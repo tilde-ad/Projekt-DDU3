@@ -1,3 +1,13 @@
+testing-API
+async function getDogFact() {
+    const response = await fetch("http://localhost:8000/dogfact");
+    const data = await response.json();
+    console.log(data);
+}
+
+getDogFact();
+
+=======
 class Dogbreed {
     //static Breeds = ["huskies", "rasker", "Collie"]  //här måste vo göra en request för att få dogbreedsen
     // men då måste vi kanske göra en static allbreeds funktion
@@ -27,3 +37,4 @@ async function driver () {
     console.log(Dogbreed.Breeds)
 }
 driver()
+
