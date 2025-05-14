@@ -11,19 +11,39 @@ async function handler(request) {
             { headers: headerCORS });
     }
 
-    if (url.pathname === "/dogfact") {
-        const apiUrl = "https://dogapi.dog/api/v2/facts";
-        const apiResponse = await fetch(apiUrl);
-        const data = await apiResponse.json();
-        const facts = data.data.map(fact => fact.attributes.body);
-        return new Response(JSON.stringify(facts),
-            {
+    if (request.method === "GET") {
+
+        if (url.pathname === "/dogPic") {
+            const urlPic = "https://dog.ceo/api/breeds/image/random";
+            const response = await fetch(urlPic);
+            const data = await response.json();
+
+            return new Response(JSON.stringify(data), {
                 status: 200,
                 headers: headerCORS
             });
-    }
+        }
 
-    return new Response("Not found", { status: 404, headers: headerCORS });
+
+        if (url.pathname === "/dogfact") {
+            const apiUrl = "https://dogapi.dog/api/v2/facts";
+            const apiResponse = await fetch(apiUrl);
+            const data = await apiResponse.json();
+            const facts = data.data.map(fact => fact.attributes.body);
+            return new Response(JSON.stringify(facts),
+                {
+                    status: 200,
+                    headers: headerCORS
+                });
+        }
+
+        return new Response("Not found", {
+            status: 404,
+            headers: headerCORS
+        });
+
+    }
 }
+
 
 Deno.serve(handler);
