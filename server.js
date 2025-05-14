@@ -24,15 +24,23 @@ async function handler(request) {
     }
 
     if (url.pathname === "/dogbreed") {
-        const apiUrl = "https://dog.ceo/api/breeds/list/all";
-        const apiResponse = await fetch(apiUrl);
-        const data = await apiResponse.json();
-        const breeds = Object.keys(data.message);
-        return new Response(JSON.stringify(breeds),
-            {
-                status: 200,
-                headers: headerCORS
-            });
+        let breeds = [];
+        let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
+        while (apiUrl) {
+            const apiResponse = await fetch(apiUrl);
+            const data = await apiResponse.json();
+            breeds = breeds.concat(
+                data.data.map(breed => ({
+                    name: breed.attributes.name,
+                    description: breed.attributes.description
+                }))
+            );
+            apiUrl = data.links && data.links.next ? data.links.next : null;
+        }
+        return new Response(JSON.stringify(breeds), {
+            status: 200,
+            headers: headerCORS
+        });
     }
 
     return new Response("Not found", { status: 404, headers: headerCORS });
