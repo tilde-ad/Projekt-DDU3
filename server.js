@@ -23,6 +23,18 @@ async function handler(request) {
             });
     }
 
+    if (url.pathname === "/dogbreed") {
+        const apiUrl = "https://dog.ceo/api/breeds/list/all";
+        const apiResponse = await fetch(apiUrl);
+        const data = await apiResponse.json();
+        const breeds = Object.keys(data.message);
+        return new Response(JSON.stringify(breeds),
+            {
+                status: 200,
+                headers: headerCORS
+            });
+    }
+
     return new Response("Not found", { status: 404, headers: headerCORS });
 }
 
