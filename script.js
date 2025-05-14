@@ -28,12 +28,9 @@ class Dogbreed {
 async function driver() {
     await Dogbreed.fetchBreed();
     console.log(Dogbreed.Instances);
-    if (Dogbreed.Instances.length > 0) {
-        console.log(Dogbreed.Instances[0].name, Dogbreed.Instances[0].description);
-    }
 }
 
-driver()
+driver();
 
 
 //få bilder och blanda dem
