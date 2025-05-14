@@ -12,10 +12,11 @@ async function handler(request) {
     }
 
     if (url.pathname === "/dogfact") {
-        const apiUrl = "https://dog-facts-api.herokuapp.com/api/v1/resources/dogs?number=1";
+        const apiUrl = "https://dogapi.dog/api/v2/facts";
         const apiResponse = await fetch(apiUrl);
         const data = await apiResponse.json();
-        return new Response(JSON.stringify(data),
+        const facts = data.data.map(fact => fact.attributes.body);
+        return new Response(JSON.stringify(facts),
             {
                 status: 200,
                 headers: headerCORS
