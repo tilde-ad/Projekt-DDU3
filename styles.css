@@ -1,0 +1,24 @@
+#memory-Container{
+    max-width: 650px;
+    height: 650px;
+    margin: 100px auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 5px;
+}
+
+.memoryCard{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.memoryCard img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+        
+}
