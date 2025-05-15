@@ -1,4 +1,4 @@
-
+//test 1
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
     const data = await response.json();
@@ -8,6 +8,7 @@ async function getDogFact() {
     document.body.appendChild(div);
 }
 
+//test 2
 async function getDogPic() {
     const response = await fetch("https://dog.ceo/api/breeds/image/random");
     const data = await response.json();
@@ -21,6 +22,7 @@ async function getDogPic() {
     document.body.appendChild(img);
 }
 
+//test 3
 async function getRandomBreedAndInfo() {
     const response = await fetch("http://localhost:8000/dogbreed");
     const data = await response.json();
