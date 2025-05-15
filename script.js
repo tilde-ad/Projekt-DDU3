@@ -3,6 +3,7 @@ class Dogbreed {
         this.name = name;
         this.description = description;
     }
+
 }
 
 class DogbreedManager {
@@ -22,6 +23,7 @@ class DogbreedManager {
         return this._dogBreed
     }
     set dogBreed(value) {
+
         if (!this.breeds.some(b => b.name === value)) {
             console.log("error");
             return;
@@ -31,11 +33,13 @@ class DogbreedManager {
 }
 
 async function driver() {
+
     const breedmanager = new DogbreedManager()
     await breedmanager.fetchBreed();
     console.log(breedmanager.instances);
 }
 driver();
+
 
 //få bilder och blanda dem
 async function getDogPic() {
