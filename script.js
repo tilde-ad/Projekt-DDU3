@@ -33,7 +33,6 @@ class DogbreedManager {
 }
 
 async function driver() {
-
     const breedmanager = new DogbreedManager()
     await breedmanager.fetchBreed();
     console.log(breedmanager.instances);
