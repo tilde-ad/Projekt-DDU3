@@ -39,11 +39,12 @@ async function driver() {
 
 
 //få bilder och blanda dem
+const memoryContainer = document.getElementById("memory-Container")
 async function getDogPic() {
     const dogPics = [];
 
     // Steg 1: Hämta 8 unika hundbilder
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 10; i++) {
         const response = await fetch("http://localhost:8000/dogpic");
         const data = await response.json();
         dogPics.push(data.message); // Bara bild-URL
@@ -68,11 +69,12 @@ async function getDogPic() {
     for (let i = 0; i < shuffledPics.length; i++) {
         const img = document.createElement("img");
         img.src = shuffledPics[i];
-        img.style.width = "200px";
-        img.style.height = "200px";
-        img.style.objectFit = "cover";
 
-        const div = document.getElementById("pic" + (i + 1));
+
+        const div = document.createElement("pic" + (i + 1))
+        div.classList.add("memoryCard")
+        memoryContainer.append(div)
+        
         if (div) {
             div.appendChild(img);
         }
