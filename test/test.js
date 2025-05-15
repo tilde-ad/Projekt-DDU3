@@ -21,9 +21,20 @@ async function getDogPic() {
     document.body.appendChild(img);
 }
 
+async function getRandomBreedAndInfo() {
+    const response = await fetch("http://localhost:8000/dogbreed");
+    const data = await response.json();
+
+    const breed = data[Math.floor(Math.random() * data.length)];
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>${breed.name}</h2><p>${breed.description}</p>`;
+    document.body.appendChild(div);
+}
+
 async function runTest() {
     await getDogFact();
     await getDogPic();
+    await getRandomBreedAndInfo();
 }
 
 runTest();
