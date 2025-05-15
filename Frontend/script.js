@@ -34,7 +34,6 @@ class DogbreedManager {
 async function driver() {
     const breedmanager = new DogbreedManager()
     await breedmanager.fetchBreed();
-    console.log(breedmanager.instances);
 }
 
 
@@ -74,7 +73,7 @@ async function getDogPic() {
         const div = document.createElement("pic" + (i + 1))
         div.classList.add("memoryCard")
         memoryContainer.append(div)
-        
+
         if (div) {
             div.appendChild(img);
         }
