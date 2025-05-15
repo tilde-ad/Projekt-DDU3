@@ -25,7 +25,9 @@ async function getRandomBreedAndInfo() {
     const response = await fetch("http://localhost:8000/dogbreed");
     const data = await response.json();
 
-    const breed = data[Math.floor(Math.random() * data.length)];
+    const index = Math.floor(Math.random() * data.length);
+    const breed = data[index];
+
     const div = document.createElement("div");
     div.innerHTML = `<h2>Dogbreed: ${breed.name}</h2><p>${breed.description}</p>`;
     document.body.appendChild(div);

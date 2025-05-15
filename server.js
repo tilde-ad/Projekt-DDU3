@@ -13,7 +13,7 @@ async function handler(request) {
 
     if (request.method === "GET") {
 
-        if (url.pathname === "/dogPic") {
+        if (url.pathname === "/dogpic") {
             const urlPic = "https://dog.ceo/api/breeds/image/random";
             const response = await fetch(urlPic);
             const data = await response.json();
@@ -63,7 +63,7 @@ async function handler(request) {
 
     }
 
-    
+
 }
 
 
