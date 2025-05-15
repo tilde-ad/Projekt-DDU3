@@ -75,3 +75,12 @@ async function getDogPic() {
 }
 
 getDogPic();
+
+async function testbreedlist() {
+    const response = await fetch("http://localhost:8000/dogbreedsecond");
+    const data = await response.json();
+
+    console.log(data);
+}
+
+testbreedlist();
