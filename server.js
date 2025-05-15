@@ -43,6 +43,26 @@ async function handler(request) {
                 headers: headerCORS
             });
         }
+        if (url.pathname === "/dogbreedsecond") {
+            const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
+            const ceoData = await ceoResponse.json();
+            const ceoBreeds = [];
+
+            for (const [breed, subBreeds] of Object.entries(ceoData.message)) {
+                if (subBreeds.length === 0) {
+                    ceoBreeds.push(breed);
+                } else {
+                    subBreeds.forEach(sub => {
+                        ceoBreeds.push(`${sub} ${breed}`);
+                    });
+                }
+            }
+
+            return new Response(JSON.stringify(ceoBreeds), {
+                status: 200,
+                headers: headerCORS
+            });
+        }
 
         if (url.pathname === "/dogfact") {
             const apiUrl = "https://dogapi.dog/api/v2/facts";

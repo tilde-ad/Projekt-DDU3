@@ -82,3 +82,27 @@ async function getDogPic() {
 }
 
 getDogPic();
+
+async function testbreedlist() {
+    const response = await fetch("http://localhost:8000/dogbreedsecond");
+    const data = await response.json();
+
+    console.log(data);
+}
+
+testbreedlist();
+
+async function getCommonBreeds() {
+    // Hämta redan platt array från din backend
+    const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
+    const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
+
+    const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
+    const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
+
+    const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+    console.log(commonBreeds);
+    return commonBreeds;
+}
+
+getCommonBreeds();
