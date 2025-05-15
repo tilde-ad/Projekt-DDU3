@@ -7,7 +7,7 @@ class Dogbreed {
 }
 
 class DogbreedManager {
-    constructor () {
+    constructor() {
         this.breeds = []
         this.instances = []
     }
@@ -46,7 +46,7 @@ async function getDogPic() {
 
     // Steg 1: Hämta 8 unika hundbilder
     for (let i = 0; i < 8; i++) {
-        const response = await fetch("http://localhost:8000/dogPic");
+        const response = await fetch("http://localhost:8000/dogpic");
         const data = await response.json();
         dogPics.push(data.message); // Bara bild-URL
     }
