@@ -1,33 +1,36 @@
 class Dogbreed {
-    constructor (){
-        this.Breeds = []
+    static Breeds = []
+    static Instances = [];
+
+    constructor({ name, description }) {
+        this.name = name;
+        this.description = description;
     }
-  
-    async fetchBreed (){
-        let response = await fetch("https://dog.ceo/api/breeds/list/all")
-        let data = await response.json()
-        for(let breed in data.message){
-            this.Breeds.push(breed)
-        }
+
+    static async fetchBreed() {
+        let response = await fetch("http://localhost:8000/dogbreed");
+        let data = await response.json();
+        Dogbreed.Breeds = data;
+        Dogbreed.Instances = data.map(breedObj => new Dogbreed(breedObj));
     }
-  
-    get dogBreed(){ 
+
+    get dogBreed() {
         return this._dogBreed
     }
-    set  dogBreed(value){
-        if(!this.Breeds.includes(value)){
-            console.log("error")
+    set dogBreed(value) {
+        if (!Dogbreed.Breeds.some(b => b.name === value)) {
+            console.log("error");
         }
-        this._dogBreed = value
+        this._dogBreed = value;
     }
 }
 
-async function driver () {
-    let dogManager = new Dogbreed()  //instans av en klass som hanterar hundraser
-    await dogManager.fetchBreed()
-    console.log(dogManager.Breeds)
+async function driver() {
+    await Dogbreed.fetchBreed();
+    console.log(Dogbreed.Instances);
 }
-driver()
+
+driver();
 
 
 //få bilder och blanda dem
