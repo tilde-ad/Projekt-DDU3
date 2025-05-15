@@ -3,7 +3,6 @@ class Dogbreed {
         this.name = name;
         this.description = description;
     }
-
 }
 
 class DogbreedManager {
@@ -18,7 +17,6 @@ class DogbreedManager {
         this.breeds = data;
         this.instances = data.map(breedObj => new Dogbreed(breedObj));
     }
-
     get dogBreed() {
         return this._dogBreed
     }
@@ -32,12 +30,12 @@ class DogbreedManager {
     }
 }
 
+//Kallar på klasserna
 async function driver() {
     const breedmanager = new DogbreedManager()
     await breedmanager.fetchBreed();
     console.log(breedmanager.instances);
 }
-driver();
 
 
 //få bilder och blanda dem
@@ -81,17 +79,17 @@ async function getDogPic() {
     }
 }
 
-getDogPic();
+//Kommer nog ta bort denna sen
+// async function testbreedlist() {
+//     const response = await fetch("http://localhost:8000/dogbreedsecond");
+//     const data = await response.json();
 
-async function testbreedlist() {
-    const response = await fetch("http://localhost:8000/dogbreedsecond");
-    const data = await response.json();
+//     console.log(data);
+// }
 
-    console.log(data);
-}
+// testbreedlist();
 
-testbreedlist();
-
+//Tar gemensamma hundar från api1 och api2 och skapar en ny array
 async function getCommonBreeds() {
     // Hämta redan platt array från din backend
     const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
@@ -104,5 +102,11 @@ async function getCommonBreeds() {
     console.log(commonBreeds);
     return commonBreeds;
 }
+
+
+
+//functionsanrop
+driver();
+getDogPic();
 
 getCommonBreeds();
