@@ -4,7 +4,7 @@ async function getDogFact() {
     const data = await response.json();
 
     const div = document.createElement("div");
-    div.textContent = data;
+    div.innerHTML = `<h2>Dog fact</h2><p>${data}</p>`
     document.body.appendChild(div);
 }
 
@@ -14,16 +14,27 @@ async function getDogPic() {
 
     const img = document.createElement("img");
     img.src = data.message;
-    img.style.width = "250px";
+    img.style.maxWidth = "450px";
     img.style.height = "250px";
     img.style.objectFit = "cover";
 
     document.body.appendChild(img);
 }
 
+async function getRandomBreedAndInfo() {
+    const response = await fetch("http://localhost:8000/dogbreed");
+    const data = await response.json();
+
+    const breed = data[Math.floor(Math.random() * data.length)];
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>Dogbreed: ${breed.name}</h2><p>${breed.description}</p>`;
+    document.body.appendChild(div);
+}
+
 async function runTest() {
     await getDogFact();
     await getDogPic();
+    await getRandomBreedAndInfo();
 }
 
 runTest();
