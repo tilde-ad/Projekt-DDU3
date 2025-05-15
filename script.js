@@ -2,6 +2,11 @@ class Dogbreed {
     constructor({ name, description }) {
         this.name = name;
         this.description = description;
+    }
+}
+
+class DogbreedManager {
+    constructor () {
         this.breeds = []
         this.instances = []
     }
@@ -26,11 +31,10 @@ class Dogbreed {
 }
 
 async function driver() {
-    const dogBreedmanager = new Dogbreed({name: "", description: ""})
-    await dogBreedmanager.fetchBreed();
-    console.log(dogBreedmanager.instances);
+    const breedmanager = new DogbreedManager()
+    await breedmanager.fetchBreed();
+    console.log(breedmanager.instances);
 }
-
 driver();
 
 //få bilder och blanda dem
