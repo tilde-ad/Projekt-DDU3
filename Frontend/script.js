@@ -1,3 +1,4 @@
+//ta bort denna innan inlämning
 const useDevMode = true;
 
 class Dog {
