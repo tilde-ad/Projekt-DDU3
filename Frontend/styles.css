@@ -1,18 +1,32 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
     background-image: url("images/background.png");
     background-size: cover;
     background-position: center;
     background-repeat: repeat-y;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #memory-Container {
-    max-width: 650px;
-    height: 650px;
-    margin: 100px auto;
+    padding: 15px;
+    width: 705px;
+    height: 555px;
     display: grid;
     grid-template-columns: repeat(5, 125px);
     grid-template-rows: repeat(4, 125px);
     gap: 20px;
+    background-color: #D9D9D9;
+    border: 5px solid #0F3665;
+    border-radius: 15px;
+    position: relative;
 }
 
 .memoryCard {
@@ -58,7 +72,6 @@ body {
 /* Baksidan (innan vändning) */
 .cardBack {
     background-image: url(images/Dog-card.png);
-
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -71,14 +84,13 @@ body {
 #popup {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
-
     display: none;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 700px;
-    height: 400px;
+    width: 726px;
+    height: 555px;
     border-radius: 10px;
     padding: 20px;
     text-align: center;

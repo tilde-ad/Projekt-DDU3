@@ -163,7 +163,6 @@ function createCard(imageUrl) {
             checkForMatch();
         }
     });
-
     return card;
 }
 
@@ -244,7 +243,10 @@ async function getDogPic() {
             shuffledPics.push(allDogPics.splice(index, 1)[0]);
         }
         // Visa bilderna
-        memoryContainer.innerHTML = "";
+        const cards = memoryContainer.querySelectorAll('.memoryCard');
+        for (let i = 0; i < cards.length; i++) {
+            memoryContainer.removeChild(cards[i]);
+        }
         for (let i = 0; i < shuffledPics.length; i++) {
             const card = createCard(shuffledPics[i]);
             memoryContainer.appendChild(card);
@@ -325,10 +327,6 @@ async function getDogPic() {
         return dogPics
     }
 }
-
-
-
-
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
 async function getCommonBreeds() {
