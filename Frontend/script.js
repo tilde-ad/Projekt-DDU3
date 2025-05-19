@@ -148,6 +148,7 @@ async function getCommonBreeds() {
 // }
 
 
+
 async function findMatchingBreedtoPic() {
     const breeds = await getCommonBreeds();
     const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
@@ -161,6 +162,7 @@ async function findMatchingBreedtoPic() {
     }
     console.log(matchedPics);
 }
+
 
 //functionsanrop
 findMatchingBreedtoPic()
