@@ -112,6 +112,7 @@ async function findMatchingBreedtoPic (){
     for (let url of picURLS){
         const breedFromURL = url.split("/")[4];
         const matchedBreed = breeds.includes(breedFromURL);    
+        console.log(matchedBreed)
     }
 }
 
