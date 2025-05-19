@@ -108,10 +108,10 @@ async function getCommonBreeds() {
 async function findMatchingBreedtoPic() {
     const breeds = await getCommonBreeds();
     const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
+    console.log(picURLs)
     
     const matchedPics = [];
     for (let url of picURLs) {
-        console.log(url)
         const breedFromURL = url.split("/")[4];
         console.log(breedFromURL);
         const matchedBreed = breeds.includes(breedFromURL);
