@@ -54,35 +54,35 @@ async function driver() {
 
 const devImages = [
     "affenpinscher.jpg",
-    "afghan hound.jpg",
+    "afghan-hound.jpg",
     "akita.jpg",
-    "australian terrier.jpg",
+    "australian-terrier.jpg",
     "basenji.jpg",
-    "basset hound.jpg",
+    "basset-hound.jpg",
     "beagle.jpg",
-    "bedlington terrier.jpg",
-    "bichon frise.jpg",
-    "border collie.jpg",
-    "border terrier.jpg",
+    "bedlington-terrier.jpg",
+    "bichon-frise.jpg",
+    "border-collie.jpg",
+    "border-terrier.jpg",
     "borzoi.jpg",
     "boxer.jpg",
     "briard.jpg",
-    "cairn terrier.jpg",
+    "cairn-terrier.jpg",
     "chihuahua.jpg",
-    "cocker spaniel.jpg",
+    "cocker-spaniel.jpg",
     "dachshund.jpg",
     "dalmatian.jpg",
-    "english setter.jpg",
-    "french bulldog.jpg",
-    "giant schnauzer.jpg",
-    "golden retriever.jpg",
-    "gordon setter.jpg",
-    "great dane.jpg",
+    "english-setter.jpg",
+    "french-bulldog.jpg",
+    "giant-schnauzer.jpg",
+    "golden-retriever.jpg",
+    "gordon-setter.jpg",
+    "great-dane.jpg",
     "havanese.jpg",
-    "ibizan hound.jpg",
-    "irish setter.jpg",
-    "irish terrier.jpg",
-    "irish wolfhound.jpg"
+    "ibizan-hound.jpg",
+    "irish-setter.jpg",
+    "irish-terrier.jpg",
+    "irish-wolfhound.jpg"
     // För när vi inte vill hämta från sidan!
 ];
 
@@ -113,7 +113,7 @@ async function getDogPic() {
         memoryContainer.innerHTML = "";
         for (let i = 0; i < shuffledPics.length; i++) {
             const img = document.createElement("img");
-            img.src = shuffledPics[i];
+            img.src = encodeURI(shuffledPics[i]);
             const div = document.createElement("div");
             div.classList.add("memoryCard");
             div.appendChild(img);
