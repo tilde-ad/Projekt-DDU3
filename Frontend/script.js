@@ -1,3 +1,6 @@
+//ta bort denna innan inlämning
+const useDevMode = true;
+
 class Dog {
     constructor({ name, description }) {
         this.name = name;
@@ -152,11 +155,11 @@ async function getCommonBreeds() {
 async function findMatchingBreedtoPic() {
     const breeds = await getCommonBreeds();
     const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
-    
+
     const matchedPics = [];
     for (let url of picURLs) {
         const breedFromURL = url.split("/")[4];
-        if(breeds.includes(breedFromURL)){
+        if (breeds.includes(breedFromURL)) {
             matchedPics.push(breedFromURL);
         }
     }
