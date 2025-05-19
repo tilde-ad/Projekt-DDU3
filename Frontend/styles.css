@@ -63,7 +63,8 @@
 #popup {
     display: none;
     text-align: center;
-    background-color: green;
+    background-image: url(images/PopDawg.png);
+
     width: 300px;
     height: 250px;
     position: fixed;
