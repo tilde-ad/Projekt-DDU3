@@ -1,4 +1,4 @@
-class Dogbreed {
+class Dog {
     constructor({ name, description }) {
         this.name = name;
         this.description = description;
@@ -15,7 +15,7 @@ class DogbreedManager {
         let response = await fetch("http://localhost:8000/dogbreed");
         let data = await response.json();
         this.breeds = data;
-        this.instances = data.map(breedObj => new Dogbreed(breedObj));
+        this.instances = data.map(breedObj => new Dog(breedObj));
     }
     get dogBreed() {
         return this._dogBreed
