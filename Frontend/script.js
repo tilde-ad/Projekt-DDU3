@@ -11,12 +11,35 @@ class DogbreedManager {
         this.instances = []
     }
 
+    // async fetchBreed() {
+    //     let response = await fetch("http://localhost:8000/dogbreed");
+    //     let data = await response.json();
+    //     this.breeds = data;
+    //     this.instances = data.map(breedObj => new Dog(breedObj));
+    // }
+
+
+    //denna ska raders innan inlämning och den ovan ska kommenteras in igen
+
     async fetchBreed() {
-        let response = await fetch("http://localhost:8000/dogbreed");
-        let data = await response.json();
+        let url;
+        if (useDevMode) {
+            url = "http://localhost:8000/dogbreedseconddesc"; // Cachad version
+        } else {
+            url = "http://localhost:8000/dogbreed"; // Live API
+        }
+
+        const response = await fetch(url);
+        const data = await response.json();
         this.breeds = data;
-        this.instances = data.map(breedObj => new Dog(breedObj));
+        this.instances = [];
+
+        for (let i = 0; i < data.length; i++) {
+            const dogObj = new Dog(data[i]);
+            this.instances.push(dogObj);
+        }
     }
+
     get dogBreed() {
         return this._dogBreed
     }
@@ -90,19 +113,38 @@ async function getDogPic() {
 
 // testbreedlist();
 
-//Tar gemensamma hundar från api1 och api2 och skapar en ny array
+//denna tas bort innan inlämning och den nedanför kommenteras in igen
 async function getCommonBreeds() {
-    // Hämta redan platt array från din backend
-    const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
-    const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
+    if (!useDevMode) {
+        const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
+        const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
 
-    const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
-    const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
+        const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
+        const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
 
-    const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
-    console.log(commonBreeds);
-    return commonBreeds;
+        const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+        console.log(commonBreeds);
+        return commonBreeds;
+    } else {
+        console.log("getCommonBreeds() körs inte i utvecklingsläge.");
+        return [];
+    }
 }
+
+
+//Tar gemensamma hundar från api1 och api2 och skapar en ny array
+// async function getCommonBreeds() {
+//     // Hämta redan platt array från din backend
+//     const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
+//     const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
+
+//     const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
+//     const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
+
+//     const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+//     console.log(commonBreeds);
+//     return commonBreeds;
+// }
 
 
 
