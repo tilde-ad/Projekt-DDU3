@@ -90,7 +90,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 745px;
+    width: 100%;
     height: 430px;
     border-radius: 10px;
     padding: 20px;
@@ -101,7 +101,20 @@ body {
 
 #popup-inner {
     width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
     position: relative;
+}
+
+#dog-fact {
+    background: rgba(255, 255, 255, 0.85);
+    color: #0F3665;
+    border-radius: 8px;
+    padding: 24px 32px;
+    font-size: 1.3rem;
+    max-width: 80%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes fadeIn {
