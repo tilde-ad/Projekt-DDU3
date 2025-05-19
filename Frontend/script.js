@@ -117,38 +117,20 @@ async function getDogPic() {
 
 // testbreedlist();
 
-//denna tas bort innan inlämning och den nedanför kommenteras in igen
-async function getCommonBreeds() {
-    if (!useDevMode) {
-        const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
-        const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
-
-        const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
-        const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
-
-        const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
-        console.log(commonBreeds);
-        return commonBreeds;
-    } else {
-        console.log("getCommonBreeds() körs inte i utvecklingsläge.");
-        return [];
-    }
-}
-
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
-// async function getCommonBreeds() {
-//     // Hämta redan platt array från din backend
-//     const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
-//     const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
+async function getCommonBreeds() {
+    // Hämta redan platt array från din backend
+    const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
+    const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
 
-//     const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
-//     const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
+    const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
+    const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
 
-//     const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
-//     console.log(commonBreeds);
-//     return commonBreeds;
-// }
+    const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+    console.log(commonBreeds);
+    return commonBreeds;
+}
 
 
 
