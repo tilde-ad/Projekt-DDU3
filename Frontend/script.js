@@ -108,13 +108,17 @@ async function getCommonBreeds() {
 
 async function findMatchingBreedtoPic (){
     const breeds = await getCommonBreeds();
-    const picURLS = await getDogPic();
-    for (let url of picURLS){
+    const picData = await getDogPic();
+    const picURL = picData.message
+    
+    const matchedpic = []
+    for (let url of picURL){
         const breedFromURL = url.split("/")[4];
         console.log(breedFromURL)
-        const matchedBreed = breeds.includes(breedFromURL);    
-        console.log(matchedBreed)
+        const matchedBreed = breeds.includes(breedFromURL);   
+        matchedpic.push(matchedBreed) 
     }
+    console.log(matchedpic)
 }
 
 
