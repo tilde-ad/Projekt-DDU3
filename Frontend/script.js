@@ -78,7 +78,7 @@ async function getDogPic() {
             div.appendChild(img);
         }
     }
-    return allDogPics
+    return dogPics
 }
 
 //Kommer nog ta bort denna sen
