@@ -84,20 +84,23 @@ body {
 #popup {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
+    background-position: center;
     display: none;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 726px;
-    height: 555px;
+    width: 745px;
+    height: 430px;
     border-radius: 10px;
     padding: 20px;
     text-align: center;
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 #popup-inner {
+    width: 100%;
     position: relative;
 }
 
