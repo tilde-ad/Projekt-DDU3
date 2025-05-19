@@ -1,28 +1,26 @@
-//Denna rad tas bort innan inlämning
-const useDevMode = true; // ändra till false inför inlämning
+// Byt till false inför inlämning
+const useDevMode = true;
 
-
-//dogfact 
+// === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
-for (let i = 0; i < 20; i++) {
-    const apiUrl = "https://dogapi.dog/api/v2/facts";
-    const apiResponse = await fetch(apiUrl);
-    const data = await apiResponse.json();
-
-    arrayDogFact.push(data.data[0].attributes.body);
-}
-
-
-//beskrivning av 67 hundraser 
 let breedDescriptions = [];
 
+// === Hämta och spara 20 hundfakta lokalt (endast i dev-läge) ===
+if (useDevMode) {
+    for (let i = 0; i < 20; i++) {
+        const apiUrl = "https://dogapi.dog/api/v2/facts";
+        const apiResponse = await fetch(apiUrl);
+        const data = await apiResponse.json();
+        arrayDogFact.push(data.data[0].attributes.body);
+    }
+}
+
+// === Hämta 67 raser med beskrivning (endast i dev-läge) ===
 async function fetchBreedDescriptions() {
-    // 1. Hämta alla raser från dog.ceo
     const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
     const ceoData = await ceoResponse.json();
     const ceoBreeds = [];
 
-    // Bygg ceoBreeds-listan med vanliga loopar
     const breedEntries = Object.entries(ceoData.message);
     for (let i = 0; i < breedEntries.length; i++) {
         const breed = breedEntries[i][0];
@@ -37,7 +35,6 @@ async function fetchBreedDescriptions() {
         }
     }
 
-    // 2. Hämta alla raser med beskrivning från dogapi.dog
     let dogApiBreeds = [];
     let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
 
@@ -47,14 +44,9 @@ async function fetchBreedDescriptions() {
         for (let i = 0; i < data.data.length; i++) {
             dogApiBreeds.push(data.data[i]);
         }
-        if (data.links && data.links.next) {
-            apiUrl = data.links.next;
-        } else {
-            apiUrl = null;
-        }
+        apiUrl = data.links?.next || null;
     }
 
-    // 3. Matcha varje ceo-breed mot dogapi-breed och spara namn + beskrivning
     for (let i = 0; i < ceoBreeds.length; i++) {
         const name = ceoBreeds[i];
         let foundDescription = "Ingen beskrivning hittades.";
@@ -67,18 +59,15 @@ async function fetchBreedDescriptions() {
             }
         }
 
-        breedDescriptions.push({
-            name: name,
-            description: foundDescription
-        });
+        breedDescriptions.push({ name, description: foundDescription });
     }
 }
 
-await fetchBreedDescriptions();
+if (useDevMode) {
+    await fetchBreedDescriptions();
+}
 
-
-
-//SERVERN
+// === SERVER ===
 async function handler(request) {
     const url = new URL(request.url);
 
@@ -88,26 +77,29 @@ async function handler(request) {
     headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
 
     if (request.method === "OPTIONS") {
-        return new Response(null,
-            { headers: headerCORS });
+        return new Response(null, { headers: headerCORS });
     }
 
     if (request.method === "GET") {
-
+        // Hundbild (med eller utan ras)
         if (url.pathname === "/dogpic") {
             const breed = url.searchParams.get("breed");
-            let apiUrl;
+            let apiUrl = "https://dog.ceo/api/breeds/image/random";
+
             if (breed) {
                 apiUrl = `https://dog.ceo/api/breed/${breed}/images/random`;
             }
+
             const response = await fetch(apiUrl);
             const data = await response.json();
+
             return new Response(JSON.stringify(data), {
                 status: 200,
                 headers: headerCORS
             });
         }
 
+        // Hämta alla hundraser (med beskrivningar)
         if (url.pathname === "/dogbreed") {
             let breeds = [];
             let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
@@ -120,7 +112,7 @@ async function handler(request) {
                         description: breed.attributes.description
                     }))
                 );
-                apiUrl = data.links && data.links.next ? data.links.next : null;
+                apiUrl = data.links?.next || null;
             }
             return new Response(JSON.stringify(breeds), {
                 status: 200,
@@ -128,15 +120,7 @@ async function handler(request) {
             });
         }
 
-        //Denna ska tas bort innan inlämning
-        if (url.pathname === "/dogbreedseconddesc") {
-            return new Response(JSON.stringify(breedDescriptions), {
-                status: 200,
-                headers: headerCORS
-            });
-        }
-
-
+        // Gemensamma raser från dog.ceo
         if (url.pathname === "/dogbreedsecond") {
             const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
             const ceoData = await ceoResponse.json();
@@ -158,37 +142,45 @@ async function handler(request) {
             });
         }
 
+        // Dev-version av dogbreed + beskrivning
+        if (url.pathname === "/dogbreedseconddesc") {
+            if (useDevMode) {
+                return new Response(JSON.stringify(breedDescriptions), {
+                    status: 200,
+                    headers: headerCORS
+                });
+            } else {
+                return new Response("Route not available in live mode", {
+                    status: 404,
+                    headers: headerCORS
+                });
+            }
+        }
 
-        // if (url.pathname === "/dogfact") {
-        //     const apiUrl = arrayDogFact;
-        //     // "https://dogapi.dog/api/v2/facts";
-        //     const apiResponse = await fetch(apiUrl);
-        //     const data = await apiResponse.json();
-        //     const facts = data.data.map(fact => fact.attributes.body);
-        //     return new Response(JSON.stringify(facts),
-        //         {
-        //             status: 200,
-        //             headers: headerCORS
-        //         });
-        // }
-
-        //denna ska tas bort innan inlämning, denna hämtar en hundfakta från vår array
+        // Fakta om hundar
         if (url.pathname === "/dogfact") {
-            return new Response(JSON.stringify(arrayDogFact), {
-                status: 200,
-                headers: headerCORS
-            });
+            if (useDevMode) {
+                return new Response(JSON.stringify(arrayDogFact), {
+                    status: 200,
+                    headers: headerCORS
+                });
+            } else {
+                const apiUrl = "https://dogapi.dog/api/v2/facts";
+                const apiResponse = await fetch(apiUrl);
+                const data = await apiResponse.json();
+                const facts = data.data.map(fact => fact.attributes.body);
+                return new Response(JSON.stringify(facts), {
+                    status: 200,
+                    headers: headerCORS
+                });
+            }
         }
 
         return new Response("Not found", {
             status: 404,
             headers: headerCORS
         });
-
     }
-
-
 }
-
 
 Deno.serve(handler);
