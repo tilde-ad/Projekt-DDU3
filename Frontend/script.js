@@ -14,16 +14,6 @@ class DogbreedManager {
         this.instances = []
     }
 
-    // async fetchBreed() {
-    //     let response = await fetch("http://localhost:8000/dogbreed");
-    //     let data = await response.json();
-    //     this.breeds = data;
-    //     this.instances = data.map(breedObj => new Dog(breedObj));
-    // }
-
-
-    //denna ska raders innan inlämning och den ovan ska kommenteras in igen
-
     async fetchBreed() {
         let url;
         if (useDevMode) {
@@ -62,94 +52,149 @@ async function driver() {
     await breedmanager.fetchBreed();
 }
 
+const devImages = [
+    "affenpinscher.jpg",
+    "afghan hound.jpg",
+    "akita.jpg",
+    "australian terrier.jpg",
+    "basenji.jpg",
+    "basset hound.jpg",
+    "beagle.jpg",
+    "bedlington terrier.jpg",
+    "bichon frise.jpg",
+    "border collie.jpg",
+    "border terrier.jpg",
+    "borzoi.jpg",
+    "boxer.jpg",
+    "briard.jpg",
+    "cairn terrier.jpg",
+    "chihuahua.jpg",
+    "cocker spaniel.jpg",
+    "dachshund.jpg",
+    "dalmatian.jpg",
+    "english setter.jpg",
+    "french bulldog.jpg",
+    "giant schnauzer.jpg",
+    "golden retriever.jpg",
+    "gordon setter.jpg",
+    "great dane.jpg",
+    "havanese.jpg",
+    "ibizan hound.jpg",
+    "irish setter.jpg",
+    "irish terrier.jpg",
+    "irish wolfhound.jpg"
+    // För när vi inte vill hämta från sidan!
+];
 
 //få bilder och blanda dem
-const memoryContainer = document.getElementById("memory-Container")
+const memoryContainer = document.getElementById("memory-Container");
 async function getDogPic() {
-    const breeds = await getCommonBreeds();
-    // Välj 10 unika slumpmässiga raser
-    const selectedBreeds = [];
-    const breedsCopy = [...breeds];
-    for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
-        const idx = Math.floor(Math.random() * breedsCopy.length);
-        selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
-    }
-
-    /* Test så rätt descriptions kommer med bara, kommenterar ut men behåller
-    const breedmanager = new DogbreedManager();
-    await breedmanager.fetchBreed();
-    selectedBreeds.forEach(breed => {
-        const match = breedmanager.instances.find(
-            b => b.name.toLowerCase() === breed.toLowerCase()
-        );
-        if (match) {
-            console.log(`Ras: ${match.name}, Beskrivning: ${match.description}`);
-        } else {
-            console.log(`Ras: ${breed}, Beskrivning: Hittades ej`);
+    let selectedImages = [];
+    if (useDevMode) {
+        // Välj 10 unika slumpmässiga bilder från devImages
+        const imagesCopy = [...devImages];
+        for (let i = 0; i < 10 && imagesCopy.length > 0; i++) {
+            const idx = Math.floor(Math.random() * imagesCopy.length);
+            selectedImages.push(imagesCopy.splice(idx, 1)[0]);
         }
-    });
-    */
-
-    function toDogCeoApiBreed(breed) {
-        const parts = breed.toLowerCase().split(" ");
-        if (parts.length === 2) {
-            return `${parts[1]}/${parts[0]}`;
+        // Skapa 2 av varje (20 bilder)
+        const allDogPics = [];
+        for (let img of selectedImages) {
+            allDogPics.push(`images/${img}`);
+            allDogPics.push(`images/${img}`);
         }
-        return parts.join("-");
-    }
-
-    // Hämta en bild per ras
-    const dogPics = [];
-    for (const breed of selectedBreeds) {
-        const apiBreed = toDogCeoApiBreed(breed);
-        const breedParam = `?breed=${apiBreed}`;
-        const response = await fetch(`http://localhost:8000/dogpic${breedParam}`);
-        const data = await response.json();
-        dogPics.push(data.message);
-    }
-
-    // Steg 2: Skapa en lista med 2 av varje bild (8 par → 16 bilder)
-    const allDogPics = [];
-    for (let i = 0; i < dogPics.length; i++) {
-        allDogPics.push(dogPics[i]);
-        allDogPics.push(dogPics[i]);
-    }
-
-    // Steg 3: Blanda bilderna med manuell metod
-    const shuffledPics = [];
-    while (allDogPics.length > 0) {
-        const index = Math.floor(Math.random() * allDogPics.length);
-        const picked = allDogPics.splice(index, 1)[0]; // plocka och ta bort
-        shuffledPics.push(picked);
-    }
-
-    // Steg 4: Lägg in bilderna i #pic1 till #pic16
-    for (let i = 0; i < shuffledPics.length; i++) {
-        const img = document.createElement("img");
-        img.src = shuffledPics[i];
-
-
-        const div = document.createElement("pic" + (i + 1))
-        div.classList.add("memoryCard")
-        memoryContainer.append(div)
-
-        if (div) {
+        // Blanda
+        const shuffledPics = [];
+        while (allDogPics.length > 0) {
+            const index = Math.floor(Math.random() * allDogPics.length);
+            shuffledPics.push(allDogPics.splice(index, 1)[0]);
+        }
+        // Visa bilderna
+        memoryContainer.innerHTML = "";
+        for (let i = 0; i < shuffledPics.length; i++) {
+            const img = document.createElement("img");
+            img.src = shuffledPics[i];
+            const div = document.createElement("div");
+            div.classList.add("memoryCard");
             div.appendChild(img);
+            memoryContainer.append(div);
         }
+        return selectedImages;
+    } else { //Detta är vad som ska användas i orginalet!
+        const breeds = await getCommonBreeds();
+        // Välj 10 unika slumpmässiga raser
+        const selectedBreeds = [];
+        const breedsCopy = [...breeds];
+        for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
+            const idx = Math.floor(Math.random() * breedsCopy.length);
+            selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
+        }
+
+        /* Test så rätt descriptions kommer med bara, kommenterar ut men behåller
+        const breedmanager = new DogbreedManager();
+        await breedmanager.fetchBreed();
+        selectedBreeds.forEach(breed => {
+            const match = breedmanager.instances.find(
+                b => b.name.toLowerCase() === breed.toLowerCase()
+            );
+            if (match) {
+                console.log(`Ras: ${match.name}, Beskrivning: ${match.description}`);
+            } else {
+                console.log(`Ras: ${breed}, Beskrivning: Hittades ej`);
+            }
+        });
+        */
+
+        function toDogCeoApiBreed(breed) {
+            const parts = breed.toLowerCase().split(" ");
+            if (parts.length === 2) {
+                return `${parts[1]}/${parts[0]}`;
+            }
+            return parts.join("-");
+        }
+
+        // Hämta en bild per ras
+        const dogPics = [];
+        for (const breed of selectedBreeds) {
+            const apiBreed = toDogCeoApiBreed(breed);
+            const breedParam = `?breed=${apiBreed}`;
+            const response = await fetch(`http://localhost:8000/dogpic${breedParam}`);
+            const data = await response.json();
+            dogPics.push(data.message);
+        }
+
+        // Steg 2: Skapa en lista med 2 av varje bild (8 par → 16 bilder)
+        const allDogPics = [];
+        for (let i = 0; i < dogPics.length; i++) {
+            allDogPics.push(dogPics[i]);
+            allDogPics.push(dogPics[i]);
+        }
+
+        // Steg 3: Blanda bilderna med manuell metod
+        const shuffledPics = [];
+        while (allDogPics.length > 0) {
+            const index = Math.floor(Math.random() * allDogPics.length);
+            const picked = allDogPics.splice(index, 1)[0]; // plocka och ta bort
+            shuffledPics.push(picked);
+        }
+
+        // Steg 4: Lägg in bilderna i #pic1 till #pic16
+        for (let i = 0; i < shuffledPics.length; i++) {
+            const img = document.createElement("img");
+            img.src = shuffledPics[i];
+
+
+            const div = document.createElement("pic" + (i + 1))
+            div.classList.add("memoryCard")
+            memoryContainer.append(div)
+
+            if (div) {
+                div.appendChild(img);
+            }
+        }
+        return dogPics
     }
-    return dogPics
 }
-
-//Kommer nog ta bort denna sen
-// async function testbreedlist() {
-//     const response = await fetch("http://localhost:8000/dogbreedsecond");
-//     const data = await response.json();
-
-//     console.log(data);
-// }
-
-// testbreedlist();
-
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
 async function getCommonBreeds() {
@@ -164,25 +209,9 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-
-
-// async function findMatchingBreedtoPic() {
-//     const breeds = await getCommonBreeds();
-//     const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
-
-//     const matchedPics = [];
-//     for (let url of picURLs) {
-//         const breedFromURL = url.split("/")[4];
-//         if (breeds.includes(breedFromURL)) {
-//             matchedPics.push(breedFromURL);
-//         }
-//     }
-//     console.log(matchedPics);
-// }
-
-
-//functionsanrop
-// findMatchingBreedtoPic()
-driver();
-getDogPic();
-getCommonBreeds();
+if (useDevMode) {
+    getDogPic(); // Använder bara bilder från images-mappen
+} else {
+    driver();    // Hämtar raser och beskrivningar från API
+    getDogPic(); // Hämtar bilder från API
+}
