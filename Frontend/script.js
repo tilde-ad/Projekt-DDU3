@@ -135,7 +135,7 @@ function checkForMatch() {
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
-
+        document.getElementById("popup").style.display = "block";
     } else {
         lockBoard = true;
         setTimeout(() => {
