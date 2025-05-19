@@ -78,6 +78,7 @@ async function getDogPic() {
             div.appendChild(img);
         }
     }
+    return allDogPics
 }
 
 //Kommer nog ta bort denna sen
@@ -105,8 +106,18 @@ async function getCommonBreeds() {
 }
 
 
+async function findMatchingBreedtoPic (){
+    const breeds = await getCommonBreeds();
+    const picURLS = await getDogPic();
+    for (let url of picURLS){
+        const breedFromURL = url.split("/")[4];
+        const matchedBreed = breeds.includes(breedFromURL);    
+    }
+}
+
 
 //functionsanrop
+findMatchingBreedtoPic()
 driver();
 getDogPic();
 
