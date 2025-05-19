@@ -106,16 +106,16 @@ async function getCommonBreeds() {
 }
 
 async function findMatchingBreedtoPic() {
-    const breeds = await getCommonBreeds();
-    const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
-    
-    const matchedPics = picURLs.filter(url => {
+  const breeds = await getCommonBreeds();
+  const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
+
+  const matchedPics = picURLs.filter(url => {
     const breedFromURL = url.split("/")[4];
     return breeds.includes(breedFromURL);
   });
-    console.log(matchedPics);
-}
 
+  console.log(matchedPics);
+}
 //functionsanrop
 findMatchingBreedtoPic()
 driver();
