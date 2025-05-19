@@ -1,4 +1,7 @@
 //ta bort denna innan inlämning
+
+let matchCounter = 0;
+
 const useDevMode = true;
 
 class Dog {
@@ -164,6 +167,26 @@ function createCard(imageUrl) {
     return card;
 }
 
+// Hämta popupen från HTML
+const popup = document.getElementById("popup");
+
+// Skapa stäng-knappen
+const closeX = document.createElement("div");
+closeX.textContent = "X";
+closeX.style.position = "absolute";
+closeX.style.top = "10px";
+closeX.style.right = "32px";
+closeX.style.cursor = "pointer";
+closeX.style.fontSize = "20px";
+closeX.style.fontWeight = "bold";
+closeX.style.color = "white";
+
+popup.appendChild(closeX);
+
+closeX.addEventListener("click", function () {
+    popup.classList.remove("show");
+})
+
 function checkForMatch() {
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -172,7 +195,18 @@ function checkForMatch() {
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
-        document.getElementById("popup").style.display = "block";
+
+        matchCounter++; // öka med 1 varje gång ett par hittas
+
+        if (matchCounter % 3 === 0) {
+            // Visa popup bara var 3:e gång
+            setTimeout(function () {
+                const popup = document.getElementById("popup");
+                popup.classList.remove("show");
+                void popup.offsetWidth;
+                popup.classList.add("show");
+            }, 1000);
+        }
     } else {
         lockBoard = true;
         setTimeout(() => {
