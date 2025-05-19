@@ -135,6 +135,7 @@ function checkForMatch() {
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
+
     } else {
         lockBoard = true;
         setTimeout(() => {
@@ -253,6 +254,10 @@ async function getDogPic() {
         return dogPics
     }
 }
+
+
+
+
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
 async function getCommonBreeds() {
