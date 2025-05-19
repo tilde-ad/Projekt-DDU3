@@ -125,6 +125,15 @@ async function handler(request) {
             });
         }
 
+        //Denna ska tas bort innan inlämning
+        if (url.pathname === "/dogbreedseconddesc") {
+            return new Response(JSON.stringify(breedDescriptions), {
+                status: 200,
+                headers: headerCORS
+            });
+        }
+
+
         if (url.pathname === "/dogbreedsecond") {
             const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
             const ceoData = await ceoResponse.json();
