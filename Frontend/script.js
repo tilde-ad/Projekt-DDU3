@@ -86,6 +86,68 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+
+//skapa framsida och baksida på kort samt att vända på korten
+let flippedCards = [];
+let lockBoard = false; //låser korten så att man inte kan klicka på mer än 2 åt gången
+
+function createCard(imageUrl) {
+    const card = document.createElement("div");
+    card.classList.add("memoryCard");
+
+    const cardInner = document.createElement("div");
+    cardInner.classList.add("memoryCardInner");
+
+    const front = document.createElement("img");
+    front.classList.add("cardFront");
+    front.src = imageUrl;
+
+    const back = document.createElement("div");
+    back.classList.add("cardBack");
+
+    cardInner.appendChild(front);
+    cardInner.appendChild(back);
+    card.appendChild(cardInner);
+
+    card.setAttribute("data-image", imageUrl); //lägger till ett html-attribut "data-image" till card
+
+    card.addEventListener("click", function () {
+        if (lockBoard) return;
+        if (card.classList.contains("matched")) return;
+        if (card.classList.contains("flipped")) return;
+
+        card.classList.add("flipped");
+        flippedCards.push(card);
+
+        if (flippedCards.length === 2) {
+            checkForMatch();
+        }
+    });
+
+    return card;
+}
+
+function checkForMatch() {
+    const [card1, card2] = flippedCards;
+    const isMatch = card1.dataset.image === card2.dataset.image;
+
+    if (isMatch) {
+        card1.classList.add("matched");
+        card2.classList.add("matched");
+        flippedCards = [];
+    } else {
+        lockBoard = true;
+        setTimeout(() => {
+            card1.classList.remove("flipped");
+            card2.classList.remove("flipped");
+            flippedCards = [];
+            lockBoard = false;
+        }, 1000);
+    }
+}
+
+
+
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
 async function getDogPic() {
@@ -112,12 +174,8 @@ async function getDogPic() {
         // Visa bilderna
         memoryContainer.innerHTML = "";
         for (let i = 0; i < shuffledPics.length; i++) {
-            const img = document.createElement("img");
-            img.src = encodeURI(shuffledPics[i]);
-            const div = document.createElement("div");
-            div.classList.add("memoryCard");
-            div.appendChild(img);
-            memoryContainer.append(div);
+            const card = createCard(shuffledPics[i]);
+            memoryContainer.appendChild(card);
         }
         return selectedImages;
     } else { //Detta är vad som ska användas i orginalet!
