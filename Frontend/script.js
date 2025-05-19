@@ -106,19 +106,23 @@ async function getCommonBreeds() {
 }
 
 async function findMatchingBreedtoPic() {
-    const breeds = await getCommonBreeds();
-    const picURLs = await getDogPic();  // picURLs är en array med URL-strängar
-    
-    const matchedPics = [];
-    for (let url of picURLs) {
-        const breedFromURL = url.split("/")[4];
-        if(breeds.includes(breedFromURL)){
-            matchedPics.push(breedFromURL);
-        }
-    }
-    console.log(matchedPics);
-}
+  const breeds = await getCommonBreeds();
+  const picURLs = [
+    "https://dog.ceo/dog-api/images/breeds/labrador/n02115641.jpg",
+    "https://dog.ceo/dog-api/images/breeds/beagle/n02113712.jpg",
+    "https://dog.ceo/dog-api/images/breeds/poodle/n02113799.jpg"
+  ];
 
+  const matchedPics = [];
+  for (let url of picURLs) {
+    const breedFromURL = url.split("/")[4];
+    if (breeds.includes(breedFromURL)) {
+      matchedPics.push(breedFromURL);
+    }
+  }
+
+  console.log(matchedPics); // Förväntar oss: ["labrador", "beagle", "poodle"]
+}
 //functionsanrop
 findMatchingBreedtoPic()
 driver();
