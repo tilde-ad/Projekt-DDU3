@@ -1,4 +1,4 @@
-#memory-Container{
+#memory-Container {
     max-width: 650px;
     height: 650px;
     margin: 100px auto;
@@ -8,17 +8,54 @@
     gap: 5px;
 }
 
-.memoryCard{
+.memoryCard {
     width: 100%;
     height: 100%;
     position: relative;
     overflow: hidden;
 }
 
-.memoryCard img{
+.memoryCard img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-        
+
+}
+
+/* nytt */
+.memoryCardInner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+/* När kortet är vänt */
+.memoryCard.flipped .memoryCardInner {
+    transform: rotateY(180deg);
+}
+
+.cardFront,
+.cardBack {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 5px;
+}
+
+/* Bilden på hunden */
+.cardFront {
+    transform: rotateY(180deg);
+}
+
+/* Baksidan (innan vändning) */
+.cardBack {
+    background-color: lightgray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
 }
