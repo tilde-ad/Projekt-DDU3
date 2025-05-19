@@ -95,10 +95,13 @@ async function handler(request) {
     if (request.method === "GET") {
 
         if (url.pathname === "/dogpic") {
-            const urlPic = "https://dog.ceo/api/breeds/image/random";
-            const response = await fetch(urlPic);
+            const breed = url.searchParams.get("breed");
+            let apiUrl;
+            if (breed) {
+                apiUrl = `https://dog.ceo/api/breed/${breed}/images/random`;
+            }
+            const response = await fetch(apiUrl);
             const data = await response.json();
-
             return new Response(JSON.stringify(data), {
                 status: 200,
                 headers: headerCORS

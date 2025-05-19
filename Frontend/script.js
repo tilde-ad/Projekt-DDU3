@@ -66,13 +66,46 @@ async function driver() {
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container")
 async function getDogPic() {
-    const dogPics = [];
+    const breeds = await getCommonBreeds();
+    // Välj 10 unika slumpmässiga raser
+    const selectedBreeds = [];
+    const breedsCopy = [...breeds];
+    for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
+        const idx = Math.floor(Math.random() * breedsCopy.length);
+        selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
+    }
 
-    // Steg 1: Hämta 8 unika hundbilder
-    for (let i = 0; i < 10; i++) {
-        const response = await fetch("http://localhost:8000/dogpic");
+    /* Test så rätt descriptions kommer med bara, kommenterar ut men behåller
+    const breedmanager = new DogbreedManager();
+    await breedmanager.fetchBreed();
+    selectedBreeds.forEach(breed => {
+        const match = breedmanager.instances.find(
+            b => b.name.toLowerCase() === breed.toLowerCase()
+        );
+        if (match) {
+            console.log(`Ras: ${match.name}, Beskrivning: ${match.description}`);
+        } else {
+            console.log(`Ras: ${breed}, Beskrivning: Hittades ej`);
+        }
+    });
+    */
+
+    function toDogCeoApiBreed(breed) {
+        const parts = breed.toLowerCase().split(" ");
+        if (parts.length === 2) {
+            return `${parts[1]}/${parts[0]}`;
+        }
+        return parts.join("-");
+    }
+
+    // Hämta en bild per ras
+    const dogPics = [];
+    for (const breed of selectedBreeds) {
+        const apiBreed = toDogCeoApiBreed(breed);
+        const breedParam = `?breed=${apiBreed}`;
+        const response = await fetch(`http://localhost:8000/dogpic${breedParam}`);
         const data = await response.json();
-        dogPics.push(data.message); // Bara bild-URL
+        dogPics.push(data.message);
     }
 
     // Steg 2: Skapa en lista med 2 av varje bild (8 par → 16 bilder)
@@ -128,7 +161,6 @@ async function getCommonBreeds() {
     const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
 
     const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
-    console.log(commonBreeds);
     return commonBreeds;
 }
 
