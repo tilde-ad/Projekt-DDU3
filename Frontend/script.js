@@ -171,5 +171,4 @@ async function findMatchingBreedtoPic() {
 findMatchingBreedtoPic()
 driver();
 getDogPic();
-
 getCommonBreeds();
