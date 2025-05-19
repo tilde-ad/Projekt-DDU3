@@ -10,24 +10,19 @@ body {
     height: 650px;
     margin: 100px auto;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    gap: 5px;
+    grid-template-columns: repeat(5, 125px);
+    grid-template-rows: repeat(4, 125px);
+    gap: 20px;
 }
 
 .memoryCard {
-    width: 100%;
-    height: 100%;
     position: relative;
     overflow: hidden;
 }
 
 .memoryCard img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
     object-position: center;
-
 }
 
 /* nytt */
@@ -50,17 +45,20 @@ body {
     height: 100%;
     position: absolute;
     backface-visibility: hidden;
-    border-radius: 5px;
+    border-radius: 13px;
 }
 
 /* Bilden på hunden */
 .cardFront {
     transform: rotateY(180deg);
+    border: 5px solid #95a6c2;
+    box-sizing: border-box;
 }
 
 /* Baksidan (innan vändning) */
 .cardBack {
     background-image: url(images/Dog-card.png);
+
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
