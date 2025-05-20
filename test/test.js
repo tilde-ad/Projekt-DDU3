@@ -1,19 +1,21 @@
+const useDevMode = true;
+
 //test 1 - hundfakta
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
     const data = await response.json();
 
-    // const div = document.createElement("div");
-    // div.innerHTML = `<h2>Dog fact</h2><p>${data}</p>`
-    // document.body.appendChild(div);
-
-    //detta tas bort innan inlämning och lägger tillbaka det ovanför
-    const index = Math.floor(Math.random() * data.length);
-    const fact = data[index];
-
-    const div = document.createElement("div");
-    div.innerHTML = `<h2>Dog fact</h2><p>${fact}</p>`;
-    document.body.appendChild(div);
+    if (useDevMode) {
+        const index = Math.floor(Math.random() * data.length);
+        const fact = data[index];
+        const div = document.createElement("div");
+        div.innerHTML = `<h2>Dog fact</h2><p>${fact}</p>`;
+        document.body.appendChild(div);
+    } else {
+        const div = document.createElement("div");
+        div.innerHTML = `<h2>Dog fact</h2><p>${data}</p>`
+        document.body.appendChild(div);
+    }
 }
 
 //test 2 - bild
@@ -32,13 +34,15 @@ async function getDogPic() {
 
 //test 3 - beskrivning av hundras
 async function getRandomBreedAndInfo() {
+    let url;
 
-    // const response = await fetch("http://localhost:8000/dogbreed");
+    if (useDevMode) {
+        url = "http://localhost:8000/dogbreedseconddesc";
+    } else {
+        url = "http://localhost:8000/dogbreed";
+    }
 
-    //denna const ska tas bort innan inlämning och den ovanför ska kommenteras in igen
-    const response = await fetch("http://localhost:8000/dogbreedseconddesc");
-
-
+    const response = await fetch(url);
     const data = await response.json();
 
     const index = Math.floor(Math.random() * data.length);

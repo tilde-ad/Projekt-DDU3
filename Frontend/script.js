@@ -167,7 +167,7 @@ function createCard(imageUrl) {
     return card;
 }
 
-// Hämta popupen från HTML
+// Hämta från HTML
 const popup = document.getElementById("popup");
 
 // Skapa stäng-knappen
@@ -185,7 +185,8 @@ popup.appendChild(closeX);
 
 closeX.addEventListener("click", function () {
     popup.classList.remove("show");
-})
+});
+
 
 function checkForMatch() {
     const [card1, card2] = flippedCards;
@@ -218,6 +219,26 @@ function checkForMatch() {
     }
 }
 
+//hämta hundinfo till popup-rutan
+async function getDogInfo() {
+    const h3 = document.getElementById("h3");
+    h3.style.fontSize = "35px";
+    const dogFact = document.getElementById("fact");
+
+    const response = await fetch("http://localhost:8000/dogfact");
+    const data = await response.json();
+
+    const index = Math.floor(Math.random() * data.length);
+    const fact = data[index];
+    dogFact.textContent = fact;
+
+    const array = ["Woof, good job!", "Nice matching", "You did it!", "Woof, you doing a great job!"];
+
+    const arrayIndex = Math.floor(Math.random() * array.length);
+    const result = array[arrayIndex];
+    h3.textContent = result;
+
+}
 
 
 //få bilder och blanda dem
@@ -343,9 +364,9 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-if (useDevMode) {
-    getDogPic(); // Använder bara bilder från images-mappen
-} else {
-    driver();    // Hämtar raser och beskrivningar från API
-    getDogPic(); // Hämtar bilder från API
-}
+
+getDogPic(); // Använder bara bilder från images-mappen
+
+driver();    // Hämtar raser och beskrivningar från API
+getDogPic(); // Hämtar bilder från API
+getDogInfo();
