@@ -260,6 +260,12 @@ function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
+        
+        const descContainer = document.getElementById("desc")
+        const descDiv = document.createElement("div")
+        descContainer.append(descDiv)
+        descDiv.classList.add("descriptions")
+        descDiv.textContent = desc
         console.log("Beskrivning:", desc);
 
         matchPairCounter++;
