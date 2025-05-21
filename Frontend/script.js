@@ -2,13 +2,14 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 const restartButton = document.getElementById('restartButton');
+let firstLoad = true;
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
 
 
-const useDevMode = true;
+const useDevMode = false;
 
 class Dog {
     constructor({ name, description }) {
@@ -252,40 +253,47 @@ function checkForMatch() {
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
+async function preloadImages(imageUrls) {
+    const promises = imageUrls.map(url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = resolve;
+            img.onerror = reject;
+        });
+    });
+    return Promise.all(promises);
+}
+
 async function getDogPic() {
+    const loadingScreen = document.getElementById("loading-screen");
+    if (firstLoad) {
+        loadingScreen.classList.add("instant");
+        loadingScreen.classList.add("show");
+        setTimeout(() => {
+            loadingScreen.classList.remove("instant");
+        }, 50);
+        firstLoad = false;
+    } else {
+        loadingScreen.classList.add("show");
+    }
+
     let selectedImages = [];
+    let allDogPics = [];
+
     if (useDevMode) {
-        // Välj 10 unika slumpmässiga bilder från devImages
         const imagesCopy = [...devImages];
         for (let i = 0; i < 10 && imagesCopy.length > 0; i++) {
             const idx = Math.floor(Math.random() * imagesCopy.length);
             selectedImages.push(imagesCopy.splice(idx, 1)[0]);
         }
-        // Skapa 2 av varje (20 bilder)
-        const allDogPics = [];
+
         for (let img of selectedImages) {
             allDogPics.push(`images/${img}`);
             allDogPics.push(`images/${img}`);
         }
-        // Blanda
-        const shuffledPics = [];
-        while (allDogPics.length > 0) {
-            const index = Math.floor(Math.random() * allDogPics.length);
-            shuffledPics.push(allDogPics.splice(index, 1)[0]);
-        }
-        // Visa bilderna
-        const cards = memoryContainer.querySelectorAll('.memoryCard');
-        for (let i = 0; i < cards.length; i++) {
-            memoryContainer.removeChild(cards[i]);
-        }
-        for (let i = 0; i < shuffledPics.length; i++) {
-            const card = createCard(shuffledPics[i]);
-            memoryContainer.appendChild(card);
-        }
-        return selectedImages;
-    } else { //Detta är vad som ska användas i orginalet!
+    } else {
         const breeds = await getCommonBreeds();
-        // Välj 10 unika slumpmässiga raser
         const selectedBreeds = [];
         const breedsCopy = [...breeds];
 
@@ -302,42 +310,37 @@ async function getDogPic() {
             return parts.join("-");
         }
 
-        // Hämta en bild per ras
-        const dogPics = [];
         for (const breed of selectedBreeds) {
             const apiBreed = toDogCeoApiBreed(breed);
-            const breedParam = `?breed=${apiBreed}`;
-            const response = await fetch(`http://localhost:8000/dogpic${breedParam}`);
+            const response = await fetch(`http://localhost:8000/dogpic?breed=${apiBreed}`);
             const data = await response.json();
-            dogPics.push(data.message);
+            allDogPics.push(data.message);
+            allDogPics.push(data.message);
         }
-
-        // Steg 2: Skapa en lista med 2 av varje bild (8 par → 16 bilder)
-        const allDogPics = [];
-        for (let i = 0; i < dogPics.length; i++) {
-            allDogPics.push(dogPics[i]);
-            allDogPics.push(dogPics[i]);
-        }
-
-        // Steg 3: Blanda bilderna med manuell metod
-        const shuffledPics = [];
-        while (allDogPics.length > 0) {
-            const index = Math.floor(Math.random() * allDogPics.length);
-            const picked = allDogPics.splice(index, 1)[0]; // plocka och ta bort
-            shuffledPics.push(picked);
-        }
-
-        // Steg 4: Lägg in bilderna i #pic1 till #pic16
-        const cards = memoryContainer.querySelectorAll('.memoryCard');
-        for (let i = 0; i < cards.length; i++) {
-            memoryContainer.removeChild(cards[i]);
-        }
-        for (let i = 0; i < shuffledPics.length; i++) {
-            const card = createCard(shuffledPics[i]);
-            memoryContainer.appendChild(card);
-        }
-        return dogPics
     }
+
+    // Blanda bilderna
+    const shuffledPics = [];
+    while (allDogPics.length > 0) {
+        const index = Math.floor(Math.random() * allDogPics.length);
+        shuffledPics.push(allDogPics.splice(index, 1)[0]);
+    }
+
+    // Vänta tills alla bilder är laddade
+    await preloadImages(shuffledPics);
+
+    // Rensa gamla kort
+    const cards = memoryContainer.querySelectorAll('.memoryCard');
+    cards.forEach(card => memoryContainer.removeChild(card));
+
+    // Skapa nya kort
+    for (let i = 0; i < shuffledPics.length; i++) {
+        const card = createCard(shuffledPics[i]);
+        memoryContainer.appendChild(card);
+    }
+
+    loadingScreen.classList.remove("show"); // Dölj loading
+    return selectedImages;
 }
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
@@ -353,11 +356,10 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
+driver().then(() => {
+    getDogPic();
+});
 
-getDogPic(); // Använder bara bilder från images-mappen
-
-driver();    // Hämtar raser och beskrivningar från API
-getDogPic(); // Hämtar bilder från API
 
 function restartGame() {
     matchCounter = 0;
@@ -365,15 +367,23 @@ function restartGame() {
     flippedCards = [];
     lockBoard = false;
     updateCounterDisplay();
-    getDogPic();
+
+    // Vänta lite så att korten hinner vändas tillbaka
+    setTimeout(() => {
+        getDogPic();
+    }, 600); // Justera tiden om du vill
 }
 
+
 restartButton.addEventListener('click', () => {
-    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
-    flippedCards.forEach(card => {
+    const flipped = document.querySelectorAll('.memoryCard.flipped');
+    flipped.forEach(card => {
         card.classList.remove('flipped');
     });
-    setTimeout(() => {
-        restartGame();
-    }, 400); // 400 ms för att hinna se vändningen
+
+    // Vänta lite innan spelet laddas om
+    setTimeout(async () => {
+        await restartGame(); // eller getDogPic(), beroende på vad du använder
+        loadingScreen.classList.remove("show");
+    }, 100); // Delay för fade-effekt
 });
