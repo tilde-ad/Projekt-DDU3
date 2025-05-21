@@ -1,14 +1,14 @@
+const useDevMode = true;
+
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
-const restartButton = document.getElementById('restartButton');
+const restartButton = document.getElementById("restartButton");
+const winRestartButton = document.getElementById("winRestartButton");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
-
-
-const useDevMode = true;
 
 class Dog {
     constructor({ name, description }) {
@@ -193,7 +193,7 @@ function createCard(imageUrl) {
 }
 
 // Hämta från HTML
-const popup = document.getElementById("popup");
+const popup = document.querySelector("#popupFact");
 
 // Skapa stäng-knappen
 const closeX = document.createElement("div");
@@ -232,7 +232,7 @@ function checkForMatch() {
             // Visa popup bara var 3:e gång
             setTimeout(async function () {
                 await showRandomDogFact();
-                const popup = document.getElementById("popup");
+                const popup = document.getElementById("popupFact");
                 popup.classList.remove("show");
                 // void popup.offsetWidth;
                 popup.classList.add("show");
@@ -247,6 +247,18 @@ function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
+
+    //vinst av spelet
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
+    if (allCardsMatch.length === allCards.length) {
+        setTimeout(() => {
+            const winPopup = document.getElementById("popupWin");
+            winPopup.classList.add("show");
+        }, 800); // lite delay så man hinner se sista kortet vändas
+    }
+
 }
 
 
@@ -354,11 +366,6 @@ async function getCommonBreeds() {
 }
 
 
-getDogPic(); // Använder bara bilder från images-mappen
-
-driver();    // Hämtar raser och beskrivningar från API
-getDogPic(); // Hämtar bilder från API
-
 function restartGame() {
     matchCounter = 0;
     matchPairCounter = 0;
@@ -368,7 +375,7 @@ function restartGame() {
     getDogPic();
 }
 
-restartButton.addEventListener('click', () => {
+restartButton.addEventListener('click', function () {
     const flippedCards = document.querySelectorAll('.memoryCard.flipped');
     flippedCards.forEach(card => {
         card.classList.remove('flipped');
@@ -377,3 +384,20 @@ restartButton.addEventListener('click', () => {
         restartGame();
     }, 400); // 400 ms för att hinna se vändningen
 });
+
+winRestartButton.addEventListener("click", function () {
+    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+    });
+    restartGame();
+    const winPopup = document.getElementById("popupWin");
+    winPopup.classList.remove("show");
+});
+
+
+
+//Functionsanrop
+getDogPic(); // Använder bara bilder från images-mappen
+driver();    // Hämtar raser och beskrivningar från API
+getDogPic(); // Hämtar bilder från API
