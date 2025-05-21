@@ -1,5 +1,5 @@
 // Byt till false inför inlämning
-const useDevMode = false;
+const useDevMode = true;
 
 // === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
@@ -140,21 +140,6 @@ async function handler(request) {
                 status: 200,
                 headers: headerCORS
             });
-        }
-
-        // Dev-version av dogbreed + beskrivning
-        if (url.pathname === "/dogbreedseconddesc") {
-            if (useDevMode) {
-                return new Response(JSON.stringify(breedDescriptions), {
-                    status: 200,
-                    headers: headerCORS
-                });
-            } else {
-                return new Response("Route not available in live mode", {
-                    status: 404,
-                    headers: headerCORS
-                });
-            }
         }
 
         // Fakta om hundar

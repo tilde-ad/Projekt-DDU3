@@ -7,7 +7,7 @@ function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
 
-const useDevMode = false;
+const useDevMode = true;
 
 async function fetchAllBreedsWithDesc() {
     const response = await fetch("http://localhost:8000/dogbreed");
@@ -29,11 +29,7 @@ class DogbreedManager {
 
     async fetchBreed() {
         let url;
-        if (useDevMode) {
-            url = "http://localhost:8000/dogbreedseconddesc"; // Cachad version
-        } else {
-            url = "http://localhost:8000/dogbreed"; // Live API
-        }
+        url = "http://localhost:8000/dogbreed"; // Live API
 
         const response = await fetch(url);
         const data = await response.json();
