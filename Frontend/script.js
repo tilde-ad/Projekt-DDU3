@@ -2,7 +2,7 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
-const useDevMode = true;
+const useDevMode = false;
 
 class Dog {
     constructor({ name, description }) {
@@ -270,6 +270,7 @@ async function getDogPic() {
         // Välj 10 unika slumpmässiga raser
         const selectedBreeds = [];
         const breedsCopy = [...breeds];
+
         for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
             const idx = Math.floor(Math.random() * breedsCopy.length);
             selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
@@ -324,18 +325,13 @@ async function getDogPic() {
         }
 
         // Steg 4: Lägg in bilderna i #pic1 till #pic16
+        const cards = memoryContainer.querySelectorAll('.memoryCard');
+        for (let i = 0; i < cards.length; i++) {
+            memoryContainer.removeChild(cards[i]);
+        }
         for (let i = 0; i < shuffledPics.length; i++) {
-            const img = document.createElement("img");
-            img.src = shuffledPics[i];
-
-
-            const div = document.createElement("pic" + (i + 1))
-            div.classList.add("memoryCard")
-            memoryContainer.append(div)
-
-            if (div) {
-                div.appendChild(img);
-            }
+            const card = createCard(shuffledPics[i]);
+            memoryContainer.appendChild(card);
         }
         return dogPics
     }

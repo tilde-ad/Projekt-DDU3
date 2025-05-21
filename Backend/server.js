@@ -1,5 +1,5 @@
 // Byt till false inför inlämning
-const useDevMode = true;
+const useDevMode = false;
 
 // === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
