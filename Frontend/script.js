@@ -14,8 +14,6 @@ function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
 
-const useDevMode = true;
-
 async function fetchAllBreedsWithDesc() {
     const response = await fetch("http://localhost:8000/dogbreed");
     allBreedsWithDesc = await response.json();
