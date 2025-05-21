@@ -359,4 +359,3 @@ getDogPic(); // Använder bara bilder från images-mappen
 
 driver();    // Hämtar raser och beskrivningar från API
 getDogPic(); // Hämtar bilder från API
-getDogInfo();
