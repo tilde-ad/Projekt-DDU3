@@ -116,7 +116,6 @@ const devImages = [
     "pug.jpg",
     "rhodesian-ridgeback.jpg",
     "rottweiler.jpg",
-    "russell-terrier.jpg",
     "saluki.jpg",
     "samoyed.jpg",
     "schipperke.jpg",
@@ -399,7 +398,8 @@ async function getCommonBreeds() {
     const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
     const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
 
-    const commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+    let commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
+    commonBreeds = commonBreeds.filter(breed => breed !== "russell terrier" && breed !== "russell-terrier");
     return commonBreeds;
 }
 
