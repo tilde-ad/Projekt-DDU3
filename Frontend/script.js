@@ -3,12 +3,24 @@ const useDevMode = true;
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
+
+let allBreedsWithDesc = [];
+
 const restartButton = document.getElementById("restartButton");
 const winRestartButton = document.getElementById("winRestartButton");
+
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
+
+const useDevMode = true;
+
+async function fetchAllBreedsWithDesc() {
+    const response = await fetch("http://localhost:8000/dogbreed");
+    allBreedsWithDesc = await response.json();
+}
+
 
 class Dog {
     constructor({ name, description }) {
@@ -25,11 +37,7 @@ class DogbreedManager {
 
     async fetchBreed() {
         let url;
-        if (useDevMode) {
-            url = "http://localhost:8000/dogbreedseconddesc"; // Cachad version
-        } else {
-            url = "http://localhost:8000/dogbreed"; // Live API
-        }
+        url = "http://localhost:8000/dogbreed"; // Live API
 
         const response = await fetch(url);
         const data = await response.json();
@@ -132,7 +140,35 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+
+function getDescriptionFromImageUrl(imageUrl) {
+    // Extrahera rasnamn
+    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
+    let breedName;
+    if (match && match[1]) {
+        // Hantera sub-breeds: vänd på ordningen om det är två ord
+        const parts = match[1].split("-");
+        if (parts.length === 2) {
+            breedName = parts[1] + " " + parts[0];
+        } else {
+            breedName = parts.join(" ");
+        }
+    } else {
+        // Fallback för devImages
+        breedName = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
+    }
+
+    // Hitta beskrivning
+    for (let i = 0; i < allBreedsWithDesc.length; i++) {
+        if (allBreedsWithDesc[i].name.toLowerCase() === breedName.toLowerCase()) {
+            return allBreedsWithDesc[i].description;
+        }
+    }
+    return "Ingen beskrivning hittades.";
+}
+
 const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
 
 async function showRandomDogFact() {
 
@@ -225,6 +261,10 @@ function checkForMatch() {
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
+
+        const imageUrl = card1.dataset.image;
+        const desc = getDescriptionFromImageUrl(imageUrl);
+        console.log("Beskrivning:", desc);
 
         matchPairCounter++;
 
@@ -365,7 +405,6 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-
 function restartGame() {
     matchCounter = 0;
     matchPairCounter = 0;
@@ -398,6 +437,9 @@ winRestartButton.addEventListener("click", function () {
 
 
 //Functionsanrop
-getDogPic(); // Använder bara bilder från images-mappen
-driver();    // Hämtar raser och beskrivningar från API
-getDogPic(); // Hämtar bilder från API
+
+(async () => {
+    await fetchAllBreedsWithDesc();
+    await getDogPic();
+    await driver();
+})();
