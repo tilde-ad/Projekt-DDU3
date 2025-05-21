@@ -1,7 +1,7 @@
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
-const restartButton = document.getElementById("restartButton");
+const restartButton = document.getElementById('restartButton');
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -367,7 +367,13 @@ function restartGame() {
     updateCounterDisplay();
     getDogPic();
 }
-restartButton.addEventListener("click", function () {
-    restartGame();
-}
-);
+
+restartButton.addEventListener('click', () => {
+    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+    });
+    setTimeout(() => {
+        restartGame();
+    }, 400); // 400 ms för att hinna se vändningen
+});
