@@ -1,3 +1,5 @@
+
+
 // Byt till false inför inlämning
 const useDevMode = true;
 
@@ -68,6 +70,8 @@ if (useDevMode) {
 }
 
 // === SERVER ===
+
+let acounts = []
 async function handler(request) {
     const url = new URL(request.url);
 
@@ -180,6 +184,20 @@ async function handler(request) {
             status: 404,
             headers: headerCORS
         });
+    }
+
+
+
+    if(request.method == "POST"){
+        if(url.pathname == "/savedAcounts" ){
+            const body = await request.json()
+            acounts.push(body)
+            return new Response(JSON.stringify(acounts), {
+                    status: 200,
+                    headers: headerCORS
+                });
+        }
+        
     }
 }
 
