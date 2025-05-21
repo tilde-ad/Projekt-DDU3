@@ -131,17 +131,24 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
 async function showRandomDogFact() {
+
+    const h3 = document.getElementById("wof");
+    const indexH3 = Math.floor(Math.random() * arrayDogFrase.length);
+    h3.textContent = arrayDogFrase[indexH3];
+
     const response = await fetch("http://localhost:8000/dogfact");
     const facts = await response.json();
     if (facts.length > 0) {
         const index = Math.floor(Math.random() * facts.length);
         let fact = facts[index];
-        document.getElementById("dog-fact").textContent = fact;
+        document.getElementById("dogFact").textContent = fact;
     }
 }
 
-["Woof, good job!",]
+
 showRandomDogFact();
 
 
