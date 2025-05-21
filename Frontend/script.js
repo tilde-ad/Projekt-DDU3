@@ -2,7 +2,7 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
-const useDevMode = false;
+const useDevMode = true;
 
 class Dog {
     constructor({ name, description }) {
@@ -275,21 +275,6 @@ async function getDogPic() {
             const idx = Math.floor(Math.random() * breedsCopy.length);
             selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
         }
-
-        /* Test så rätt descriptions kommer med bara, kommenterar ut men behåller
-        const breedmanager = new DogbreedManager();
-        await breedmanager.fetchBreed();
-        selectedBreeds.forEach(breed => {
-            const match = breedmanager.instances.find(
-                b => b.name.toLowerCase() === breed.toLowerCase()
-            );
-            if (match) {
-                console.log(`Ras: ${match.name}, Beskrivning: ${match.description}`);
-            } else {
-                console.log(`Ras: ${breed}, Beskrivning: Hittades ej`);
-            }
-        });
-        */
 
         function toDogCeoApiBreed(breed) {
             const parts = breed.toLowerCase().split(" ");
