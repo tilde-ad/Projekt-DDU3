@@ -3,7 +3,6 @@ const useDevMode = true;
 
 // === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
-let breedDescriptions = [];
 
 // === Hämta och spara 20 hundfakta lokalt (endast i dev-läge) ===
 if (useDevMode) {
@@ -13,58 +12,6 @@ if (useDevMode) {
         const data = await apiResponse.json();
         arrayDogFact.push(data.data[0].attributes.body);
     }
-}
-
-// === Hämta 67 raser med beskrivning (endast i dev-läge) ===
-async function fetchBreedDescriptions() {
-    const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
-    const ceoData = await ceoResponse.json();
-    const ceoBreeds = [];
-
-    const breedEntries = Object.entries(ceoData.message);
-    for (let i = 0; i < breedEntries.length; i++) {
-        const breed = breedEntries[i][0];
-        const subBreeds = breedEntries[i][1];
-
-        if (subBreeds.length === 0) {
-            ceoBreeds.push(breed);
-        } else {
-            for (let j = 0; j < subBreeds.length; j++) {
-                ceoBreeds.push(subBreeds[j] + " " + breed);
-            }
-        }
-    }
-
-    let dogApiBreeds = [];
-    let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
-
-    while (apiUrl) {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
-        for (let i = 0; i < data.data.length; i++) {
-            dogApiBreeds.push(data.data[i]);
-        }
-        apiUrl = data.links?.next || null;
-    }
-
-    for (let i = 0; i < ceoBreeds.length; i++) {
-        const name = ceoBreeds[i];
-        let foundDescription = "Ingen beskrivning hittades.";
-
-        for (let j = 0; j < dogApiBreeds.length; j++) {
-            const breedName = dogApiBreeds[j].attributes.name.toLowerCase();
-            if (breedName.includes(name.toLowerCase())) {
-                foundDescription = dogApiBreeds[j].attributes.description;
-                break;
-            }
-        }
-
-        breedDescriptions.push({ name, description: foundDescription });
-    }
-}
-
-if (useDevMode) {
-    await fetchBreedDescriptions();
 }
 
 // === SERVER ===
