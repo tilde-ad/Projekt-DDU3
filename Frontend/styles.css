@@ -112,7 +112,7 @@ p {
 }
 
 
-#popup {
+.popup {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
     background-position: center;
@@ -130,18 +130,25 @@ p {
     display: none;
 }
 
+
 #popup-inner {
     position: relative;
 }
 
-#fact {
+#winRestartButton {
+    margin-left: 100px;
+    margin-top: 50px;
+}
+
+
+#fact,
+#inner {
     width: 50%;
     margin-left: 315px;
     margin-top: 85px;
 }
 
 #dogFact {
-
     margin: 0px auto;
 }
 
@@ -161,7 +168,7 @@ p {
     }
 }
 
-#popup.show {
+.popup.show {
     display: block;
     animation: fadeIn 0.5s ease forwards;
 }

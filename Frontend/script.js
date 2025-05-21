@@ -1,15 +1,25 @@
+const useDevMode = true;
+
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
+let allBreedsWithDesc = [];
+const winRestartButton = document.getElementById("winRestartButton");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
 }
 
+async function fetchAllBreedsWithDesc() {
+    const response = await fetch("http://localhost:8000/dogbreed");
+    allBreedsWithDesc = await response.json();
+}
 
-const useDevMode = false;
+const useDevMode = true;
+
 
 class Dog {
     constructor({ name, description }) {
@@ -26,11 +36,7 @@ class DogbreedManager {
 
     async fetchBreed() {
         let url;
-        if (useDevMode) {
-            url = "http://localhost:8000/dogbreedseconddesc"; // Cachad version
-        } else {
-            url = "http://localhost:8000/dogbreed"; // Live API
-        }
+        url = "http://localhost:8000/dogbreed"; // Live API
 
         const response = await fetch(url);
         const data = await response.json();
@@ -113,7 +119,7 @@ const devImages = [
     "pug.jpg",
     "rhodesian-ridgeback.jpg",
     "rottweiler.jpg",
-    "russel-terrier.jpg",
+    "russell-terrier.jpg",
     "saluki.jpg",
     "samoyed.jpg",
     "schipperke.jpg",
@@ -133,7 +139,35 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+
+function getDescriptionFromImageUrl(imageUrl) {
+    // Extrahera rasnamn
+    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
+    let breedName;
+    if (match && match[1]) {
+        // Hantera sub-breeds: vänd på ordningen om det är två ord
+        const parts = match[1].split("-");
+        if (parts.length === 2) {
+            breedName = parts[1] + " " + parts[0];
+        } else {
+            breedName = parts.join(" ");
+        }
+    } else {
+        // Fallback för devImages
+        breedName = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
+    }
+
+    // Hitta beskrivning
+    for (let i = 0; i < allBreedsWithDesc.length; i++) {
+        if (allBreedsWithDesc[i].name.toLowerCase() === breedName.toLowerCase()) {
+            return allBreedsWithDesc[i].description;
+        }
+    }
+    return "Ingen beskrivning hittades.";
+}
+
 const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
 
 async function showRandomDogFact() {
 
@@ -194,7 +228,7 @@ function createCard(imageUrl) {
 }
 
 // Hämta från HTML
-const popup = document.getElementById("popup");
+const popup = document.querySelector("#popupFact");
 
 // Skapa stäng-knappen
 const closeX = document.createElement("div");
@@ -227,13 +261,17 @@ function checkForMatch() {
         card2.classList.add("matched");
         flippedCards = [];
 
+        const imageUrl = card1.dataset.image;
+        const desc = getDescriptionFromImageUrl(imageUrl);
+        console.log("Beskrivning:", desc);
+
         matchPairCounter++;
 
         if (matchPairCounter % 3 === 0) {
             // Visa popup bara var 3:e gång
             setTimeout(async function () {
                 await showRandomDogFact();
-                const popup = document.getElementById("popup");
+                const popup = document.getElementById("popupFact");
                 popup.classList.remove("show");
                 // void popup.offsetWidth;
                 popup.classList.add("show");
@@ -248,6 +286,18 @@ function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
+
+    //vinst av spelet
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
+    if (allCardsMatch.length === allCards.length) {
+        setTimeout(() => {
+            const winPopup = document.getElementById("popupWin");
+            winPopup.classList.add("show");
+        }, 800); // lite delay så man hinner se sista kortet vändas
+    }
+
 }
 
 
@@ -356,10 +406,10 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
+
 driver().then(() => {
     getDogPic();
 });
-
 
 function restartGame() {
     matchCounter = 0;
@@ -374,7 +424,6 @@ function restartGame() {
     }, 600); // Justera tiden om du vill
 }
 
-
 restartButton.addEventListener('click', () => {
     const flipped = document.querySelectorAll('.memoryCard.flipped');
     flipped.forEach(card => {
@@ -387,3 +436,22 @@ restartButton.addEventListener('click', () => {
         loadingScreen.classList.remove("show");
     }, 100); // Delay för fade-effekt
 });
+
+winRestartButton.addEventListener("click", function () {
+    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+    });
+    restartGame();
+    const winPopup = document.getElementById("popupWin");
+    winPopup.classList.remove("show");
+});
+
+//Functionsanrop
+
+(async () => {
+    await fetchAllBreedsWithDesc();
+    await getDogPic();
+    await driver();
+})();
+
