@@ -1,6 +1,7 @@
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
+const restartButton = document.getElementById("restartButton");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -357,3 +358,16 @@ getDogPic(); // Använder bara bilder från images-mappen
 
 driver();    // Hämtar raser och beskrivningar från API
 getDogPic(); // Hämtar bilder från API
+
+function restartGame() {
+    matchCounter = 0;
+    matchPairCounter = 0;
+    flippedCards = [];
+    lockBoard = false;
+    updateCounterDisplay();
+    getDogPic();
+}
+restartButton.addEventListener("click", function () {
+    restartGame();
+}
+);
