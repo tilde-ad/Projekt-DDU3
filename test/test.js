@@ -2,19 +2,20 @@
 
 let acountnumber = 1
 const button = document.getElementById("acountButton")
-const acount = document.getElementById("acount").value
-const password = document.getElementById("password").value
+
 
 
 button.addEventListener("click", async e =>{
-    const data = {[`Acount${acountnumber++}`]: {username: acount, password: password}};
+    const acount = document.getElementById("acount").value
+    const password = document.getElementById("password").value
+    const data = {username: acount, password: password};
     const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
     method: "POST",
     headers: {"content-type": "application/json"},
     body: JSON.stringify(data)
 })
     const response = await fetch(Acountrequest)
-    const resource = await response.json()
+    const resource = await response.json()  
     console.log(resource)
 
 })
