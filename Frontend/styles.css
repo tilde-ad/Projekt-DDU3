@@ -1,4 +1,8 @@
-html,
+@font-face {
+    font-family: "Jua";
+    src: url("Jua/Jua-Regular.ttf");
+}
+
 body {
     height: 100%;
     margin: 0;
@@ -16,6 +20,22 @@ body {
     align-items: center;
     flex-direction: column;
 }
+
+.header {
+    display: flex;
+    flex-direction: row;
+}
+
+h1 {
+    font-family: "Jua";
+    font-size: 50px;
+    border: 3px solid #0F3665;
+    border-radius: 10px;
+    padding: 10px 20px;
+    background-color: #E2EFFF;
+
+}
+
 
 #memory-Container {
     padding: 15px;
