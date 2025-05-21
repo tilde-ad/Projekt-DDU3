@@ -1,7 +1,14 @@
+const useDevMode = true;
+
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
+
 let allBreedsWithDesc = [];
+
+const restartButton = document.getElementById("restartButton");
+const winRestartButton = document.getElementById("winRestartButton");
+
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -13,6 +20,7 @@ async function fetchAllBreedsWithDesc() {
     const response = await fetch("http://localhost:8000/dogbreed");
     allBreedsWithDesc = await response.json();
 }
+
 
 class Dog {
     constructor({ name, description }) {
@@ -132,6 +140,7 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+
 function getDescriptionFromImageUrl(imageUrl) {
     // Extrahera rasnamn
     const match = imageUrl.match(/\/breeds\/([^/]+)\//);
@@ -158,16 +167,26 @@ function getDescriptionFromImageUrl(imageUrl) {
     return "Ingen beskrivning hittades.";
 }
 
+const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
+
 async function showRandomDogFact() {
+
+    const h3 = document.getElementById("wof");
+    const indexH3 = Math.floor(Math.random() * arrayDogFrase.length);
+    h3.textContent = arrayDogFrase[indexH3];
+
     const response = await fetch("http://localhost:8000/dogfact");
     const facts = await response.json();
-    let fact = "No dog fact found.";
-    if (Array.isArray(facts) && facts.length > 0) {
+    if (facts.length > 0) {
         const index = Math.floor(Math.random() * facts.length);
-        fact = facts[index];
+        let fact = facts[index];
+        document.getElementById("dogFact").textContent = fact;
     }
-    document.getElementById("dog-fact").textContent = fact;
 }
+
+
+showRandomDogFact();
 
 
 //skapa framsida och baksida på kort samt att vända på korten
@@ -210,7 +229,7 @@ function createCard(imageUrl) {
 }
 
 // Hämta från HTML
-const popup = document.getElementById("popup");
+const popup = document.querySelector("#popupFact");
 
 // Skapa stäng-knappen
 const closeX = document.createElement("div");
@@ -253,7 +272,7 @@ function checkForMatch() {
             // Visa popup bara var 3:e gång
             setTimeout(async function () {
                 await showRandomDogFact();
-                const popup = document.getElementById("popup");
+                const popup = document.getElementById("popupFact");
                 popup.classList.remove("show");
                 // void popup.offsetWidth;
                 popup.classList.add("show");
@@ -268,6 +287,18 @@ function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
+
+    //vinst av spelet
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
+    if (allCardsMatch.length === allCards.length) {
+        setTimeout(() => {
+            const winPopup = document.getElementById("popupWin");
+            winPopup.classList.add("show");
+        }, 800); // lite delay så man hinner se sista kortet vändas
+    }
+
 }
 
 
@@ -374,6 +405,38 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
+function restartGame() {
+    matchCounter = 0;
+    matchPairCounter = 0;
+    flippedCards = [];
+    lockBoard = false;
+    updateCounterDisplay();
+    getDogPic();
+}
+
+restartButton.addEventListener('click', function () {
+    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+    });
+    setTimeout(() => {
+        restartGame();
+    }, 400); // 400 ms för att hinna se vändningen
+});
+
+winRestartButton.addEventListener("click", function () {
+    const flippedCards = document.querySelectorAll('.memoryCard.flipped');
+    flippedCards.forEach(card => {
+        card.classList.remove('flipped');
+    });
+    restartGame();
+    const winPopup = document.getElementById("popupWin");
+    winPopup.classList.remove("show");
+});
+
+
+
+//Functionsanrop
 
 (async () => {
     await fetchAllBreedsWithDesc();
