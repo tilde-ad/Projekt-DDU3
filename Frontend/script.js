@@ -118,7 +118,7 @@ const devImages = [
     "pug.jpg",
     "rhodesian-ridgeback.jpg",
     "rottweiler.jpg",
-    "russel-terrier.jpg",
+    "russell-terrier.jpg",
     "saluki.jpg",
     "samoyed.jpg",
     "schipperke.jpg",
