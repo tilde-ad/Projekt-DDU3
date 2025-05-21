@@ -3,6 +3,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: repeat-y;
+
+    text-align: center;
 }
 
 #memory-Container {
@@ -67,6 +69,7 @@ body {
     justify-content: center;
     font-size: 2rem;
 }
+
 
 #popup {
     background-image: url(images/PopDawg.png);
