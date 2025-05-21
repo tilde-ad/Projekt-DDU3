@@ -2,6 +2,11 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
+function updateCounterDisplay() {
+    count.textContent = matchCounter;
+}
+
+
 const useDevMode = true;
 
 class Dog {
@@ -197,8 +202,12 @@ closeX.addEventListener("click", function () {
     popup.classList.remove("show");
 });
 
+let matchPairCounter = 0;
 
 function checkForMatch() {
+    matchCounter++;
+    updateCounterDisplay();
+
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
 
@@ -207,16 +216,15 @@ function checkForMatch() {
         card2.classList.add("matched");
         flippedCards = [];
 
-        matchCounter++; // öka med 1 varje gång ett par hittas
+        matchPairCounter++;
 
-
-        if (matchCounter % 3 === 0) {
+        if (matchPairCounter % 3 === 0) {
             // Visa popup bara var 3:e gång
             setTimeout(async function () {
                 await showRandomDogFact();
                 const popup = document.getElementById("popup");
                 popup.classList.remove("show");
-                void popup.offsetWidth;
+                // void popup.offsetWidth;
                 popup.classList.add("show");
             }, 1000);
         }
