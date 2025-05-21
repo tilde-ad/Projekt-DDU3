@@ -1,6 +1,8 @@
 //ta bort denna innan inlämning
 
 let matchCounter = 0;
+const count = document.getElementById("count");
+count.textContent = matchCounter;
 
 const useDevMode = true;
 
@@ -198,6 +200,7 @@ function checkForMatch() {
         flippedCards = [];
 
         matchCounter++; // öka med 1 varje gång ett par hittas
+
 
         if (matchCounter % 3 === 0) {
             // Visa popup bara var 3:e gång
