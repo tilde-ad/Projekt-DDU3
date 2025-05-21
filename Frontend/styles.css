@@ -87,7 +87,6 @@ body {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
     background-position: center;
-    display: none;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -99,6 +98,8 @@ body {
     text-align: center;
     z-index: 1000;
     box-sizing: border-box;
+
+    display: none;
 }
 
 #popup-inner {
@@ -110,13 +111,12 @@ body {
 }
 
 #dog-fact {
-    background: rgba(255, 255, 255, 0.85);
     color: #0F3665;
     border-radius: 8px;
     padding: 24px 32px;
     font-size: 1.3rem;
     max-width: 80%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
 }
 
 @keyframes fadeIn {

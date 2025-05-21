@@ -134,13 +134,15 @@ const devImages = [
 async function showRandomDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
     const facts = await response.json();
-    let fact = "No dog fact found.";
-    if (Array.isArray(facts) && facts.length > 0) {
+    if (facts.length > 0) {
         const index = Math.floor(Math.random() * facts.length);
-        fact = facts[index];
+        let fact = facts[index];
+        document.getElementById("dog-fact").textContent = fact;
     }
-    document.getElementById("dog-fact").textContent = fact;
 }
+
+["Woof, good job!",]
+showRandomDogFact();
 
 
 //skapa framsida och baksida på kort samt att vända på korten
