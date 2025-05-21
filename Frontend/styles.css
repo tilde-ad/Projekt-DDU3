@@ -90,9 +90,6 @@ body {
 
 #popup-inner {
     position: relative;
-    width: 300px;
-    margin-left: 320px;
-    margin-top: 100px;
 }
 
 @keyframes fadeIn {

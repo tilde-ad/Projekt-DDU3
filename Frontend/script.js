@@ -222,27 +222,6 @@ function checkForMatch() {
     }
 }
 
-//hämta hundinfo till popup-rutan
-async function getDogInfo() {
-    const h3 = document.getElementById("h3");
-    h3.style.fontSize = "35px";
-    const dogFact = document.getElementById("fact");
-
-    const response = await fetch("http://localhost:8000/dogfact");
-    const data = await response.json();
-
-    const index = Math.floor(Math.random() * data.length);
-    const fact = data[index];
-    dogFact.textContent = fact;
-
-    const array = ["Woof, good job!", "Nice matching", "You did it!", "Woof, you doing a great job!"];
-
-    const arrayIndex = Math.floor(Math.random() * array.length);
-    const result = array[arrayIndex];
-    h3.textContent = result;
-
-}
-
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
