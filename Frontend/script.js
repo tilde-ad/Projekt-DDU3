@@ -1,5 +1,3 @@
-//ta bort denna innan inlämning
-
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
@@ -128,6 +126,17 @@ const devImages = [
     // För när vi inte vill hämta från sidan!
 ];
 
+async function showRandomDogFact() {
+    const response = await fetch("http://localhost:8000/dogfact");
+    const facts = await response.json();
+    let fact = "No dog fact found.";
+    if (Array.isArray(facts) && facts.length > 0) {
+        const index = Math.floor(Math.random() * facts.length);
+        fact = facts[index];
+    }
+    document.getElementById("dog-fact").textContent = fact;
+}
+
 
 //skapa framsida och baksida på kort samt att vända på korten
 let flippedCards = [];
@@ -165,7 +174,6 @@ function createCard(imageUrl) {
             checkForMatch();
         }
     });
-
     return card;
 }
 
@@ -204,7 +212,8 @@ function checkForMatch() {
 
         if (matchCounter % 3 === 0) {
             // Visa popup bara var 3:e gång
-            setTimeout(function () {
+            setTimeout(async function () {
+                await showRandomDogFact();
                 const popup = document.getElementById("popup");
                 popup.classList.remove("show");
                 void popup.offsetWidth;
@@ -247,7 +256,10 @@ async function getDogPic() {
             shuffledPics.push(allDogPics.splice(index, 1)[0]);
         }
         // Visa bilderna
-        memoryContainer.innerHTML = "";
+        const cards = memoryContainer.querySelectorAll('.memoryCard');
+        for (let i = 0; i < cards.length; i++) {
+            memoryContainer.removeChild(cards[i]);
+        }
         for (let i = 0; i < shuffledPics.length; i++) {
             const card = createCard(shuffledPics[i]);
             memoryContainer.appendChild(card);
@@ -328,10 +340,6 @@ async function getDogPic() {
         return dogPics
     }
 }
-
-
-
-
 
 //Tar gemensamma hundar från api1 och api2 och skapar en ny array
 async function getCommonBreeds() {
