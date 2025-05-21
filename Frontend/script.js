@@ -18,9 +18,6 @@ async function fetchAllBreedsWithDesc() {
     allBreedsWithDesc = await response.json();
 }
 
-const useDevMode = true;
-
-
 class Dog {
     constructor({ name, description }) {
         this.name = name;
