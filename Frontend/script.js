@@ -1,4 +1,7 @@
 let matchCounter = 0;
+const count = document.getElementById("count");
+count.textContent = matchCounter;
+
 const useDevMode = true;
 
 class Dog {
@@ -174,7 +177,7 @@ function createCard(imageUrl) {
     return card;
 }
 
-// Hämta popupen från HTML
+// Hämta från HTML
 const popup = document.getElementById("popup");
 
 // Skapa stäng-knappen
@@ -192,7 +195,8 @@ popup.appendChild(closeX);
 
 closeX.addEventListener("click", function () {
     popup.classList.remove("show");
-})
+});
+
 
 function checkForMatch() {
     const [card1, card2] = flippedCards;
@@ -204,6 +208,7 @@ function checkForMatch() {
         flippedCards = [];
 
         matchCounter++; // öka med 1 varje gång ett par hittas
+
 
         if (matchCounter % 3 === 0) {
             // Visa popup bara var 3:e gång
@@ -225,6 +230,7 @@ function checkForMatch() {
         }, 1000);
     }
 }
+
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
@@ -348,9 +354,9 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-if (useDevMode) {
-    getDogPic(); // Använder bara bilder från images-mappen
-} else {
-    driver();    // Hämtar raser och beskrivningar från API
-    getDogPic(); // Hämtar bilder från API
-}
+
+getDogPic(); // Använder bara bilder från images-mappen
+
+driver();    // Hämtar raser och beskrivningar från API
+getDogPic(); // Hämtar bilder från API
+getDogInfo();
