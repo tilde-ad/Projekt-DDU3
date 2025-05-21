@@ -190,9 +190,14 @@ async function handler(request) {
 
     if(request.method == "POST"){
         if(url.pathname == "/savedAcounts" ){
-            const body = await request.json()
-            acounts.push(body)
-            return new Response(JSON.stringify(acounts), {
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+            const newAccount = await request.json();
+
+            data.accounts.push(newAccount);
+            await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+            return new Response(JSON.stringify(data), {
                     status: 200,
                     headers: headerCORS
                 });
