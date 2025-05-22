@@ -9,35 +9,40 @@
 </head>
 
 <body>
-    <h1>DOG MEMORY</h1>
-    <p>Click the Squares to Find the Matching Pairs!</p>
-    <div>
-        <p id="tries">Tries: <span id="count"></span></p>
-    </div>
-    <div id="memory-Container">
-        <div id="popupFact" class="popup">
-            <div id="popup-inner">
-                <div id="fact">
-                    <h3 id="wof" class="colorText"></h3>
-                    <p class="colorText">Did you know...</p>
-                    <p id="dogFact"></p>
+    <div id="body-Container">
+        <h1>DOG MEMORY</h1>
+        <p>Click the Squares to Find the Matching Pairs!</p>
+        <div>
+            <p id="tries">Tries: <span id="count"></span></p>
+        </div>
+        <div id="memory-Container">
+            <div id="popupFact" class="popup">
+                <div id="popup-inner">
+                    <div id="fact">
+                        <h3 id="wof" class="colorText"></h3>
+                        <p class="colorText">Did you know...</p>
+                        <p id="dogFact"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="popupWin" class="popup">
+                <div id="inner">
+                    <h3 class="colorText">Congratulations, you won the game!</h3>
+                    <button id="winRestartButton">Restart Game</button>
                 </div>
             </div>
         </div>
-        <div id="popupWin" class="popup">
-            <div id="inner">
-                <h3 class="colorText">Congratulations, you won the game!</h3>
-                <button id="winRestartButton">Restart Game</button>
-            </div>
-        </div>
+        <button id="restartButton">Restart Game</button>
     </div>
-    <button id="restartButton">Restart Game</button>
-
-
     <div id="loading-screen" class="show">
         <div class="spinner"></div>
         <h1>Loading puppies... 🐶</h1>
     </div>
+
+    <div id="desc">
+        <h2>Your pairs:</h2>
+    </div>
+
 
     <script src="script.js"></script>
 </body>

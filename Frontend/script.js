@@ -11,6 +11,7 @@ let firstLoad = true;
 let allBreedsWithDesc = [];
 let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
+const loadingScreen = document.getElementById("loading-screen");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -133,6 +134,8 @@ const devImages = [
 ];
 
 
+const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
 function getDescriptionFromImageUrl(imageUrl) {
     // Extrahera rasnamn
     const match = imageUrl.match(/\/breeds\/([^/]+)\//);
@@ -158,8 +161,6 @@ function getDescriptionFromImageUrl(imageUrl) {
     return "Ingen beskrivning hittades.";
 }
 
-const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
-
 
 async function showRandomDogFact() {
 
@@ -175,10 +176,6 @@ async function showRandomDogFact() {
         document.getElementById("dogFact").textContent = fact;
     }
 }
-
-
-showRandomDogFact();
-
 
 //skapa framsida och baksida på kort samt att vända på korten
 let flippedCards = [];
@@ -256,6 +253,12 @@ async function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
+
+        const descContainer = document.getElementById("desc")
+        const descDiv = document.createElement("div")
+        descContainer.append(descDiv)
+        descDiv.classList.add("descriptions")
+        descDiv.textContent = desc
         console.log("Beskrivning:", desc);
 
         matchPairCounter++;
@@ -340,7 +343,6 @@ async function preloadImages(imageUrls) {
 }
 
 async function getDogPic() {
-    const loadingScreen = document.getElementById("loading-screen");
     if (firstLoad) {
         loadingScreen.classList.add("instant");
         loadingScreen.classList.add("show");
