@@ -15,6 +15,8 @@ if (useDevMode) {
 }
 
 // === SERVER ===
+
+let acounts = []
 async function handler(request) {
     const url = new URL(request.url);
 
@@ -113,6 +115,53 @@ async function handler(request) {
             headers: headerCORS
         });
     }
+
+    if (request.method === "POST") {
+
+        if (url.pathname === "/savedAcounts") {
+            // Hämta nuvarande data
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+
+            // Läs in det nya kontot
+            const newAccount = await request.json();
+
+            // Lägg till det i arrayen
+            data.accounts.push(newAccount);
+
+            // Spara tillbaka till filen
+            await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+            return new Response(JSON.stringify({ success: true, message: "Account saved!" }), {
+                status: 200,
+                headers: headerCORS
+            });
+        }
+
+        if (url.pathname === "/login") {
+            const body = await request.json();
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+
+            // Kontrollera om kontot finns
+            const found = data.accounts.find(
+                acc => acc.username === body.username && acc.password === body.password
+            );
+
+            if (found) {
+                return new Response(JSON.stringify({ success: true, message: "Login successful" }), {
+                    status: 200,
+                    headers: headerCORS
+                });
+            } else {
+                return new Response(JSON.stringify({ success: false, message: "Invalid credentials" }), {
+                    status: 401,
+                    headers: headerCORS
+                });
+            }
+        }
+    }
+
 }
 
 Deno.serve(handler);
