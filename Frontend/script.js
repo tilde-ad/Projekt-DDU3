@@ -270,6 +270,13 @@ async function checkForMatch() {
                 popup.classList.add("show");
             }, 1000);
         }
+
+        const totalCards = document.querySelectorAll(".memoryCard").length;
+        const totalPairs = totalCards / 2;
+        if (matchPairCounter === totalPairs) {
+            checkAndSendHighscore()
+        }
+
     } else {
         lockBoard = true;
         setTimeout(() => {
@@ -279,14 +286,23 @@ async function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
+
+
+    //vinst av spelet
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
     
+    if (allCardsMatch.length === allCards.length) {
+        setTimeout(() => {
+            const winPopup = document.getElementById("popupWin");
+            winPopup.classList.add("show");
+        }, 800); // lite delay så man hinner se sista kortet vändas
+    }
 }
     //spara highscore
-
-
     async function checkAndSendHighscore() {
-    const totalCards = document.querySelectorAll(".memoryCard").length;
-    const totalPairs = totalCards / 2;
+    // const totalCards = document.querySelectorAll(".memoryCard").length;
+    // const totalPairs = totalCards / 2;
 
         const data = { username: "sara", password: "blabla", Highscore: matchPairCounter };
 
@@ -299,44 +315,14 @@ async function checkForMatch() {
         const response = await fetch(Acountrequest);
         const result = await response.json();
         console.log("Svar från servern:", result);
-
-    
-
-
-
-
-// let acountnumber = 1
-// const accountButton = document.getElementById("acountButton")
-
-
-// accountButton.addEventListener("click", async e =>{
-//     const acount = document.getElementById("acount").value
-//     const password = document.getElementById("password").value
-//     const data = {username: acount, password: password, Higscore: matchPairCounter};
-//     const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
-//     method: "POST",
-//     headers: {"content-type": "application/json"},
-//     body: JSON.stringify(data)
-// })
-//     const response = await fetch(Acountrequest)
-//     const resource = await response.json()  
-//     console.log(resource)
-
-// })
-
-
-    //vinst av spelet
-    const allCards = document.querySelectorAll(".memoryCard");
-    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-
-    if (allCardsMatch.length === allCards.length) {
-        setTimeout(() => {
-            const winPopup = document.getElementById("popupWin");
-            winPopup.classList.add("show");
-        }, 800); // lite delay så man hinner se sista kortet vändas
     }
 
-}
+
+
+
+
+
+
 
 
 //få bilder och blanda dem
