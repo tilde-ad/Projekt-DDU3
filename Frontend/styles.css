@@ -27,6 +27,13 @@ body {
     box-sizing: border-box;
 }
 
+#container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 h1 {
     font-family: "Jua";
     font-size: 50px;
@@ -53,8 +60,6 @@ p {
 
 #memory-Container {
     padding: 15px;
-    width: 705px;
-    height: 555px;
     display: grid;
     grid-template-columns: repeat(5, 125px);
     grid-template-rows: repeat(4, 125px);
