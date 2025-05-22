@@ -284,19 +284,20 @@ h2 {
     display: flex;
     flex-direction: column;
 
+}
 
-    .popup-content-login {
-        width: 20%;
-        position: relative;
-        left: 680px;
-        top: 30px;
-    }
+.popup-content-login {
+    width: 20%;
+    position: relative;
+    left: 680px;
+    top: 30px;
+}
 
-    .popup-content-login input {
-        margin-bottom: 10px;
-    }
+.popup-content-login input {
+    margin-bottom: 10px;
+}
 
 
-    h4 {
-        margin: 15px 0px 5px;
-    }
+h4 {
+    margin: 15px 0px 5px;
+}
