@@ -10,6 +10,9 @@ let allBreedsWithDesc = [];
 let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
+const createButton = document.getElementById("createButton");
+const loginButton = document.getElementById("loginButton");
+const openAuthPopupButton = document.getElementById("openAuthPopup");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -439,7 +442,6 @@ winRestartButton.addEventListener("click", function () {
 
 createCloseX(document.getElementById("popupWin"));
 
-const openAuthPopupButton = document.getElementById("openAuthPopup");
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
 });
