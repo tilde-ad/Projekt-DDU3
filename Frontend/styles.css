@@ -262,11 +262,12 @@ button:active {
     margin-right: 15px;
     margin-top: -10px;
     box-sizing: border-box;
-    overflow-y: scroll;
+    overflow-y: auto;
     border-radius: 20px;
 
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-auto-rows: 120px;
+    gap: 10px;
 }
 
 .descriptions {
