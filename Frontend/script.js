@@ -9,6 +9,7 @@ let firstLoad = true;
 let allBreedsWithDesc = [];
 let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
+const loadingScreen = document.getElementById("loading-screen");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -306,7 +307,6 @@ async function preloadImages(imageUrls) {
 }
 
 async function getDogPic() {
-    const loadingScreen = document.getElementById("loading-screen");
     if (firstLoad) {
         loadingScreen.classList.add("instant");
         loadingScreen.classList.add("show");
