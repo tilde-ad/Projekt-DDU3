@@ -405,7 +405,8 @@ function restartGame() {
     flippedCards = [];
     lockBoard = false;
     updateCounterDisplay();
-
+    const descContainer = document.getElementById("desc");
+    descContainer.innerHTML = ""; // Rensa beskrivningar
     // Vänta lite så att korten hinner vändas tillbaka
     setTimeout(() => {
         getDogPic();
