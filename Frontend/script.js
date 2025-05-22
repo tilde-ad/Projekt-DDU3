@@ -469,7 +469,63 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
-(async () => {
+
+
+//Login
+const authPopup = document.getElementById("authPopup");
+const openAuthPopup = document.getElementById("openAuthPopup");
+const createButton = document.getElementById("createButton");
+const loginButton = document.getElementById("loginButton");
+
+openAuthPopup.addEventListener("click", () => {
+    authPopup.classList.add("show");
+});
+
+const popupContent = authPopup.querySelector(".popup-content-login");
+popupContent.appendChild(closeX);
+
+closeX.addEventListener("click", function () {
+    authPopup.classList.remove("show");
+});
+
+createButton.addEventListener("click", async () => {
+    const username = document.getElementById("createUsername").value;
+    const password = document.getElementById("createPassword").value;
+
+    const response = await fetch("http://localhost:8000/savedAcounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    alert("Account created!");
+    authPopup.classList.remove("show");
+    localStorage.setItem("loggedInUser", username);
+});
+
+loginButton.addEventListener("click", async () => {
+    const username = document.getElementById("loginUsername").value;
+    const password = document.getElementById("loginPassword").value;
+
+    const response = await fetch("http://localhost:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        alert("Login successful!");
+        authPopup.classList.remove("show");
+        localStorage.setItem("loggedInUser", username);
+    } else {
+        alert("Wrong username or password.");
+    }
+});
+
+
+
+(async function () {
     breedmanager = new DogbreedManager();
     await breedmanager.fetchBreed();
     await getDogPic();
