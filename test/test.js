@@ -1,11 +1,10 @@
 
 
 let acountnumber = 1
-const button = document.getElementById("acountButton")
+const accountButton = document.getElementById("acountButton")
 
 
-
-button.addEventListener("click", async e =>{
+accountButton.addEventListener("click", async e =>{
     const acount = document.getElementById("acount").value
     const password = document.getElementById("password").value
     const data = {username: acount, password: password};
