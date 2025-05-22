@@ -61,6 +61,27 @@ class DogbreedManager {
     }
 }
 
+function createCloseX(popupElement) {
+    const closeX = document.createElement("div");
+    closeX.textContent = "X";
+    closeX.style.position = "absolute";
+    closeX.style.top = "10px";
+    closeX.style.right = "32px";
+    closeX.style.cursor = "pointer";
+    closeX.style.fontSize = "20px";
+    closeX.style.fontWeight = "bold";
+    closeX.style.color = "white";
+    popupElement.appendChild(closeX);
+
+    closeX.addEventListener("click", function () {
+        if (popupElement.classList.contains("popup")) {
+            popupElement.classList.remove("show");
+        } else if (popupElement.parentElement.classList.contains("popup")) {
+            popupElement.parentElement.classList.remove("show");
+        }
+    });
+}
+
 const devImages = [
     "affenpinscher.jpg",
     "afghan-hound.jpg",
@@ -214,25 +235,7 @@ function createCard(imageUrl) {
     return card;
 }
 
-// Hämta från HTML
-const popup = document.querySelector("#popupFact");
-
-// Skapa stäng-knappen
-const closeX = document.createElement("div");
-closeX.textContent = "X";
-closeX.style.position = "absolute";
-closeX.style.top = "10px";
-closeX.style.right = "32px";
-closeX.style.cursor = "pointer";
-closeX.style.fontSize = "20px";
-closeX.style.fontWeight = "bold";
-closeX.style.color = "white";
-
-popup.appendChild(closeX);
-
-closeX.addEventListener("click", function () {
-    popup.classList.remove("show");
-});
+createCloseX(document.getElementById("popupFact"));
 
 let matchPairCounter = 0;
 
@@ -290,9 +293,7 @@ function checkForMatch() {
             winPopup.classList.add("show");
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
-
 }
-
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
@@ -421,7 +422,7 @@ restartButton.addEventListener('click', () => {
 
     // Vänta lite innan spelet laddas om
     setTimeout(async () => {
-        await restartGame(); // eller getDogPic(), beroende på vad du använder
+        restartGame(); // eller getDogPic(), beroende på vad du använder
         loadingScreen.classList.remove("show");
     }, 100); // Delay för fade-effekt
 });
@@ -436,24 +437,14 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
+createCloseX(document.getElementById("popupWin"));
 
-
-//Login
-const authPopup = document.getElementById("authPopup");
-const openAuthPopup = document.getElementById("openAuthPopup");
-const createButton = document.getElementById("createButton");
-const loginButton = document.getElementById("loginButton");
-
-openAuthPopup.addEventListener("click", () => {
+const openAuthPopupButton = document.getElementById("openAuthPopup");
+openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
 });
 
-const popupContent = authPopup.querySelector(".popup-content-login");
-popupContent.appendChild(closeX);
-
-closeX.addEventListener("click", function () {
-    authPopup.classList.remove("show");
-});
+createCloseX(document.getElementById("authPopup"));
 
 createButton.addEventListener("click", async () => {
     const username = document.getElementById("createUsername").value;
