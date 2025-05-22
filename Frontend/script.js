@@ -487,7 +487,7 @@ openAuthPopup.addEventListener("click", () => {
         alert("Du är nu utloggad!");
 
         authPopup.classList.remove("show"); 
-        openAuthPopup.innerHTML = "Log in/Register";
+        openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
     }
 });
@@ -522,8 +522,8 @@ loginButton.addEventListener("click", async () => {
         openAuthPopup.innerHTML = "Log out"
         openAuthPopup.classList.add("loggedIN")
    
-
-    
+        const infoDiv= document.getElementById("savedUserinfo")
+        
 
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
