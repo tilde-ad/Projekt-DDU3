@@ -444,7 +444,7 @@ openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
 });
 
-createCloseX(document.getElementById("authPopup").querySelector(".popup-content-login"));
+createCloseX(document.getElementById("authPopup"));
 
 createButton.addEventListener("click", async () => {
     const username = document.getElementById("createUsername").value;

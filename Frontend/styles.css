@@ -290,10 +290,8 @@ button:active {
 
 
 .popup-content-login {
-    width: 20%;
     position: relative;
-    left: 680px;
-    top: 30px;
+    left: 405px;
 }
 
 .popup-content-login input {
