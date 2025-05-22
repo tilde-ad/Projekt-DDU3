@@ -174,10 +174,6 @@ async function showRandomDogFact() {
     }
 }
 
-
-showRandomDogFact();
-
-
 //skapa framsida och baksida på kort samt att vända på korten
 let flippedCards = [];
 let lockBoard = false; //låser korten så att man inte kan klicka på mer än 2 åt gången
