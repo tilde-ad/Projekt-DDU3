@@ -4,6 +4,8 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
+
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -242,6 +244,7 @@ let matchPairCounter = 0;
 function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
+    
 
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -276,6 +279,41 @@ function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
+
+    const totalCards = document.querySelectorAll(".card").length;
+    const totalPairs = totalCards / 2;
+    if(matchPairCounter== totalPairs){
+        const acount = document.getElementById("acount").value
+        const password = document.getElementById("password").value
+        const data = {username: acount, password: password, Higscore: matchPairCounter};
+        const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
+        method: "POST",
+        headers: {"content-type": "application/json"},
+        body: JSON.stringify(data)
+    })
+
+    }
+
+    //spara highscore
+let acountnumber = 1
+const accountButton = document.getElementById("acountButton")
+
+
+// accountButton.addEventListener("click", async e =>{
+//     const acount = document.getElementById("acount").value
+//     const password = document.getElementById("password").value
+//     const data = {username: acount, password: password, Higscore: matchPairCounter};
+//     const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
+//     method: "POST",
+//     headers: {"content-type": "application/json"},
+//     body: JSON.stringify(data)
+// })
+//     const response = await fetch(Acountrequest)
+//     const resource = await response.json()  
+//     console.log(resource)
+
+// })
+
 
     //vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
