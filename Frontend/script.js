@@ -61,6 +61,27 @@ class DogbreedManager {
     }
 }
 
+function createCloseX(popupElement) {
+    const closeX = document.createElement("div");
+    closeX.textContent = "X";
+    closeX.style.position = "absolute";
+    closeX.style.top = "10px";
+    closeX.style.right = "32px";
+    closeX.style.cursor = "pointer";
+    closeX.style.fontSize = "20px";
+    closeX.style.fontWeight = "bold";
+    closeX.style.color = "white";
+    popupElement.appendChild(closeX);
+
+    closeX.addEventListener("click", function () {
+        if (popupElement.classList.contains("popup")) {
+            popupElement.classList.remove("show");
+        } else if (popupElement.parentElement.classList.contains("popup")) {
+            popupElement.parentElement.classList.remove("show");
+        }
+    });
+}
+
 const devImages = [
     "affenpinscher.jpg",
     "afghan-hound.jpg",
@@ -214,24 +235,7 @@ function createCard(imageUrl) {
     return card;
 }
 
-// Hämta från HTML
-const popupFact = document.getElementById("popupFact");
-
-//Skapa stängknappen
-const closeXFact = document.createElement("div");
-closeXFact.textContent = "X";
-closeXFact.style.position = "absolute";
-closeXFact.style.top = "10px";
-closeXFact.style.right = "32px";
-closeXFact.style.cursor = "pointer";
-closeXFact.style.fontSize = "20px";
-closeXFact.style.fontWeight = "bold";
-closeXFact.style.color = "white";
-popupFact.appendChild(closeXFact);
-
-closeXFact.addEventListener("click", function () {
-    popupFact.classList.remove("show");
-});
+createCloseX(document.getElementById("popupFact"));
 
 let matchPairCounter = 0;
 
@@ -433,28 +437,14 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
+createCloseX(document.getElementById("popupWin"));
+
 const openAuthPopupButton = document.getElementById("openAuthPopup");
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
 });
 
-//Login
-const authPopup = document.getElementById("authPopup");
-const popupContent = authPopup.querySelector(".popup-content-login");
-const closeXAuth = document.createElement("div");
-closeXAuth.textContent = "X";
-closeXAuth.style.position = "absolute";
-closeXAuth.style.top = "10px";
-closeXAuth.style.right = "32px";
-closeXAuth.style.cursor = "pointer";
-closeXAuth.style.fontSize = "20px";
-closeXAuth.style.fontWeight = "bold";
-closeXAuth.style.color = "white";
-popupContent.appendChild(closeXAuth);
-
-closeXAuth.addEventListener("click", function () {
-    authPopup.classList.remove("show");
-});
+createCloseX(document.getElementById("authPopup").querySelector(".popup-content-login"));
 
 createButton.addEventListener("click", async () => {
     const username = document.getElementById("createUsername").value;
