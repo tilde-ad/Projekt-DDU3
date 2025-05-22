@@ -266,7 +266,7 @@ button:active {
 
     display: grid;
     grid-auto-rows: 133px;
-    gap: 15px;
+    gap: 12px;
 }
 
 .descriptions {

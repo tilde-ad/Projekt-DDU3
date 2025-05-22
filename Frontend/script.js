@@ -290,9 +290,7 @@ function checkForMatch() {
             winPopup.classList.add("show");
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
-
 }
-
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
@@ -420,7 +418,7 @@ restartButton.addEventListener('click', () => {
 
     // Vänta lite innan spelet laddas om
     setTimeout(async () => {
-        await restartGame(); // eller getDogPic(), beroende på vad du använder
+        restartGame(); // eller getDogPic(), beroende på vad du använder
         loadingScreen.classList.remove("show");
     }, 100); // Delay för fade-effekt
 });
