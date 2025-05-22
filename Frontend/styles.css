@@ -5,10 +5,9 @@
 
 body {
     margin: 0;
-    font-family: 'Poppins', sans-serif;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-
+    font-family: Georgia, 'Times New Roman', Times, serif;
     background-image: url("images/background.png");
     background-size: cover;
     background-position: center;
@@ -37,7 +36,7 @@ h1 {
 }
 
 p {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+
     font-size: 15px;
     color: #0F3665;
     margin-bottom: 5px;
