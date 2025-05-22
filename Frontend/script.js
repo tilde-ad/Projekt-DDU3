@@ -477,8 +477,19 @@ const openAuthPopup = document.getElementById("openAuthPopup");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
 
+let isLoggedin = false;
 openAuthPopup.addEventListener("click", () => {
-    authPopup.classList.add("show");
+    if (!isLoggedin) {
+        authPopup.classList.add("show");
+        
+    } else {
+        isLoggedin = false;
+        alert("Du är nu utloggad!");
+
+        authPopup.classList.remove("show"); 
+        openAuthPopup.innerHTML = "Log in/Register";
+        openAuthPopup.removeAttribute("style");
+    }
 });
 
 const popupContent = authPopup.querySelector(".popup-content-login");
@@ -504,6 +515,16 @@ createButton.addEventListener("click", async () => {
 });
 
 loginButton.addEventListener("click", async () => {
+        openAuthPopup.style.backgroundColor = "#E2EFFF"
+        openAuthPopup.style.color = "#0F3665"
+        openAuthPopup.style.fontFamily = "Jua, sans-serif"
+        openAuthPopup.style.fontSize = "24px"
+        openAuthPopup.innerHTML = "Log out"
+        openAuthPopup.classList.add("loggedIN")
+   
+
+    
+
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -515,6 +536,7 @@ loginButton.addEventListener("click", async () => {
 
     const result = await response.json();
     if (result.success) {
+        isLoggedin = true
         alert("Login successful!");
         authPopup.classList.remove("show");
         localStorage.setItem("loggedInUser", username);
