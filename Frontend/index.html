@@ -15,22 +15,44 @@
         <div>
             <p id="tries">Tries: <span id="count"></span></p>
         </div>
-        <div id="memory-Container">
-            <div id="popupFact" class="popup">
-                <div id="popup-inner">
-                    <div id="fact">
-                        <h3 id="wof" class="colorText"></h3>
-                        <p class="colorText">Did you know...</p>
-                        <p id="dogFact"></p>
+        <div id="container">
+            <div id="desc">
+            </div>
+            <div id="memory-Container">
+                <div id="authPopup" class="popup">
+                    <div class="popup-content-login">
+
+                        <!-- Login -->
+                        <h4>Login</h4>
+                        <input type="text" id="loginUsername" placeholder="Username"><br>
+                        <input type="password" id="loginPassword" placeholder="Password"><br>
+                        <button id="loginButton">Log In</button>
+
+                        <!-- Create Account -->
+                        <h4>Create Account</h4>
+                        <input type="text" id="createUsername" placeholder="New username"><br>
+                        <input type="password" id="createPassword" placeholder="New password"><br>
+                        <button id="createButton">Create Account</button>
+
+                    </div>
+                </div>
+                <div id="popupFact" class="popup">
+                    <div id="popup-inner">
+                        <div id="fact">
+                            <h3 id="wof" class="colorText"></h3>
+                            <p class="colorText">Did you know...</p>
+                            <p id="dogFact"></p>
+                        </div>
+                    </div>
+                </div>
+                <div id="popupWin" class="popup">
+                    <div id="inner">
+                        <h3 class="colorText">Congratulations, you won the game!</h3>
+                        <button id="winRestartButton">Restart Game</button>
                     </div>
                 </div>
             </div>
-            <div id="popupWin" class="popup">
-                <div id="inner">
-                    <h3 class="colorText">Congratulations, you won the game!</h3>
-                    <button id="winRestartButton">Restart Game</button>
-                </div>
-            </div>
+            <div id="myAccount"></div>
         </div>
         <button id="restartButton">Restart Game</button>
     </div>
@@ -39,30 +61,7 @@
         <h1>Loading puppies... 🐶</h1>
     </div>
 
-    <div id="desc">
-        <h2>Your pairs:</h2>
-    </div>
 
-    <!-- LOGIN / CREATE ACCOUNT POPUP -->
-    <div id="authPopup" class="popup">
-        <div class="popup-content-login">
-
-            <!-- Login -->
-            <h4>Login</h4>
-            <input type="text" id="loginUsername" placeholder="Username"><br>
-            <input type="password" id="loginPassword" placeholder="Password"><br>
-            <button id="loginButton">Log In</button>
-
-            <!-- Create Account -->
-            <h4>Create Account</h4>
-            <input type="text" id="createUsername" placeholder="New username"><br>
-            <input type="password" id="createPassword" placeholder="New password"><br>
-            <button id="createButton">Create Account</button>
-
-        </div>
-    </div>
-
-    <!-- Button to open the popup -->
     <button id="openAuthPopup">Login / Register</button>
 
 
