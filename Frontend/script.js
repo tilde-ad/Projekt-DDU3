@@ -7,6 +7,7 @@ count.textContent = matchCounter;
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
+let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
 
 function updateCounterDisplay() {
@@ -57,12 +58,6 @@ class DogbreedManager {
         }
         this._dogBreed = value;
     }
-}
-
-//Kallar på klasserna
-async function driver() {
-    const breedmanager = new DogbreedManager()
-    await breedmanager.fetchBreed();
 }
 
 const devImages = [
@@ -141,7 +136,6 @@ function getDescriptionFromImageUrl(imageUrl) {
     const match = imageUrl.match(/\/breeds\/([^/]+)\//);
     let breedName;
     if (match && match[1]) {
-        // Hantera sub-breeds: vänd på ordningen om det är två ord
         const parts = match[1].split("-");
         if (parts.length === 2) {
             breedName = parts[1] + " " + parts[0];
@@ -149,14 +143,14 @@ function getDescriptionFromImageUrl(imageUrl) {
             breedName = parts.join(" ");
         }
     } else {
-        // Fallback för devImages
         breedName = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
     }
 
-    // Hitta beskrivning
-    for (let i = 0; i < allBreedsWithDesc.length; i++) {
-        if (allBreedsWithDesc[i].name.toLowerCase() === breedName.toLowerCase()) {
-            return allBreedsWithDesc[i].description;
+    if (breedmanager && breedmanager.instances) {
+        for (let i = 0; i < breedmanager.instances.length; i++) {
+            if (breedmanager.instances[i].name.toLowerCase() === breedName.toLowerCase()) {
+                return breedmanager.instances[i].description;
+            }
         }
     }
     return "Ingen beskrivning hittades.";
@@ -403,11 +397,6 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-
-driver().then(() => {
-    getDogPic();
-});
-
 function restartGame() {
     matchCounter = 0;
     matchPairCounter = 0;
@@ -444,11 +433,8 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
-//Functionsanrop
-
 (async () => {
-    await fetchAllBreedsWithDesc();
+    breedmanager = new DogbreedManager();
+    await breedmanager.fetchBreed();
     await getDogPic();
-    await driver();
 })();
-
