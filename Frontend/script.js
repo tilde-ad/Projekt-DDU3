@@ -132,6 +132,8 @@ const devImages = [
 ];
 
 
+const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
+
 function getDescriptionFromImageUrl(imageUrl) {
     // Extrahera rasnamn
     const match = imageUrl.match(/\/breeds\/([^/]+)\//);
@@ -156,8 +158,6 @@ function getDescriptionFromImageUrl(imageUrl) {
     }
     return "Ingen beskrivning hittades.";
 }
-
-const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
 
 
 async function showRandomDogFact() {
@@ -254,6 +254,12 @@ function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
+
+        const descContainer = document.getElementById("desc")
+        const descDiv = document.createElement("div")
+        descContainer.append(descDiv)
+        descDiv.classList.add("descriptions")
+        descDiv.textContent = desc
         console.log("Beskrivning:", desc);
 
         matchPairCounter++;
