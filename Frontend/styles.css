@@ -11,6 +11,14 @@ body {
     background-position: center;
     background-repeat: repeat-y;
     min-height: 100vh;
+    position: relative;
+}
+
+#openAuthPopup {
+  position: absolute;
+  top: 50px;
+  right: 100px;
+
 }
 
 #body-Container {
