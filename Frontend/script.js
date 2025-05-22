@@ -241,7 +241,7 @@ closeX.addEventListener("click", function () {
 
 let matchPairCounter = 0;
 
-function checkForMatch() {
+async function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
     
@@ -279,24 +279,34 @@ function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
-
-    const totalCards = document.querySelectorAll(".card").length;
-    const totalPairs = totalCards / 2;
-    if(matchPairCounter== totalPairs){
-        const acount = document.getElementById("acount").value
-        const password = document.getElementById("password").value
-        const data = {username: acount, password: password, Higscore: matchPairCounter};
-        const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
-        method: "POST",
-        headers: {"content-type": "application/json"},
-        body: JSON.stringify(data)
-    })
-
-    }
-
+    
+}
     //spara highscore
-let acountnumber = 1
-const accountButton = document.getElementById("acountButton")
+
+
+    async function checkAndSendHighscore() {
+    const totalCards = document.querySelectorAll(".memoryCard").length;
+    const totalPairs = totalCards / 2;
+
+        const data = { username: "sara", password: "blabla", Highscore: matchPairCounter };
+
+        const Acountrequest = new Request("http://localhost:8000/savedAcounts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const response = await fetch(Acountrequest);
+        const result = await response.json();
+        console.log("Svar från servern:", result);
+
+    
+
+
+
+
+// let acountnumber = 1
+// const accountButton = document.getElementById("acountButton")
 
 
 // accountButton.addEventListener("click", async e =>{
