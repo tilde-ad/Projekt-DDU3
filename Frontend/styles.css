@@ -249,3 +249,19 @@ button:active {
         transform: rotate(360deg);
     }
 }
+
+.popup-content-login {
+    width: 20%;
+    position: relative;
+    left: 680px;
+    top: 30px;
+}
+
+.popup-content-login input {
+    margin-bottom: 10px;
+}
+
+
+h4 {
+    margin: 15px 0px 5px;
+}
