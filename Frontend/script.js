@@ -433,7 +433,10 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
-
+const openAuthPopupButton = document.getElementById("openAuthPopup");
+openAuthPopupButton.addEventListener("click", function () {
+    authPopup.classList.add("show");
+});
 
 //Login
 const authPopup = document.getElementById("authPopup");
