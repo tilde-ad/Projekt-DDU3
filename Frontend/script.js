@@ -215,23 +215,22 @@ function createCard(imageUrl) {
 }
 
 // Hämta från HTML
-const popup = document.querySelector("#popupFact");
+const popupFact = document.getElementById("popupFact");
 
-// Skapa stäng-knappen
-const closeX = document.createElement("div");
-closeX.textContent = "X";
-closeX.style.position = "absolute";
-closeX.style.top = "10px";
-closeX.style.right = "32px";
-closeX.style.cursor = "pointer";
-closeX.style.fontSize = "20px";
-closeX.style.fontWeight = "bold";
-closeX.style.color = "white";
+//Skapa stängknappen
+const closeXFact = document.createElement("div");
+closeXFact.textContent = "X";
+closeXFact.style.position = "absolute";
+closeXFact.style.top = "10px";
+closeXFact.style.right = "32px";
+closeXFact.style.cursor = "pointer";
+closeXFact.style.fontSize = "20px";
+closeXFact.style.fontWeight = "bold";
+closeXFact.style.color = "white";
+popupFact.appendChild(closeXFact);
 
-popup.appendChild(closeX);
-
-closeX.addEventListener("click", function () {
-    popup.classList.remove("show");
+closeXFact.addEventListener("click", function () {
+    popupFact.classList.remove("show");
 });
 
 let matchPairCounter = 0;
@@ -438,18 +437,19 @@ winRestartButton.addEventListener("click", function () {
 
 //Login
 const authPopup = document.getElementById("authPopup");
-const openAuthPopup = document.getElementById("openAuthPopup");
-const createButton = document.getElementById("createButton");
-const loginButton = document.getElementById("loginButton");
-
-openAuthPopup.addEventListener("click", () => {
-    authPopup.classList.add("show");
-});
-
 const popupContent = authPopup.querySelector(".popup-content-login");
-popupContent.appendChild(closeX);
+const closeXAuth = document.createElement("div");
+closeXAuth.textContent = "X";
+closeXAuth.style.position = "absolute";
+closeXAuth.style.top = "10px";
+closeXAuth.style.right = "32px";
+closeXAuth.style.cursor = "pointer";
+closeXAuth.style.fontSize = "20px";
+closeXAuth.style.fontWeight = "bold";
+closeXAuth.style.color = "white";
+popupContent.appendChild(closeXAuth);
 
-closeX.addEventListener("click", function () {
+closeXAuth.addEventListener("click", function () {
     authPopup.classList.remove("show");
 });
 
