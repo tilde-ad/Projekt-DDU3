@@ -4,6 +4,8 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
+
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -242,9 +244,10 @@ createCloseX(document.getElementById("popupFact"));
 
 let matchPairCounter = 0;
 
-function checkForMatch() {
+async function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
+    
 
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -276,6 +279,13 @@ function checkForMatch() {
                 popup.classList.add("show");
             }, 1000);
         }
+
+        const totalCards = document.querySelectorAll(".memoryCard").length;
+        const totalPairs = totalCards / 2;
+        if (matchPairCounter === totalPairs) {
+            checkAndSendHighscore()
+        }
+
     } else {
         lockBoard = true;
         setTimeout(() => {
@@ -286,10 +296,11 @@ function checkForMatch() {
         }, 1000);
     }
 
+
     //vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
     const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-
+    
     if (allCardsMatch.length === allCards.length) {
         setTimeout(() => {
             const restartButtonBottom = document.getElementById("restartButton");
@@ -299,6 +310,30 @@ function checkForMatch() {
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
 }
+    //spara highscore
+    async function checkAndSendHighscore() {
+    // const totalCards = document.querySelectorAll(".memoryCard").length;
+    // const totalPairs = totalCards / 2;
+
+        const data = { username: "sara", password: "blabla", Highscore: matchPairCounter };
+
+        const Acountrequest = new Request("http://localhost:8000/savedAcounts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const response = await fetch(Acountrequest);
+        const result = await response.json();
+        console.log("Svar från servern:", result);
+    }
+
+
+
+
+
+
+
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
@@ -447,8 +482,30 @@ winRestartButton.addEventListener("click", function () {
 
 createCloseX(document.getElementById("popupWin"));
 
+
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
+})
+
+//Login
+const authPopup = document.getElementById("authPopup");
+const openAuthPopup = document.getElementById("openAuthPopup");
+
+let isLoggedin = false;
+openAuthPopup.addEventListener("click", () => {
+    if (!isLoggedin) {
+        authPopup.classList.add("show");
+        isLoggedin = true
+        
+    } else {
+        isLoggedin = false;
+        alert("Du är nu utloggad!");
+
+        authPopup.classList.remove("show"); 
+        openAuthPopup.innerHTML = "Login/Register";
+        openAuthPopup.removeAttribute("style");
+    }
+
 });
 
 createCloseX(document.getElementById("authPopup"));
@@ -472,6 +529,7 @@ createButton.addEventListener("click", async () => {
 });
 
 loginButton.addEventListener("click", async () => {
+    
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -483,8 +541,17 @@ loginButton.addEventListener("click", async () => {
 
     const result = await response.json();
     if (result.success) {
+        isLoggedin = true
         alert("Login successful!");
         authPopup.classList.remove("show");
+
+        openAuthPopup.style.backgroundColor = "#E2EFFF"
+        openAuthPopup.style.color = "#0F3665"
+        openAuthPopup.style.fontFamily = "Jua, sans-serif"
+        openAuthPopup.style.fontSize = "24px"
+        openAuthPopup.innerHTML = "Log out"
+        openAuthPopup.classList.add("loggedIN")
+
         localStorage.setItem("loggedInUser", username);
     } else {
         alert("Wrong username or password.");
