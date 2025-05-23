@@ -481,6 +481,7 @@ let isLoggedin = false;
 openAuthPopup.addEventListener("click", () => {
     if (!isLoggedin) {
         authPopup.classList.add("show");
+        isLoggedin = true
         
     } else {
         isLoggedin = false;
@@ -515,16 +516,7 @@ createButton.addEventListener("click", async () => {
 });
 
 loginButton.addEventListener("click", async () => {
-        openAuthPopup.style.backgroundColor = "#E2EFFF"
-        openAuthPopup.style.color = "#0F3665"
-        openAuthPopup.style.fontFamily = "Jua, sans-serif"
-        openAuthPopup.style.fontSize = "24px"
-        openAuthPopup.innerHTML = "Log out"
-        openAuthPopup.classList.add("loggedIN")
-   
-        const infoDiv= document.getElementById("savedUserinfo")
-        
-
+    
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -539,6 +531,14 @@ loginButton.addEventListener("click", async () => {
         isLoggedin = true
         alert("Login successful!");
         authPopup.classList.remove("show");
+
+        openAuthPopup.style.backgroundColor = "#E2EFFF"
+        openAuthPopup.style.color = "#0F3665"
+        openAuthPopup.style.fontFamily = "Jua, sans-serif"
+        openAuthPopup.style.fontSize = "24px"
+        openAuthPopup.innerHTML = "Log out"
+        openAuthPopup.classList.add("loggedIN")
+
         localStorage.setItem("loggedInUser", username);
     } else {
         alert("Wrong username or password.");
