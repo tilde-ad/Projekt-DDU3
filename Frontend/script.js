@@ -466,6 +466,9 @@ createButton.addEventListener("click", async () => {
     alert("Account created!");
     authPopup.classList.remove("show");
     localStorage.setItem("loggedInUser", username);
+
+    document.getElementById("createUsername").value = "";
+    document.getElementById("createPassword").value = "";
 });
 
 loginButton.addEventListener("click", async () => {
@@ -486,6 +489,9 @@ loginButton.addEventListener("click", async () => {
     } else {
         alert("Wrong username or password.");
     }
+
+    document.getElementById("loginUsername").value = "";
+    document.getElementById("loginPassword").value = "";
 });
 
 
