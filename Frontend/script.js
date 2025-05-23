@@ -292,6 +292,8 @@ function checkForMatch() {
 
     if (allCardsMatch.length === allCards.length) {
         setTimeout(() => {
+            const restartButtonBottom = document.getElementById("restartButton");
+            restartButtonBottom.style.display = "none";
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
         }, 800); // lite delay så man hinner se sista kortet vändas
@@ -415,9 +417,12 @@ function restartGame() {
     setTimeout(() => {
         getDogPic();
     }, 600); // Justera tiden om du vill
+
+    const restartButtonBottom = document.getElementById("restartButton");
+    restartButtonBottom.style.display = "block";
 }
 
-restartButton.addEventListener('click', () => {
+restartButton.addEventListener('click', function () {
     const flipped = document.querySelectorAll('.memoryCard.flipped');
     flipped.forEach(card => {
         card.classList.remove('flipped');
