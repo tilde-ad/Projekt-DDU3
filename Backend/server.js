@@ -118,7 +118,7 @@ async function handler(request) {
 
     if (request.method === "POST") {
 
-        if (url.pathname === "/savedAcounts") {
+        if (url.pathname === "/savedAccounts") {
             // Hämta nuvarande data
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);

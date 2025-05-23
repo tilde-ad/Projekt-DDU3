@@ -457,7 +457,7 @@ createButton.addEventListener("click", async () => {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-    const response = await fetch("http://localhost:8000/savedAcounts", {
+    const response = await fetch("http://localhost:8000/savedAccounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -471,7 +471,7 @@ createButton.addEventListener("click", async () => {
     document.getElementById("createPassword").value = "";
 });
 
-loginButton.addEventListener("click", async () => {
+loginButton.addEventListener("click", async function () {
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
