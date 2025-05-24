@@ -126,6 +126,15 @@ async function handler(request) {
             // Läs in det nya kontot
             const newAccount = await request.json();
 
+            const existing = data.accounts.find(acc => acc.username === newAccount.username);
+            if(existing){
+                return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
+                status: 409,
+                headers: headerCORS
+                });
+            }
+
+
             // Lägg till det i arrayen
             data.accounts.push(newAccount);
 
