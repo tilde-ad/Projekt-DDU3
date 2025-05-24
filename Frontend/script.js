@@ -310,28 +310,6 @@ async function checkForMatch() {
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
 }
-    //spara highscore
-    async function checkAndSendHighscore() {
-    // const totalCards = document.querySelectorAll(".memoryCard").length;
-    // const totalPairs = totalCards / 2;
-
-        const data = { username: "sara", password: "blabla", Highscore: matchPairCounter };
-
-        const Acountrequest = new Request("http://localhost:8000/savedAcounts", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
-
-        const response = await fetch(Acountrequest);
-        const result = await response.json();
-        console.log("Svar från servern:", result);
-    }
-
-
-
-
-
 
 
 
@@ -520,6 +498,8 @@ createButton.addEventListener("click", async () => {
         body: JSON.stringify({ username, password })
     });
 
+
+    isLoggedin = false
     alert("Account created!");
     authPopup.classList.remove("show");
     localStorage.setItem("loggedInUser", username);
@@ -528,6 +508,7 @@ createButton.addEventListener("click", async () => {
     document.getElementById("createPassword").value = "";
 });
 
+let currentUser = null;
 loginButton.addEventListener("click", async () => {
     
     const username = document.getElementById("loginUsername").value;
@@ -542,15 +523,9 @@ loginButton.addEventListener("click", async () => {
     const result = await response.json();
     if (result.success) {
         isLoggedin = true
+        buttonDesign()
+        currentUser = username;
         alert("Login successful!");
-        authPopup.classList.remove("show");
-
-        openAuthPopup.style.backgroundColor = "#E2EFFF"
-        openAuthPopup.style.color = "#0F3665"
-        openAuthPopup.style.fontFamily = "Jua, sans-serif"
-        openAuthPopup.style.fontSize = "24px"
-        openAuthPopup.innerHTML = "Log out"
-        openAuthPopup.classList.add("loggedIN")
 
         localStorage.setItem("loggedInUser", username);
     } else {
@@ -561,7 +536,36 @@ loginButton.addEventListener("click", async () => {
     document.getElementById("loginPassword").value = "";
 });
 
+function buttonDesign(){
+        authPopup.classList.remove("show");
+        openAuthPopup.style.backgroundColor = "#E2EFFF"
+        openAuthPopup.style.color = "#0F3665"
+        openAuthPopup.style.fontFamily = "Jua, sans-serif"
+        openAuthPopup.style.fontSize = "24px"
+        openAuthPopup.textContent = "Log out"
+}
 
+    //spara highscore
+    async function checkAndSendHighscore() {
+    // const totalCards = document.querySelectorAll(".memoryCard").length;
+    // const totalPairs = totalCards / 2;
+        if(isLoggedin && currentUser){
+            const data = {Highscore: matchCounter, currentUser: currentUser };
+    
+            const Acountrequest = new Request("http://localhost:8000/highscore", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+    
+            const response = await fetch(Acountrequest);
+            const result = await response.json();
+            console.log("Svar från servern:", result);
+    
+            
+        }
+    
+    }
 
 (async function () {
     breedmanager = new DogbreedManager();
