@@ -536,12 +536,22 @@ loginButton.addEventListener("click", async () => {
         body: JSON.stringify({ username, password })
     });
 
+    function isGameWon() {
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+    return allCards.length > 0 && allCardsMatch.length === allCards.length;
+    }
+
     const result = await response.json();
     if (result.success) {
         isLoggedin = true
         buttonDesign()
         currentUser = username;
         alert("Login successful!");
+
+        if(isGameWon){
+            checkAndSendHighscore();
+        }
 
         localStorage.setItem("loggedInUser", username);
     } else {
