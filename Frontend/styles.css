@@ -14,11 +14,23 @@ body {
     position: relative;
 }
 
-#openAuthPopup {
+.openAuthPopup {
   position: absolute;
   top: 50px;
   right: 100px;
 
+}
+
+#secondButton {
+    position: absolute;
+    top: 275px;
+    right: 171px;
+}
+
+#popupWin h4 {
+    position: absolute;
+    top: 220px;
+    right: 80px;
 }
 
 #body-Container {
@@ -156,7 +168,7 @@ p {
 
 #winRestartButton {
     margin-left: 100px;
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 
