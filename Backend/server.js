@@ -22,7 +22,7 @@ async function handler(request) {
 
     const headerCORS = new Headers();
     headerCORS.append("Access-Control-Allow-Origin", "*");
-    headerCORS.append("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    headerCORS.append("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
     headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
 
     if (request.method === "OPTIONS") {
@@ -159,6 +159,37 @@ async function handler(request) {
                     headers: headerCORS
                 });
             }
+        }
+    
+    }
+    
+    if (request.method === "PATCH") {
+        if (url.pathname === "/highscore") {
+            // Hämta nuvarande data
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+
+            
+            const { Highscore, currentUser } = await request.json();
+
+            // Hitta användarkontot med matchande username
+            const userAccount = data.accounts.find(account => account.username === currentUser);
+
+            if(userAccount){
+                userAccount.Highscore = Highscore;
+
+                await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+                return new Response(JSON.stringify({ success: true, message: "Highscore updated!" }), {
+                status: 200,
+                headers: headerCORS,
+                });
+            } else {
+                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS,
+                });
+            }   
         }
     }
 
