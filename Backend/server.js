@@ -170,13 +170,13 @@ async function handler(request) {
             const data = JSON.parse(file);
 
             
-            const { Highscore, currentUser } = await request.json();
+            const { highscore, currentUser } = await request.json();
 
             // Hitta användarkontot med matchande username
             const userAccount = data.accounts.find(account => account.username === currentUser);
 
             if(userAccount){
-                userAccount.Highscore = Highscore;
+                userAccount.highscore = highscore;
 
                 await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
 
