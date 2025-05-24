@@ -576,7 +576,7 @@ function buttonDesign(){
     // const totalCards = document.querySelectorAll(".memoryCard").length;
     // const totalPairs = totalCards / 2;
         if(isLoggedin && currentUser){
-            const data = {Highscore: matchCounter, currentUser: currentUser };
+            const data = {highscore: matchCounter, currentUser: currentUser };
     
             const Acountrequest = new Request("http://localhost:8000/highscore", {
                 method: "PATCH",
