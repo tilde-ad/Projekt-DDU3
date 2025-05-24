@@ -514,14 +514,24 @@ createButton.addEventListener("click", async () => {
         body: JSON.stringify({ username, password })
     });
 
+    if(response.status == 409){
+        alert("The username is already taken");
+        isLoggedin = false
+        return
+    }
 
-    isLoggedin = false
-    alert("Account created!");
-    authPopup.classList.remove("show");
-    localStorage.setItem("loggedInUser", username);
+    if(response.ok){
+        isLoggedin = true
+        alert("Account created!");
+        authPopup.classList.remove("show");
+        localStorage.setItem("loggedInUser", username);
 
-    document.getElementById("createUsername").value = "";
-    document.getElementById("createPassword").value = "";
+        document.getElementById("createUsername").value = "";
+        document.getElementById("createPassword").value = "";
+        buttonDesign()
+
+    }
+
 });
 
 let currentUser = null;
