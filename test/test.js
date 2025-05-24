@@ -67,7 +67,7 @@ async function getRandomBreedAndInfo() {
     document.body.appendChild(div);
 }
 
-//test 4 - skapa konto
+
 
 
 //test 5 - logga in
