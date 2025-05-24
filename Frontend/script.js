@@ -14,7 +14,7 @@ const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
-const openAuthPopupButton = document.getElementById("openAuthPopup");
+const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -307,11 +307,28 @@ async function checkForMatch() {
             restartButtonBottom.style.display = "none";
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
+    
+            if(isLoggedin == false){
+                const wantToSaveHighscore = document.createElement("h4")
+                wantToSaveHighscore.textContent = "Login or register to save your highscore!"
+                wantToSaveHighscore.style.textAlign = "center"
+                winPopup.append(wantToSaveHighscore)
+                
+                const button = document.createElement("button")
+                button.classList.add("openAuthPopup")
+                button.textContent = "Login/Register"
+                button.id = "secondButton"
+                winPopup.append(button)
+
+                button.addEventListener("click", () => {
+                    winPopup.remove();
+                    authPopup.classList.add("show");
+                });
+            }
+            
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
 }
-
-
 
 //få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
@@ -467,13 +484,12 @@ openAuthPopupButton.addEventListener("click", function () {
 
 //Login
 const authPopup = document.getElementById("authPopup");
-const openAuthPopup = document.getElementById("openAuthPopup");
+const openAuthPopup = document.querySelector(".openAuthPopup");
 
 let isLoggedin = false;
 openAuthPopup.addEventListener("click", () => {
     if (!isLoggedin) {
         authPopup.classList.add("show");
-        isLoggedin = true
         
     } else {
         isLoggedin = false;
@@ -572,3 +588,7 @@ function buttonDesign(){
     await breedmanager.fetchBreed();
     await getDogPic();
 })();
+
+
+
+
