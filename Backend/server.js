@@ -110,10 +110,23 @@ async function handler(request) {
             }
         }
 
+        if(url.pathname === "/getAllAccounts"){
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        // Returnera hela data (t.ex. alla accounts)
+        return new Response(JSON.stringify(data), {
+        status: 200,
+        headers: headerCORS,
+        });
+    }
+
         return new Response("Not found", {
             status: 404,
             headers: headerCORS
         });
+
+        
     }
 
     if (request.method === "POST") {
@@ -201,6 +214,7 @@ async function handler(request) {
             }   
         }
     }
+
 
 }
 

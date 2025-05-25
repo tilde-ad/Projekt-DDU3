@@ -283,7 +283,7 @@ async function checkForMatch() {
         const totalCards = document.querySelectorAll(".memoryCard").length;
         const totalPairs = totalCards / 2;
         if (matchPairCounter === totalPairs) {
-            checkAndSendHighscore()
+            await checkAndSendHighscore()
         }
 
     } else {
@@ -321,7 +321,7 @@ async function checkForMatch() {
                 winPopup.append(button)
 
                 button.addEventListener("click", () => {
-                    winPopup.remove();
+                    winPopup.classList.remove("show");
                     authPopup.classList.add("show");
                 });
             }
@@ -452,12 +452,15 @@ function restartGame() {
     restartButtonBottom.style.display = "block";
 }
 
-restartButton.addEventListener('click', function () {
+function flipTheCards(){
     const flipped = document.querySelectorAll('.memoryCard.flipped');
     flipped.forEach(card => {
         card.classList.remove('flipped');
     });
+}
 
+restartButton.addEventListener('click', function () {
+    flipTheCards()
     // Vänta lite innan spelet laddas om
     setTimeout(async () => {
         restartGame(); // eller getDogPic(), beroende på vad du använder
@@ -485,6 +488,7 @@ openAuthPopupButton.addEventListener("click", function () {
 //Login
 const authPopup = document.getElementById("authPopup");
 const openAuthPopup = document.querySelector(".openAuthPopup");
+const highScoreBox = document.getElementById("savedHighscore");
 
 let isLoggedin = false;
 openAuthPopup.addEventListener("click", () => {
@@ -494,8 +498,11 @@ openAuthPopup.addEventListener("click", () => {
     } else {
         isLoggedin = false;
         alert("Du är nu utloggad!");
-
-        authPopup.classList.remove("show"); 
+        restartGame()
+        flipTheCards()
+        authPopup.classList.remove("show");
+        highScoreBox.innerHTML = ""; 
+        highScoreBox.classList.remove("showBox");
         openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
     }
@@ -559,8 +566,12 @@ loginButton.addEventListener("click", async () => {
         currentUser = username;
         alert("Login successful!");
 
+        await checkAndSendHighscore()
+
+        await showHighscoreBox()
+
         if(isGameWon){
-            checkAndSendHighscore();
+            await checkAndSendHighscore();
         }
 
         localStorage.setItem("loggedInUser", username);
@@ -595,8 +606,10 @@ function buttonDesign(){
             });
     
             const response = await fetch(Acountrequest);
-            const result = await response.json();
-            console.log("Svar från servern:", result);
+            if(response.ok){
+                await showHighscoreBox()
+            }
+
     
             
         }
@@ -611,4 +624,22 @@ function buttonDesign(){
 
 
 
+async function showHighscoreBox (){
+    const highScoreBox = document.getElementById("savedHighscore");
+    highScoreBox.classList.add("showBox");
 
+    const response = await fetch("http://localhost:8000/getAllAccounts")
+    console.log(response)
+    
+    if(response.ok){
+        const data = await response.json()
+        const userAccount = data.accounts.find(acc => acc.username === currentUser);
+        console.log(userAccount)
+        if(userAccount){
+            const highscore = userAccount.highscore
+
+            matchCounter = highscore;
+            highScoreBox.innerHTML= `<h2>Highscore:${highscore}</h2>`
+        }
+    }
+}
