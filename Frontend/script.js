@@ -577,7 +577,7 @@ loginButton.addEventListener("click", async function () {
             await checkAndSendHighscore();
         }
 
-        localStorage.setItem("loggedInUser", username);
+
     } else {
         alert("Wrong username or password.");
     }
