@@ -618,19 +618,20 @@ function buttonDesign() {
     openAuthPopup.textContent = "Log out"
 }
 
+
 //spara highscore
-async function checkAndSendHighscore() {
+
+async function findLoggedUserHighscore(){
     const response = await fetch("http://localhost:8000/getAllAccounts")
-    const allUsers = await response.json();
-    console.log(allUsers)
+    const data = await response.json()
+    const userAccount = data.accounts.find(acc => acc.username === currentUser);
+    const userHighscore = userAccount.highscore
+    return userHighscore
+}
+async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
+        const currentHighscore = await findLoggedUserHighscore();
 
-
-        // 2. Hitta den aktuella användaren
-        //const user = allUsers.find(u => u.username === currentUser);
-      
-
-        const currentHighscore = user.highscore;
         if(matchCounter < currentHighscore){
             console.log(matchCounter)
             const data = { highscore: matchCounter, currentUser: currentUser };
@@ -662,7 +663,6 @@ async function showHighscoreBox() {
     if (response.ok) {
         const data = await response.json()
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
-        console.log(userAccount)
         let highscore = matchCounter;
         if (userAccount) {
             highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
@@ -670,8 +670,6 @@ async function showHighscoreBox() {
         }
     }
 }
-
-
 
 //changed
 //changed
