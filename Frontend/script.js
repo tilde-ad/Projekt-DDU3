@@ -515,12 +515,16 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
+
+    const response = await fetch("http://localhost:8000/savedAccounts", {
+
     if (!username && !password) {
         alert("Please enter both a username and a password.");
         return;
     }
 
     const response = await fetch("http://localhost:8000/savedAcounts", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
@@ -548,9 +552,13 @@ createButton.addEventListener("click", async function () {
 
 });
 
+
+loginButton.addEventListener("click", async function () {
+
 let currentUser = null;
 loginButton.addEventListener("click", async () => {
     
+
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 

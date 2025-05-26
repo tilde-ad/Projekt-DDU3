@@ -3,3 +3,11 @@ body {
     flex-direction: column;
     gap: 20px;
 }
+
+h1 {
+    margin: 10px;
+}
+
+#firstDiv {
+    text-align: center;
+}
