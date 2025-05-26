@@ -180,17 +180,18 @@ p {
     position: relative;
 }
 
-.popup.closeX {
-    right: 32px;
-    top: 10px;
-    position: absolute;
-}
-
 .popup.narrow {
     width: auto;
     max-width: 90vw;
     min-width: 0;
     height: auto;
+}
+
+.popup .closeX {
+    right: 32px;
+    top: 10px;
+    position: absolute;
+    z-index: 10;
 }
 
 .popup.narrow .closeX {
