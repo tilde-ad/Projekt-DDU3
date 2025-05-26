@@ -185,6 +185,17 @@ function getDescriptionFromImageUrl(imageUrl) {
     return "Ingen beskrivning hittades.";
 }
 
+function getBreedFromImageUrl(imageUrl) {
+    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
+    let breed;
+    if (match && match[1]) {
+        breed = match[1].replace(/-/g, " ");
+    } else {
+        breed = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
+    }
+
+    return breed.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
 
 async function showRandomDogFact() {
 
@@ -259,13 +270,21 @@ async function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
+        const breed = getBreedFromImageUrl(imageUrl);
 
-        const descContainer = document.getElementById("desc")
-        const descDiv = document.createElement("div")
-        descContainer.append(descDiv)
+        const descContainer = document.getElementById("desc");
+        const descDiv = document.createElement("div");
+        descContainer.append(descDiv);
         descDiv.classList.add("descriptions")
-        descDiv.textContent = desc
-        console.log("Beskrivning:", desc);
+
+        const divBreed = document.createElement("div");
+        descDiv.append(divBreed);
+        divBreed.textContent = `${breed}:`;
+        divBreed.classList.add("descBreed")
+
+        const description = document.createElement("div");
+        descDiv.append(description);
+        description.textContent = desc;
 
         matchPairCounter++;
 
