@@ -545,7 +545,7 @@ createButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    
+
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -592,8 +592,8 @@ loginButton.addEventListener("click", async function () {
         buttonDesign()
         currentUser = username;
         alert("Login successful!");
-        
-        
+
+
         await showHighscoreBox()
 
         if (isGameWon()) {
@@ -632,8 +632,7 @@ async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
         const currentHighscore = await findLoggedUserHighscore();
 
-        if(matchCounter < currentHighscore){
-            console.log(matchCounter)
+        if (matchCounter < currentHighscore) {
             const data = { highscore: matchCounter, currentUser: currentUser };
             const response = await fetch("http://localhost:8000/highscore", {
                 method: "PATCH",
