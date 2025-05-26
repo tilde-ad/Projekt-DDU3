@@ -176,10 +176,54 @@ p {
     display: none;
 }
 
-
 #popup-inner {
     position: relative;
 }
+
+.popup.closeX {
+    right: 32px;
+    top: 10px;
+    position: absolute;
+}
+
+.popup.narrow {
+    width: auto;
+    max-width: 90vw;
+    min-width: 0;
+    height: auto;
+}
+
+.popup.narrow .closeX {
+    right: 10px;
+    top: 5px;
+}
+
+.popup.show {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.popup-content-login {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-left: 365px;
+    margin-top: 5px;
+}
+
+.popup.narrow .popup-content-login {
+    margin-left: 0;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+.popup-content-login input {
+    margin-bottom: 10px;
+}
+
 
 #winRestartButton {
     margin-left: 100px;
@@ -214,25 +258,6 @@ p {
     }
 }
 
-.popup.show {
-    display: block;
-    animation: fadeIn 0.5s ease forwards;
-}
-
-.popup-content-login {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    margin-left: 365px;
-    margin-top: 5px;
-}
-
-.popup-content-login input {
-    margin-bottom: 10px;
-}
 
 button {
     padding: 10px 20px;

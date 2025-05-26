@@ -70,8 +70,7 @@ function createCloseX(popupElement) {
     const closeX = document.createElement("div");
     closeX.textContent = "X";
     closeX.style.position = "absolute";
-    closeX.style.top = "10px";
-    closeX.style.right = "32px";
+    closeX.className = "closeX";
     closeX.style.cursor = "pointer";
     closeX.style.fontSize = "20px";
     closeX.style.fontWeight = "bold";
@@ -81,8 +80,10 @@ function createCloseX(popupElement) {
     closeX.addEventListener("click", function () {
         if (popupElement.classList.contains("popup")) {
             popupElement.classList.remove("show");
+            popupElement.classList.remove("narrow");
         } else if (popupElement.parentElement.classList.contains("popup")) {
             popupElement.parentElement.classList.remove("show");
+            popupElement.parentElement.classList.remove("narrow");
         }
     });
 }
@@ -342,6 +343,7 @@ async function checkForMatch() {
                 button.addEventListener("click", () => {
                     winPopup.classList.remove("show");
                     authPopup.classList.add("show");
+                    authPopup.classList.remove("narrow");
                 });
             }
 
@@ -502,6 +504,7 @@ createCloseX(document.getElementById("popupWin"));
 
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
+    authPopup.classList.add("narrow");
 })
 
 //Login
@@ -621,7 +624,7 @@ function buttonDesign() {
 
 //spara highscore
 
-async function findLoggedUserHighscore(){
+async function findLoggedUserHighscore() {
     const response = await fetch("http://localhost:8000/getAllAccounts")
     const data = await response.json()
     const userAccount = data.accounts.find(acc => acc.username === currentUser);
