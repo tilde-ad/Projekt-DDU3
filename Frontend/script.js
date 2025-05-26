@@ -453,9 +453,14 @@ openAuthPopupButton.addEventListener("click", function () {
 
 createCloseX(document.getElementById("authPopup"));
 
-createButton.addEventListener("click", async () => {
+createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
+
+    if (!username && !password) {
+        alert("Please enter both a username and a password.");
+        return;
+    }
 
     const response = await fetch("http://localhost:8000/savedAcounts", {
         method: "POST",
