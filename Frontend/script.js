@@ -274,7 +274,7 @@ async function checkForMatch() {
 
         const descContainer = document.getElementById("desc");
         const descDiv = document.createElement("div");
-        descContainer.append(descDiv);
+        descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions")
 
         const divBreed = document.createElement("div");
@@ -545,7 +545,7 @@ createButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    
+
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -592,8 +592,8 @@ loginButton.addEventListener("click", async function () {
         buttonDesign()
         currentUser = username;
         alert("Login successful!");
-        
-        
+
+
         await showHighscoreBox()
 
         if (isGameWon()) {
