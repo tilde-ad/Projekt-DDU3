@@ -597,8 +597,6 @@ function buttonDesign() {
 
 //spara highscore
 async function checkAndSendHighscore() {
-    // const totalCards = document.querySelectorAll(".memoryCard").length;
-    // const totalPairs = totalCards / 2;
     if (isLoggedin && currentUser) {
         const data = { highscore: matchCounter, currentUser: currentUser };
 
