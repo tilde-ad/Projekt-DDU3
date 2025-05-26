@@ -22,7 +22,7 @@ async function handler(request) {
 
     const headerCORS = new Headers();
     headerCORS.append("Access-Control-Allow-Origin", "*");
-    headerCORS.append("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    headerCORS.append("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
     headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
 
     if (request.method === "OPTIONS") {
@@ -110,10 +110,23 @@ async function handler(request) {
             }
         }
 
+        if(url.pathname === "/getAllAccounts"){
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        // Returnera hela data (t.ex. alla accounts)
+        return new Response(JSON.stringify(data), {
+        status: 200,
+        headers: headerCORS,
+        });
+    }
+
         return new Response("Not found", {
             status: 404,
             headers: headerCORS
         });
+
+        
     }
 
     if (request.method === "POST") {
@@ -125,6 +138,15 @@ async function handler(request) {
 
             // Läs in det nya kontot
             const newAccount = await request.json();
+
+            const existing = data.accounts.find(acc => acc.username === newAccount.username);
+            if(existing){
+                return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
+                status: 409,
+                headers: headerCORS
+                });
+            }
+
 
             // Lägg till det i arrayen
             data.accounts.push(newAccount);
@@ -160,7 +182,39 @@ async function handler(request) {
                 });
             }
         }
+    
     }
+    
+    if (request.method === "PATCH") {
+        if (url.pathname === "/highscore") {
+            // Hämta nuvarande data
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+
+            
+            const { highscore, currentUser } = await request.json();
+
+            // Hitta användarkontot med matchande username
+            const userAccount = data.accounts.find(account => account.username === currentUser);
+
+            if(userAccount){
+                userAccount.highscore = highscore;
+
+                await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+                return new Response(JSON.stringify({ success: true, message: "Highscore updated!" }), {
+                status: 200,
+                headers: headerCORS,
+                });
+            } else {
+                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS,
+                });
+            }   
+        }
+    }
+
 
 }
 

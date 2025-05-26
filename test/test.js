@@ -1,4 +1,27 @@
 
+
+let acountnumber = 1
+const accountButton = document.getElementById("acountButton")
+
+
+accountButton.addEventListener("click", async e =>{
+    const acount = document.getElementById("acount").value
+    const password = document.getElementById("password").value
+    const data = {username: acount, password: password};
+    const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
+    method: "POST",
+    headers: {"content-type": "application/json"},
+    body: JSON.stringify(data)
+})
+    const response = await fetch(Acountrequest)
+    const resource = await response.json()  
+    console.log(resource)
+
+})
+
+const useDevMode = true;
+
+
 //test 1 - hundfakta
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
@@ -44,7 +67,7 @@ async function getRandomBreedAndInfo() {
     document.body.appendChild(div);
 }
 
-//test 4 - skapa konto
+
 
 
 //test 5 - logga in
