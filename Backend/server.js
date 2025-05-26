@@ -110,23 +110,23 @@ async function handler(request) {
             }
         }
 
-        if(url.pathname === "/getAllAccounts"){
-        const file = await Deno.readTextFile("database.json");
-        const data = JSON.parse(file);
+        if (url.pathname === "/getAllAccounts") {
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
 
-        // Returnera hela data (t.ex. alla accounts)
-        return new Response(JSON.stringify(data), {
-        status: 200,
-        headers: headerCORS,
-        });
-    }
+            // Returnera hela data (t.ex. alla accounts)
+            return new Response(JSON.stringify(data), {
+                status: 200,
+                headers: headerCORS,
+            });
+        }
 
         return new Response("Not found", {
             status: 404,
             headers: headerCORS
         });
 
-        
+
     }
 
     if (request.method === "POST") {
@@ -140,10 +140,10 @@ async function handler(request) {
             const newAccount = await request.json();
 
             const existing = data.accounts.find(acc => acc.username === newAccount.username);
-            if(existing){
+            if (existing) {
                 return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
-                status: 409,
-                headers: headerCORS
+                    status: 409,
+                    headers: headerCORS
                 });
             }
 
@@ -182,40 +182,141 @@ async function handler(request) {
                 });
             }
         }
-    
+
     }
-    
+
     if (request.method === "PATCH") {
         if (url.pathname === "/highscore") {
             // Hämta nuvarande data
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
-            
+
             const { highscore, currentUser } = await request.json();
 
             // Hitta användarkontot med matchande username
             const userAccount = data.accounts.find(account => account.username === currentUser);
 
-            if(userAccount){
+            if (userAccount) {
                 userAccount.highscore = highscore;
 
                 await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
 
                 return new Response(JSON.stringify({ success: true, message: "Highscore updated!" }), {
-                status: 200,
-                headers: headerCORS,
+                    status: 200,
+                    headers: headerCORS,
                 });
             } else {
                 return new Response(JSON.stringify({ success: false, message: "User not found" }), {
-                status: 404,
-                headers: headerCORS,
+                    status: 404,
+                    headers: headerCORS,
                 });
-            }   
+            }
+        }
+    }
+    // Spara favorit
+    if (url.pathname === "/favorite" && request.method === "POST") {
+        const body = await request.json();
+        const username = body.username;
+        const breed = body.breed;
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        let user = null;
+        for (let i = 0; i < data.accounts.length; i++) {
+            if (data.accounts[i].username === username) {
+                user = data.accounts[i];
+                break;
+            }
+        }
+
+        if (!user) {
+            return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS
+            });
+        }
+
+        if (!user.favorites) user.favorites = [];
+        const breedLower = breed.toLowerCase();
+        if (user.favorites.map(function (f) { return f.toLowerCase(); }).indexOf(breedLower) === -1) {
+            user.favorites.push(breedLower);
+            await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+        }
+
+        return new Response(JSON.stringify({ success: true, favorites: user.favorites }), {
+            status: 200,
+            headers: headerCORS
+        });
+    }
+
+    // Hämta favoriter
+    if (url.pathname === "/favorite" && request.method === "GET") {
+        const username = url.searchParams.get("username");
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        var user = null;
+        for (var i = 0; i < data.accounts.length; i++) {
+            if (data.accounts[i].username === username) {
+                user = data.accounts[i];
+                break;
+            }
+        }
+
+        if (!user) {
+            return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS
+            });
+        }
+
+        return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
+            status: 200,
+            headers: headerCORS
+        });
+    }
+    if (url.pathname === "/favorite" && request.method === "DELETE") {
+        const body = await request.json();
+        const username = body.username;
+        const breed = body.breed;
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        let user = null;
+        for (let i = 0; i < data.accounts.length; i++) {
+            if (data.accounts[i].username === username) {
+                user = data.accounts[i];
+                break;
+            }
+        }
+
+        if (!user) {
+            return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS
+            });
+        }
+
+        if (user.favorites) user.favorites = [];
+        let index = -1;
+        for (let j = 0; j < user.favorites.length; j++) {
+            if (user.favorites[j].toLowerCase() === breed.toLowerCase()) {
+                index = j;
+                break;
+            }
         }
     }
 
+    if (index !== -1) {
+        user.favorites.splice(index, 1);
+        await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+    }
 
+    return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
+        status: 200,
+        headers: headerCORS
+    });
 }
 
 Deno.serve(handler);
