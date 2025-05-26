@@ -247,7 +247,7 @@ let matchPairCounter = 0;
 async function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
-    
+
 
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -300,20 +300,20 @@ async function checkForMatch() {
     //vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
     const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-    
+
     if (allCardsMatch.length === allCards.length) {
         setTimeout(() => {
             const restartButtonBottom = document.getElementById("restartButton");
             restartButtonBottom.style.display = "none";
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
-    
-            if(isLoggedin == false){
+
+            if (isLoggedin == false) {
                 const wantToSaveHighscore = document.createElement("h4")
                 wantToSaveHighscore.textContent = "Login or register to save your highscore!"
                 wantToSaveHighscore.style.textAlign = "center"
                 winPopup.append(wantToSaveHighscore)
-                
+
                 const button = document.createElement("button")
                 button.classList.add("openAuthPopup")
                 button.textContent = "Login/Register"
@@ -325,7 +325,7 @@ async function checkForMatch() {
                     authPopup.classList.add("show");
                 });
             }
-            
+
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
 }
@@ -452,7 +452,7 @@ function restartGame() {
     restartButtonBottom.style.display = "block";
 }
 
-function flipTheCards(){
+function flipTheCards() {
     const flipped = document.querySelectorAll('.memoryCard.flipped');
     flipped.forEach(card => {
         card.classList.remove('flipped');
@@ -494,14 +494,14 @@ let isLoggedin = false;
 openAuthPopup.addEventListener("click", () => {
     if (!isLoggedin) {
         authPopup.classList.add("show");
-        
+
     } else {
         isLoggedin = false;
         alert("Du är nu utloggad!");
         restartGame()
         flipTheCards()
         authPopup.classList.remove("show");
-        highScoreBox.innerHTML = ""; 
+        highScoreBox.innerHTML = "";
         highScoreBox.classList.remove("showBox");
         openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
@@ -516,49 +516,41 @@ createButton.addEventListener("click", async function () {
     const password = document.getElementById("createPassword").value;
 
 
-    const response = await fetch("http://localhost:8000/savedAccounts", {
+    const response = await fetch("http://localhost:8000/savedAccounts")
 
     if (!username && !password) {
         alert("Please enter both a username and a password.");
         return;
     }
 
-    const response = await fetch("http://localhost:8000/savedAcounts", {
-
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-    });
-
-    if(response.status == 409){
-        alert("The username is already taken");
-        isLoggedin = false
-        return
-    }
-
-    if(response.ok){
-        isLoggedin = true
-        alert("Account created!");
-        authPopup.classList.remove("show");
-        localStorage.setItem("loggedInUser", username);
-
-        document.getElementById("createUsername").value = "";
-        document.getElementById("createPassword").value = "";
-        buttonDesign()
-        await showHighscoreBox ()
-
-
-    }
-
 });
 
+const response = await fetch("http://localhost:8000/savedAcounts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password })
+});
 
-loginButton.addEventListener("click", async function () {
+if (response.status == 409) {
+    alert("The username is already taken");
+    isLoggedin = false
+    return
+}
+
+if (response.ok) {
+    isLoggedin = true
+    alert("Account created!");
+    authPopup.classList.remove("show");
+    localStorage.setItem("loggedInUser", username);
+
+    document.getElementById("createUsername").value = "";
+    document.getElementById("createPassword").value = "";
+    buttonDesign()
+    await showHighscoreBox()
+}
 
 let currentUser = null;
-loginButton.addEventListener("click", async () => {
-    
-
+loginButton.addEventListener("click", async function () {
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -569,9 +561,9 @@ loginButton.addEventListener("click", async () => {
     });
 
     function isGameWon() {
-    const allCards = document.querySelectorAll(".memoryCard");
-    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-    return allCards.length > 0 && allCardsMatch.length === allCards.length;
+        const allCards = document.querySelectorAll(".memoryCard");
+        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+        return allCards.length > 0 && allCardsMatch.length === allCards.length;
     }
 
     const result = await response.json();
@@ -583,7 +575,7 @@ loginButton.addEventListener("click", async () => {
 
         await showHighscoreBox()
 
-        if(isGameWon()){
+        if (isGameWon()) {
             await checkAndSendHighscore();
         }
 
@@ -596,34 +588,34 @@ loginButton.addEventListener("click", async () => {
     document.getElementById("loginPassword").value = "";
 });
 
-function buttonDesign(){
-        authPopup.classList.remove("show");
-        openAuthPopup.style.backgroundColor = "#E2EFFF"
-        openAuthPopup.style.color = "#0F3665"
-        openAuthPopup.style.fontFamily = "Jua, sans-serif"
-        openAuthPopup.style.fontSize = "24px"
-        openAuthPopup.textContent = "Log out"
+function buttonDesign() {
+    authPopup.classList.remove("show");
+    openAuthPopup.style.backgroundColor = "#E2EFFF"
+    openAuthPopup.style.color = "#0F3665"
+    openAuthPopup.style.fontFamily = "Jua, sans-serif"
+    openAuthPopup.style.fontSize = "24px"
+    openAuthPopup.textContent = "Log out"
 }
 
-    //spara highscore
-    async function checkAndSendHighscore() {
+//spara highscore
+async function checkAndSendHighscore() {
     // const totalCards = document.querySelectorAll(".memoryCard").length;
     // const totalPairs = totalCards / 2;
-        if(isLoggedin && currentUser){
-            const data = {highscore: matchCounter, currentUser: currentUser };
-    
-            const response = await fetch("http://localhost:8000/highscore", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data)
-            });
-    
-            if(response.ok){
-                await showHighscoreBox()
-            } 
+    if (isLoggedin && currentUser) {
+        const data = { highscore: matchCounter, currentUser: currentUser };
+
+        const response = await fetch("http://localhost:8000/highscore", {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+            await showHighscoreBox()
         }
-    
     }
+
+}
 
 (async function () {
     breedmanager = new DogbreedManager();
@@ -633,22 +625,22 @@ function buttonDesign(){
 
 
 
-async function showHighscoreBox (){
+async function showHighscoreBox() {
     const highScoreBox = document.getElementById("savedHighscore");
     highScoreBox.classList.add("showBox");
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
     console.log(response)
-    
-    if(response.ok){
+
+    if (response.ok) {
         const data = await response.json()
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
         console.log(userAccount)
-        if(userAccount){
+        if (userAccount) {
             const highscore = userAccount.highscore
 
             matchCounter = highscore;
-            highScoreBox.innerHTML= `<h2>Highscore:${highscore}</h2>`
+            highScoreBox.innerHTML = `<h2>Highscore:${highscore}</h2>`
         }
     }
 }
