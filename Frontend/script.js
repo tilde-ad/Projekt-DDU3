@@ -618,22 +618,30 @@ function buttonDesign() {
     openAuthPopup.textContent = "Log out"
 }
 
+
 //spara highscore
+
+async function findLoggedUserHighscore(){
+    const response = await fetch("http://localhost:8000/getAllAccounts")
+    const data = await response.json()
+    const userAccount = data.accounts.find(acc => acc.username === currentUser);
+    const userHighscore = userAccount.highscore
+    return userHighscore
+}
 async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
-        const data = { highscore: matchCounter, currentUser: currentUser };
+        const currentHighscore = await findLoggedUserHighscore();
 
-        const response = await fetch("http://localhost:8000/highscore", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        });
-
-        if (response.ok) {
+        if (matchCounter < currentHighscore) {
+            const data = { highscore: matchCounter, currentUser: currentUser };
+            const response = await fetch("http://localhost:8000/highscore", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
             await showHighscoreBox()
         }
     }
-
 }
 
 (async function () {
@@ -647,18 +655,16 @@ async function checkAndSendHighscore() {
 async function showHighscoreBox() {
     const highScoreBox = document.getElementById("savedHighscore");
     highScoreBox.classList.add("showBox");
-    
+
     const response = await fetch("http://localhost:8000/getAllAccounts")
-    console.log(response)
+
 
     if (response.ok) {
         const data = await response.json()
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
-        console.log(userAccount)
         let highscore = matchCounter;
         if (userAccount) {
             highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
-            matchCounter = highscore;
             highScoreBox.innerHTML = `<h2>Highscore:${highscore}</h2>`
         }
     }
