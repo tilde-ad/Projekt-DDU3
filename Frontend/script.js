@@ -646,3 +646,4 @@ async function showHighscoreBox() {
 }
 
 //changed
+//changed
