@@ -671,3 +671,47 @@ async function showHighscoreBox() {
 
 //changed
 //changed
+
+
+//ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
+//ANROPA winGameInstantly() I KONSOLLEN
+function winGameInstantly() {
+    const allCards = document.querySelectorAll(".memoryCard");
+
+    allCards.forEach(card => {
+        card.classList.add("matched");
+    });
+
+    matchPairCounter = allCards.length / 2;
+    matchCounter = 10; // Bästa möjliga score
+
+    updateCounterDisplay();
+
+    setTimeout(() => {
+        const restartButtonBottom = document.getElementById("restartButton");
+        restartButtonBottom.style.display = "none";
+
+        const winPopup = document.getElementById("popupWin");
+        winPopup.classList.add("show");
+
+        if (!isLoggedin) {
+            const wantToSaveHighscore = document.createElement("h4");
+            wantToSaveHighscore.textContent = "Login or register to save your highscore!";
+            wantToSaveHighscore.style.textAlign = "center";
+            winPopup.append(wantToSaveHighscore);
+
+            const button = document.createElement("button");
+            button.classList.add("openAuthPopup");
+            button.textContent = "Login/Register";
+            button.id = "secondButton";
+            winPopup.append(button);
+
+            button.addEventListener("click", () => {
+                winPopup.classList.remove("show");
+                authPopup.classList.add("show");
+            });
+        }
+
+        checkAndSendHighscore(); // Spara automatiskt 10 som highscore om inloggad
+    }, 500);
+}
