@@ -647,7 +647,7 @@ async function checkAndSendHighscore() {
 async function showHighscoreBox() {
     const highScoreBox = document.getElementById("savedHighscore");
     highScoreBox.classList.add("showBox");
-
+    
     const response = await fetch("http://localhost:8000/getAllAccounts")
     console.log(response)
 
