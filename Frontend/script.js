@@ -545,7 +545,7 @@ createButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    
+
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -592,8 +592,8 @@ loginButton.addEventListener("click", async function () {
         buttonDesign()
         currentUser = username;
         alert("Login successful!");
-        
-        
+
+
         await showHighscoreBox()
 
         if (isGameWon()) {
@@ -621,17 +621,17 @@ function buttonDesign() {
 //spara highscore
 async function checkAndSendHighscore() {
     const response = await fetch("http://localhost:8000/getAllAccounts")
-    const allUsers = await response.json();
+    const data = await response.json();
     console.log(allUsers)
     if (isLoggedin && currentUser) {
 
 
         // 2. Hitta den aktuella användaren
         //const user = allUsers.find(u => u.username === currentUser);
-      
+
 
         const currentHighscore = user.highscore;
-        if(matchCounter < currentHighscore){
+        if (matchCounter < currentHighscore) {
             console.log(matchCounter)
             const data = { highscore: matchCounter, currentUser: currentUser };
             const response = await fetch("http://localhost:8000/highscore", {
