@@ -144,7 +144,6 @@ async function handler(request) {
                 });
             }
 
-
             // Lägg till det i arrayen
             data.accounts.push(newAccount);
 

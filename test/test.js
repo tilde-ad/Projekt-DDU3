@@ -1,5 +1,3 @@
-const useDevMode = true;
-
 //test 1 - hundfakta
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
@@ -31,7 +29,6 @@ async function getDogPic() {
     document.body.appendChild(img);
 }
 
-
 //test 3 - beskrivning av hundras
 async function getRandomBreedAndInfo() {
     const response = await fetch("http://localhost:8000/dogbreed");
@@ -51,33 +48,33 @@ async function getRandomBreedAndInfo() {
     div2.style.overflowY = "auto";
     div2.style.border = "1px solid black";
 
-    const ul = document.createElement("ul");
-    ul.style.columns = "2";
-    ul.style.columnGap = "20px";
+    const ol = document.createElement("ol");
+    ol.style.columns = "2";
+    ol.style.columnGap = "20px";
     for (let i = 0; i < data.length; i++) {
         const li = document.createElement("li");
         li.textContent = data[i].name;
-        ul.appendChild(li);
+        ol.appendChild(li);
     }
 
-    div2.appendChild(ul);
+    div2.appendChild(ol);
     document.body.appendChild(div);
     document.body.appendChild(div2);
 }
 
 //test 4 - array av hundar
-
 async function getArrayOfDogs() {
     const response = await fetch("http://localhost:8000/dogbreedsecond");
     const data = await response.json();
 
     const div = document.createElement("div");
-    div.innerHTML = `<h2>Test 4: En array hundraser från api2 (dog.ceo)</h2>`
+    div.innerHTML = `<h2>Test 4: En array hundraser från API2 (dog.ceo)</h2>`
 
-    div.style.height = "400px";
-    div.style.width = "500px"
-    div.style.overflowY = "auto";
-    div.style.border = "1px solid black";
+    const div2 = document.createElement("div");
+    div2.style.height = "400px";
+    div2.style.width = "500px"
+    div2.style.overflowY = "auto";
+    div2.style.border = "1px solid black";
 
     const ol = document.createElement("ol");
     ol.style.columns = "2";
@@ -89,8 +86,9 @@ async function getArrayOfDogs() {
         ol.appendChild(li);
     }
 
-    div.appendChild(ol);
+    div2.appendChild(ol);
     document.body.appendChild(div);
+    document.body.appendChild(div2);
 }
 
 //test 5 - skapa konto
