@@ -78,19 +78,16 @@ p {
 }
 
 #tries {
+    font-family: "Jua";
     font-weight: bold;
-    margin-top: 3px;
+    font-size: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
     margin-bottom: 8px;
-    text-align: center;
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#pairs {
-    grid-column: 1;
-    grid-row: 1;
-    margin-left: 37px;
-    font-size: 18px;
+    background-color: #E2EFFF;
+    color: #0F3665;
+    border: 3px solid #0F3665;
+    padding: 10px;
 }
 
 #memory-Container {
@@ -103,6 +100,7 @@ p {
     border: 5px solid #0F3665;
     border-radius: 15px;
     position: relative;
+    margin: 20px 0px;
 }
 
 .memoryCard {
