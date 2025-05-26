@@ -14,11 +14,11 @@ body {
     position: relative;
 }
 
+
 .openAuthPopup {
   position: absolute;
   top: 50px;
   right: 100px;
-
 }
 
 #secondButton {
@@ -302,7 +302,6 @@ button:active {
     border-radius: 10px;
     padding: 10px;
     font-size: 14px;
-    font-weight: bold;
     line-height: 1.3;
     overflow: scroll;
 }
