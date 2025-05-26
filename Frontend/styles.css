@@ -376,7 +376,8 @@ h4 {
     margin: 15px 0px 5px;
 }
 
-.showBox {
+#myAccount {
+    flex-direction: column;
     margin-left: 15px;
     height: 250px;
     background-color: #EBC6E5;
@@ -386,7 +387,8 @@ h4 {
     display: none;
 }
 
-.showBox h2 {
+
+#myAccount h2 {
     text-align: center;
     font-family: "Jua", sans-serif;
     font-size: 35px;

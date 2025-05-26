@@ -46,16 +46,19 @@ async function getFavorites() {
         console.log("ingen inloggad användare")
         return [];
     }
-    const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`);
+    const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`)
     if (response.ok) {
         const data = await response.json();
-        console.log("favoriter hämtade:", data.favorites);
-        return data.favorites || [];
+        const favorites = Array.isArray(data.favorites) ? data.favorites : [];
+        console.log("favoriter hämtade:", favorites);
+        return favorites;
     } else {
-        console.log("sorry nej");
+        console.log(currentUser, "kunde inte hämta favoriter");
         return [];
+
     }
 }
+
 async function removeFavorite(breedName) {
     if (!currentUser) return;
     await fetch("http://localhost:8000/favorite", {
@@ -66,6 +69,41 @@ async function removeFavorite(breedName) {
     showFavoritesBox();
 }
 
+async function showFavoritesBox() {
+    let faveBox = document.getElementById("favoritesBox");
+    document.getElementById("myAccount").style.display = "flex";
+    if (!faveBox) {
+        faveBox = document.createElement("div");
+        faveBox.id = "favoritesBox";
+        document.getElementById("myAccount").appendChild(faveBox);
+    }
+
+    faveBox.innerHTML = "<h2>Saved Breeds</h2>";
+
+    if (!currentUser) {
+        return;
+    }
+
+    let favorites = await getFavorites();
+
+    console.log("Favoriter:", favorites);
+
+    if (!favorites || favorites.length === 0) {
+        faveBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
+        return;
+    }
+
+    let ul = document.createElement("ul");
+    for (let i = 0; i < favorites.length; i++) {
+        let li = document.createElement("li");
+        li.textContent = favorites[i]
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+        ul.appendChild(li);
+    }
+    faveBox.appendChild(ul);
+}
 
 class Dog {
     constructor({ name, description }) {
@@ -599,7 +637,7 @@ openAuthPopup.addEventListener("click", () => {
         flipTheCards()
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
-        highScoreBox.classList.remove("showBox");
+        highScoreBox.classList.remove("myAccount");
         openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
     }
@@ -665,7 +703,7 @@ loginButton.addEventListener("click", async function () {
     const result = await response.json();
     if (result.success) {
         isLoggedin = true
-        buttonDesign()
+        buttonDesign();
         currentUser = username;
         alert("Login successful!");
 
@@ -728,11 +766,9 @@ async function checkAndSendHighscore() {
     await getDogPic();
 })();
 
-
-
 async function showHighscoreBox() {
-    const highScoreBox = document.getElementById("myAccount");
-    highScoreBox.style.display = "flex";
+    const myAccount = document.getElementById("myAccount");
+    myAccount.style.display = "flex";
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
 
@@ -747,38 +783,6 @@ async function showHighscoreBox() {
         }
     }
 }
-
-async function showFavoritesBox() {
-    let boxfave = document.getElementById("favoritesBox");
-    if (!boxfave) {
-        boxfave = document.createElement("div");
-        boxfave.id = "favoritesBox";
-        document.getElementById("myAccount").appendChild(boxfave);
-    }
-    boxfave.innerHTML = "<h2>Saved Breeds</h2>";
-
-    if (!currentUser) {
-        return;
-    }
-
-    let favorites = await getFavorites();
-    if (!favorites || favorites.length === 0) {
-        boxfave.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
-        return;
-    }
-
-    let ul = document.createElement("ul");
-    for (let i = 0; i < favorites.length; i++) {
-        let li = document.createElement("li");
-        li.textContent = favorites[i];
-        ul.appendChild(li);
-    }
-    boxfave.appendChild(ul);
-}
-
-//changed
-//changed
-
 
 //ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
 //ANROPA winGameInstantly() I KONSOLLEN

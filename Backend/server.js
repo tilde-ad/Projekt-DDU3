@@ -29,6 +29,7 @@ async function handler(request) {
         return new Response(null, { headers: headerCORS });
     }
 
+
     if (request.method === "GET") {
         // Hundbild (med eller utan ras)
         if (url.pathname === "/dogpic") {
@@ -223,6 +224,8 @@ async function handler(request) {
         const data = JSON.parse(file);
 
         let user = null;
+
+
         for (let i = 0; i < data.accounts.length; i++) {
             if (data.accounts[i].username === username) {
                 user = data.accounts[i];
@@ -255,6 +258,7 @@ async function handler(request) {
         const username = url.searchParams.get("username");
         const file = await Deno.readTextFile("database.json");
         const data = JSON.parse(file);
+        console.log("Alla konton:", data.accounts);
 
         var user = null;
         for (var i = 0; i < data.accounts.length; i++) {
@@ -276,6 +280,7 @@ async function handler(request) {
             headers: headerCORS
         });
     }
+
     if (url.pathname === "/favorite" && request.method === "DELETE") {
         const body = await request.json();
         const username = body.username;
