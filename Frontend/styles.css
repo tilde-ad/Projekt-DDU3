@@ -219,6 +219,21 @@ p {
     animation: fadeIn 0.5s ease forwards;
 }
 
+.popup-content-login {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-left: 365px;
+    margin-top: 5px;
+}
+
+.popup-content-login input {
+    margin-bottom: 10px;
+}
+
 button {
     padding: 10px 20px;
     background-color: #0F3665;
@@ -324,17 +339,6 @@ button:active {
 .descBreed {
     font-weight: bold;
 }
-
-
-.popup-content-login {
-    position: relative;
-    left: 405px;
-}
-
-.popup-content-login input {
-    margin-bottom: 10px;
-}
-
 
 h4 {
     margin: 15px 0px 5px;
