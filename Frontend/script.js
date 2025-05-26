@@ -515,39 +515,36 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-
-    const response = await fetch("http://localhost:8000/savedAccounts")
+    const response = await fetch("http://localhost:8000/savedAcounts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
 
     if (!username && !password) {
         alert("Please enter both a username and a password.");
         return;
     }
 
+    if (response.status == 409) {
+        alert("The username is already taken");
+        isLoggedin = false;
+    }
+
+    if (response.ok) {
+        isLoggedin = true
+        alert("Account created!");
+        authPopup.classList.remove("show");
+        localStorage.setItem("loggedInUser", username);
+
+        document.getElementById("createUsername").value = "";
+        document.getElementById("createPassword").value = "";
+        buttonDesign();
+        await showHighscoreBox();
+    }
 });
 
-const response = await fetch("http://localhost:8000/savedAcounts", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password })
-});
 
-if (response.status == 409) {
-    alert("The username is already taken");
-    isLoggedin = false
-    return
-}
-
-if (response.ok) {
-    isLoggedin = true
-    alert("Account created!");
-    authPopup.classList.remove("show");
-    localStorage.setItem("loggedInUser", username);
-
-    document.getElementById("createUsername").value = "";
-    document.getElementById("createPassword").value = "";
-    buttonDesign()
-    await showHighscoreBox()
-}
 
 let currentUser = null;
 loginButton.addEventListener("click", async function () {
