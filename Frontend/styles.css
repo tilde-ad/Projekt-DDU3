@@ -295,6 +295,10 @@ button:active {
     overflow: scroll;
 }
 
+.descBreed {
+    font-weight: bold;
+}
+
 
 .popup-content-login {
     position: relative;
