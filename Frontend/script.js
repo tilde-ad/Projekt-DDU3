@@ -313,12 +313,12 @@ async function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
-        const breed = getBreedFromImageUrl(imageUrl).toLowerCase();
+        const breed = getBreedFromImageUrl(imageUrl);
 
         const descContainer = document.getElementById("desc");
         const descDiv = document.createElement("div");
         descContainer.prepend(descDiv);
-        descDiv.classList.add("descriptions")
+        descDiv.classList.add("descriptions");
 
         const divBreed = document.createElement("div");
         descDiv.append(divBreed);
@@ -731,8 +731,8 @@ async function checkAndSendHighscore() {
 
 
 async function showHighscoreBox() {
-    const highScoreBox = document.getElementById("savedHighscore");
-    highScoreBox.classList.add("showBox");
+    const highScoreBox = document.getElementById("myAccount");
+    highScoreBox.style.display = "flex";
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
 
@@ -747,10 +747,14 @@ async function showHighscoreBox() {
         }
     }
 }
-let favoritesBox = document.createElement("div");
+
 async function showFavoritesBox() {
-    let boxfave = document.querySelector(favoritesBox);
-    document.body.appendChild(boxfave);
+    let boxfave = document.getElementById("favoritesBox");
+    if (!boxfave) {
+        boxfave = document.createElement("div");
+        boxfave.id = "favoritesBox";
+        document.getElementById("myAccount").appendChild(boxfave);
+    }
     boxfave.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {

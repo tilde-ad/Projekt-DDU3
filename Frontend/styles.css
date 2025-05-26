@@ -383,7 +383,7 @@ h4 {
     border: 2px solid #E875D7;
     border-radius: 10px;
 
-
+    display: none;
 }
 
 .showBox h2 {
