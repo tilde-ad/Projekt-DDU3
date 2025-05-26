@@ -515,16 +515,18 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-    const response = await fetch("http://localhost:8000/savedAcounts", {
+    if (!username && !password) {
+        alert("Please enter both a username and a password.");
+        return;
+    }
+
+    const response = await fetch("http://localhost:8000/savedAccounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     });
 
-    if (!username && !password) {
-        alert("Please enter both a username and a password.");
-        return;
-    }
+    
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -532,6 +534,7 @@ createButton.addEventListener("click", async function () {
     }
 
     if (response.ok) {
+        currentUser = username;
         isLoggedin = true
         alert("Account created!");
         authPopup.classList.remove("show");
@@ -541,6 +544,7 @@ createButton.addEventListener("click", async function () {
         document.getElementById("createPassword").value = "";
         buttonDesign();
         await showHighscoreBox();
+        await checkAndSendHighscore()
     }
 });
 
@@ -570,7 +574,7 @@ loginButton.addEventListener("click", async function () {
         currentUser = username;
         alert("Login successful!");
         
-        await checkAndSendHighscore()
+        
         await showHighscoreBox()
 
         if (isGameWon()) {
@@ -632,9 +636,9 @@ async function showHighscoreBox() {
         const data = await response.json()
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
         console.log(userAccount)
+        let highscore = matchCounter;
         if (userAccount) {
-            const highscore = userAccount.highscore
-
+            highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
             matchCounter = highscore;
             highScoreBox.innerHTML = `<h2>Highscore:${highscore}</h2>`
         }
