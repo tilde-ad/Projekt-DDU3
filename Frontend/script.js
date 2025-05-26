@@ -296,7 +296,7 @@ async function checkForMatch() {
                 popup.classList.remove("show");
                 // void popup.offsetWidth;
                 popup.classList.add("show");
-            }, 1000);
+            }, 400);
         }
 
         const totalCards = document.querySelectorAll(".memoryCard").length;
@@ -647,7 +647,7 @@ async function checkAndSendHighscore() {
 async function showHighscoreBox() {
     const highScoreBox = document.getElementById("savedHighscore");
     highScoreBox.classList.add("showBox");
-    
+
     const response = await fetch("http://localhost:8000/getAllAccounts")
     console.log(response)
 
