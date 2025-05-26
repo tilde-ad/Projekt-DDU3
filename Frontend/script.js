@@ -537,7 +537,7 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-    if (!username && !password) {
+    if (!username || !password) {
         alert("Please enter both a username and a password.");
         return;
     }
@@ -547,8 +547,6 @@ createButton.addEventListener("click", async function () {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     });
-
-
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -634,8 +632,9 @@ async function findLoggedUserHighscore() {
 async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
         const currentHighscore = await findLoggedUserHighscore();
+        const noHighscoreYet = currentHighscore === null || currentHighscore === undefined || currentHighscore === 0;
 
-        if (matchCounter < currentHighscore) {
+        if (matchCounter >= 10 && (noHighscoreYet || matchCounter < currentHighscore)) {
             const data = { highscore: matchCounter, currentUser: currentUser };
             const response = await fetch("http://localhost:8000/highscore", {
                 method: "PATCH",
@@ -675,3 +674,47 @@ async function showHighscoreBox() {
 
 //changed
 //changed
+
+
+//ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
+//ANROPA winGameInstantly() I KONSOLLEN
+function winGameInstantly() {
+    const allCards = document.querySelectorAll(".memoryCard");
+
+    allCards.forEach(card => {
+        card.classList.add("matched");
+    });
+
+    matchPairCounter = allCards.length / 2;
+    matchCounter = 10; // Bästa möjliga score
+
+    updateCounterDisplay();
+
+    setTimeout(() => {
+        const restartButtonBottom = document.getElementById("restartButton");
+        restartButtonBottom.style.display = "none";
+
+        const winPopup = document.getElementById("popupWin");
+        winPopup.classList.add("show");
+
+        if (!isLoggedin) {
+            const wantToSaveHighscore = document.createElement("h4");
+            wantToSaveHighscore.textContent = "Login or register to save your highscore!";
+            wantToSaveHighscore.style.textAlign = "center";
+            winPopup.append(wantToSaveHighscore);
+
+            const button = document.createElement("button");
+            button.classList.add("openAuthPopup");
+            button.textContent = "Login/Register";
+            button.id = "secondButton";
+            winPopup.append(button);
+
+            button.addEventListener("click", () => {
+                winPopup.classList.remove("show");
+                authPopup.classList.add("show");
+            });
+        }
+
+        checkAndSendHighscore(); // Spara automatiskt 10 som highscore om inloggad
+    }, 500);
+}
