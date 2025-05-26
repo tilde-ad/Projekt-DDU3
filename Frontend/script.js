@@ -536,6 +536,8 @@ createButton.addEventListener("click", async () => {
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
         buttonDesign()
+        await showHighscoreBox ()
+
 
     }
 
@@ -566,11 +568,9 @@ loginButton.addEventListener("click", async () => {
         currentUser = username;
         alert("Login successful!");
 
-        await checkAndSendHighscore()
-
         await showHighscoreBox()
 
-        if(isGameWon){
+        if(isGameWon()){
             await checkAndSendHighscore();
         }
 
@@ -599,19 +599,15 @@ function buttonDesign(){
         if(isLoggedin && currentUser){
             const data = {highscore: matchCounter, currentUser: currentUser };
     
-            const Acountrequest = new Request("http://localhost:8000/highscore", {
+            const response = await fetch("http://localhost:8000/highscore", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
             });
     
-            const response = await fetch(Acountrequest);
             if(response.ok){
                 await showHighscoreBox()
-            }
-
-    
-            
+            } 
         }
     
     }
