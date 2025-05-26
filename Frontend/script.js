@@ -38,16 +38,21 @@ async function saveFavorite(breedName) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
+    showFavoritesBox();
 }
+
 async function getFavorites() {
     if (!currentUser) {
+        console.log("ingen inloggad användare")
         return [];
     }
     const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`);
     if (response.ok) {
         const data = await response.json();
+        console.log("favoriter hämtade:", data.favorites);
         return data.favorites || [];
     } else {
+        console.log("sorry nej");
         return [];
     }
 }
@@ -58,7 +63,9 @@ async function removeFavorite(breedName) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
+    showFavoritesBox();
 }
+
 
 class Dog {
     constructor({ name, description }) {
@@ -728,11 +735,11 @@ async function showHighscoreBox() {
         }
     }
 }
-
+let favoritesBox = document.createElement("div");
 async function showFavoritesBox() {
-    let favoritesBox = document.createElement("div");
-    document.body.appendChild(favoritesBox);
-    favoritesBox.innerHTML = "<h2>Saved Breeds</h2>";
+    let boxfave = document.querySelector(favoritesBox);
+    document.body.appendChild(boxfave);
+    boxfave.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {
         return;
@@ -740,7 +747,7 @@ async function showFavoritesBox() {
 
     let favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
-        favoritesBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
+        boxfave.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
         return;
     }
 
@@ -750,7 +757,7 @@ async function showFavoritesBox() {
         li.textContent = favorites[i];
         ul.appendChild(li);
     }
-    favoritesBox.appendChild(ul);
+    boxfave.appendChild(ul);
 }
 
 //changed
