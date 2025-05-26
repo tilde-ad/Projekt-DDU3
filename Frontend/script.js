@@ -345,10 +345,12 @@ async function checkForMatch() {
                 await removeFavorite(breed);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
+                await showFavoritesBox();
             } else {
                 await saveFavorite(breed);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
+                await showFavoritesBox();
             }
         });
 
@@ -626,6 +628,7 @@ createButton.addEventListener("click", async function () {
         document.getElementById("createPassword").value = "";
         buttonDesign();
         await showHighscoreBox();
+        await showFavoritesBox();
     }
 });
 
@@ -725,7 +728,8 @@ async function showHighscoreBox() {
 }
 
 async function showFavoritesBox() {
-    let favoritesBox = document.getElementById("favoritesBox");
+    let favoritesBox = document.createElement("favoritesBox");
+    body.appendChild(favoritesBox);
     favoritesBox.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {

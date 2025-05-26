@@ -311,12 +311,13 @@ async function handler(request) {
     if (index !== -1) {
         user.favorites.splice(index, 1);
         await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+        return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
+            status: 200,
+            headers: headerCORS
+        });
     }
 
-    return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
-        status: 200,
-        headers: headerCORS
-    });
+
 }
 
 Deno.serve(handler);
