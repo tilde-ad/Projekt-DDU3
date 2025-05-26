@@ -324,6 +324,7 @@ async function checkForMatch() {
         matchPairCounter++;
 
         const faveButton = document.createElement("button");
+        faveButton.type = "button";
         faveButton.innerHTML = "♡";
         faveButton.classList.add("faveButton");
         descDiv.appendChild(faveButton);
@@ -658,6 +659,7 @@ loginButton.addEventListener("click", async function () {
 
         await checkAndSendHighscore()
         await showHighscoreBox()
+        await showFavoritesBox();
 
         if (isGameWon()) {
             await checkAndSendHighscore();
@@ -728,8 +730,8 @@ async function showHighscoreBox() {
 }
 
 async function showFavoritesBox() {
-    let favoritesBox = document.createElement("favoritesBox");
-    body.appendChild(favoritesBox);
+    let favoritesBox = document.createElement("div");
+    document.body.appendChild(favoritesBox);
     favoritesBox.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {
