@@ -1,26 +1,4 @@
-
-
-let acountnumber = 1
-const accountButton = document.getElementById("acountButton")
-
-
-accountButton.addEventListener("click", async e =>{
-    const acount = document.getElementById("acount").value
-    const password = document.getElementById("password").value
-    const data = {username: acount, password: password};
-    const Acountrequest = new Request("http://0.0.0.0:8000/savedAcounts", {
-    method: "POST",
-    headers: {"content-type": "application/json"},
-    body: JSON.stringify(data)
-})
-    const response = await fetch(Acountrequest)
-    const resource = await response.json()  
-    console.log(resource)
-
-})
-
 const useDevMode = true;
-
 
 //test 1 - hundfakta
 async function getDogFact() {
@@ -79,8 +57,6 @@ async function createAcount() {
     }
     const response = await fetch("http://localhost:8000/savedAccounts", options);
 
-
-
     const div = document.createElement("div");
 
     if (response.status === 200) {
@@ -90,7 +66,6 @@ async function createAcount() {
         div.innerHTML = `<h2>Create a account</h2><p>An account could not be created.</p>`
         document.body.appendChild(div);
     }
-
 }
 
 //test 5 - logga in
@@ -103,7 +78,6 @@ async function loginToAccount() {
             password: "testpassword"
         })
     }
-
     const response = await fetch("http://localhost:8000/login", options);
 
     const div = document.createElement("div");
