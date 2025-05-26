@@ -195,6 +195,35 @@ async function getAllAccountsTest() {
     document.body.appendChild(div);
 }
 
+//test 9 - spara favorit
+async function testSaveFavorite() {
+    const testData = {
+        username: "testuser123",
+        breed: "golden retriever"
+    };
+
+    const options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(testData)
+    };
+
+    const response = await fetch("http://localhost:8000/favorite", options);
+    const data = await response.json();
+
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>Test 9: Save Favorite</h2>`;
+
+    if (response.status === 200) {
+        div.innerHTML += `<p>Favorite "${testData.breed}" saved for user "${testData.username}".</p>`;
+    } else {
+        div.innerHTML += `<p>Failed to save favorite. Status: ${response.status}<br>Message: ${data.message}</p>`;
+    }
+
+    document.body.appendChild(div);
+}
+
+
 
 async function runTest() {
     await getDogFact();
@@ -205,6 +234,7 @@ async function runTest() {
     await loginToAccount();
     await updateHighscoreTest();
     await getAllAccountsTest();
+    await testSaveFavorite();
 }
 
 runTest();

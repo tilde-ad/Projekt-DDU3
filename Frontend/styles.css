@@ -16,9 +16,9 @@ body {
 
 
 .openAuthPopup {
-  position: absolute;
-  top: 50px;
-  right: 100px;
+    position: absolute;
+    top: 50px;
+    right: 100px;
 }
 
 #secondButton {
@@ -73,9 +73,16 @@ p {
 }
 
 #tries {
+    font-family: "Jua";
     font-weight: bold;
-    margin-top: 3px;
+    font-size: 25px;
+    border-radius: 10px;
+    margin-top: 15px;
     margin-bottom: 8px;
+    background-color: #E2EFFF;
+    color: #0F3665;
+    border: 3px solid #0F3665;
+    padding: 10px;
 }
 
 #memory-Container {
@@ -88,6 +95,7 @@ p {
     border: 5px solid #0F3665;
     border-radius: 15px;
     position: relative;
+    margin: 20px 0px;
 }
 
 .memoryCard {
@@ -325,17 +333,17 @@ h4 {
     margin: 15px 0px 5px;
 }
 
-.showBox{
+.showBox {
     margin-left: 15px;
     height: 250px;
     background-color: #EBC6E5;
     border: 2px solid #E875D7;
     border-radius: 10px;
 
-    
+
 }
 
-.showBox h2{
+.showBox h2 {
     text-align: center;
     font-family: "Jua", sans-serif;
     font-size: 35px;
