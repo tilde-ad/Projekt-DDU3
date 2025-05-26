@@ -569,7 +569,8 @@ loginButton.addEventListener("click", async function () {
         buttonDesign()
         currentUser = username;
         alert("Login successful!");
-
+        
+        await checkAndSendHighscore()
         await showHighscoreBox()
 
         if (isGameWon()) {
