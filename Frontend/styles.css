@@ -185,6 +185,10 @@ p {
     max-width: 90vw;
     min-width: 0;
     height: auto;
+    left: auto;
+    right: -375px;
+    top: 190px;
+    transform: none;
 }
 
 .popup .closeX {

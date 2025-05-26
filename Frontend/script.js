@@ -712,6 +712,7 @@ function winGameInstantly() {
             button.addEventListener("click", () => {
                 winPopup.classList.remove("show");
                 authPopup.classList.add("show");
+                authPopup.classList.remove("narrow");
             });
         }
 
