@@ -644,3 +644,5 @@ async function showHighscoreBox (){
         }
     }
 }
+
+//changed
