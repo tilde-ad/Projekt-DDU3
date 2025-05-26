@@ -534,7 +534,7 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-    if (!username && !password) {
+    if (!username || !password) {
         alert("Please enter both a username and a password.");
         return;
     }
@@ -544,8 +544,6 @@ createButton.addEventListener("click", async function () {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     });
-
-
 
     if (response.status == 409) {
         alert("The username is already taken");
