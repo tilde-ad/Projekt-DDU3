@@ -631,8 +631,9 @@ async function findLoggedUserHighscore(){
 async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
         const currentHighscore = await findLoggedUserHighscore();
+        const noHighscoreYet = currentHighscore === null || currentHighscore === undefined || currentHighscore === 0;
 
-        if (matchCounter < currentHighscore) {
+        if (matchCounter >= 10 && (noHighscoreYet || matchCounter < currentHighscore)) {
             const data = { highscore: matchCounter, currentUser: currentUser };
             const response = await fetch("http://localhost:8000/highscore", {
                 method: "PATCH",
