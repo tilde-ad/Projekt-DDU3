@@ -4,6 +4,8 @@ let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
 
+
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -12,7 +14,7 @@ const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
-const openAuthPopupButton = document.getElementById("openAuthPopup");
+const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -242,9 +244,10 @@ createCloseX(document.getElementById("popupFact"));
 
 let matchPairCounter = 0;
 
-function checkForMatch() {
+async function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
+    
 
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -276,6 +279,13 @@ function checkForMatch() {
                 popup.classList.add("show");
             }, 1000);
         }
+
+        const totalCards = document.querySelectorAll(".memoryCard").length;
+        const totalPairs = totalCards / 2;
+        if (matchPairCounter === totalPairs) {
+            await checkAndSendHighscore()
+        }
+
     } else {
         lockBoard = true;
         setTimeout(() => {
@@ -286,16 +296,36 @@ function checkForMatch() {
         }, 1000);
     }
 
+
     //vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
     const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-
+    
     if (allCardsMatch.length === allCards.length) {
         setTimeout(() => {
             const restartButtonBottom = document.getElementById("restartButton");
             restartButtonBottom.style.display = "none";
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
+    
+            if(isLoggedin == false){
+                const wantToSaveHighscore = document.createElement("h4")
+                wantToSaveHighscore.textContent = "Login or register to save your highscore!"
+                wantToSaveHighscore.style.textAlign = "center"
+                winPopup.append(wantToSaveHighscore)
+                
+                const button = document.createElement("button")
+                button.classList.add("openAuthPopup")
+                button.textContent = "Login/Register"
+                button.id = "secondButton"
+                winPopup.append(button)
+
+                button.addEventListener("click", () => {
+                    winPopup.classList.remove("show");
+                    authPopup.classList.add("show");
+                });
+            }
+            
         }, 800); // lite delay så man hinner se sista kortet vändas
     }
 }
@@ -422,12 +452,15 @@ function restartGame() {
     restartButtonBottom.style.display = "block";
 }
 
-restartButton.addEventListener('click', function () {
+function flipTheCards(){
     const flipped = document.querySelectorAll('.memoryCard.flipped');
     flipped.forEach(card => {
         card.classList.remove('flipped');
     });
+}
 
+restartButton.addEventListener('click', function () {
+    flipTheCards()
     // Vänta lite innan spelet laddas om
     setTimeout(async () => {
         restartGame(); // eller getDogPic(), beroende på vad du använder
@@ -447,31 +480,85 @@ winRestartButton.addEventListener("click", function () {
 
 createCloseX(document.getElementById("popupWin"));
 
+
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
+})
+
+//Login
+const authPopup = document.getElementById("authPopup");
+const openAuthPopup = document.querySelector(".openAuthPopup");
+const highScoreBox = document.getElementById("savedHighscore");
+
+let isLoggedin = false;
+openAuthPopup.addEventListener("click", () => {
+    if (!isLoggedin) {
+        authPopup.classList.add("show");
+        
+    } else {
+        isLoggedin = false;
+        alert("Du är nu utloggad!");
+        restartGame()
+        flipTheCards()
+        authPopup.classList.remove("show");
+        highScoreBox.innerHTML = ""; 
+        highScoreBox.classList.remove("showBox");
+        openAuthPopup.innerHTML = "Login/Register";
+        openAuthPopup.removeAttribute("style");
+    }
+
 });
 
 createCloseX(document.getElementById("authPopup"));
 
-createButton.addEventListener("click", async () => {
+createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
+
     const response = await fetch("http://localhost:8000/savedAccounts", {
+
+    if (!username && !password) {
+        alert("Please enter both a username and a password.");
+        return;
+    }
+
+    const response = await fetch("http://localhost:8000/savedAcounts", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     });
 
-    alert("Account created!");
-    authPopup.classList.remove("show");
-    localStorage.setItem("loggedInUser", username);
+    if(response.status == 409){
+        alert("The username is already taken");
+        isLoggedin = false
+        return
+    }
 
-    document.getElementById("createUsername").value = "";
-    document.getElementById("createPassword").value = "";
+    if(response.ok){
+        isLoggedin = true
+        alert("Account created!");
+        authPopup.classList.remove("show");
+        localStorage.setItem("loggedInUser", username);
+
+        document.getElementById("createUsername").value = "";
+        document.getElementById("createPassword").value = "";
+        buttonDesign()
+        await showHighscoreBox ()
+
+
+    }
+
 });
 
+
 loginButton.addEventListener("click", async function () {
+
+let currentUser = null;
+loginButton.addEventListener("click", async () => {
+    
+
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -481,10 +568,25 @@ loginButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
+    function isGameWon() {
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+    return allCards.length > 0 && allCardsMatch.length === allCards.length;
+    }
+
     const result = await response.json();
     if (result.success) {
+        isLoggedin = true
+        buttonDesign()
+        currentUser = username;
         alert("Login successful!");
-        authPopup.classList.remove("show");
+
+        await showHighscoreBox()
+
+        if(isGameWon()){
+            await checkAndSendHighscore();
+        }
+
         localStorage.setItem("loggedInUser", username);
     } else {
         alert("Wrong username or password.");
@@ -494,10 +596,59 @@ loginButton.addEventListener("click", async function () {
     document.getElementById("loginPassword").value = "";
 });
 
+function buttonDesign(){
+        authPopup.classList.remove("show");
+        openAuthPopup.style.backgroundColor = "#E2EFFF"
+        openAuthPopup.style.color = "#0F3665"
+        openAuthPopup.style.fontFamily = "Jua, sans-serif"
+        openAuthPopup.style.fontSize = "24px"
+        openAuthPopup.textContent = "Log out"
+}
 
+    //spara highscore
+    async function checkAndSendHighscore() {
+    // const totalCards = document.querySelectorAll(".memoryCard").length;
+    // const totalPairs = totalCards / 2;
+        if(isLoggedin && currentUser){
+            const data = {highscore: matchCounter, currentUser: currentUser };
+    
+            const response = await fetch("http://localhost:8000/highscore", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+    
+            if(response.ok){
+                await showHighscoreBox()
+            } 
+        }
+    
+    }
 
 (async function () {
     breedmanager = new DogbreedManager();
     await breedmanager.fetchBreed();
     await getDogPic();
 })();
+
+
+
+async function showHighscoreBox (){
+    const highScoreBox = document.getElementById("savedHighscore");
+    highScoreBox.classList.add("showBox");
+
+    const response = await fetch("http://localhost:8000/getAllAccounts")
+    console.log(response)
+    
+    if(response.ok){
+        const data = await response.json()
+        const userAccount = data.accounts.find(acc => acc.username === currentUser);
+        console.log(userAccount)
+        if(userAccount){
+            const highscore = userAccount.highscore
+
+            matchCounter = highscore;
+            highScoreBox.innerHTML= `<h2>Highscore:${highscore}</h2>`
+        }
+    }
+}
