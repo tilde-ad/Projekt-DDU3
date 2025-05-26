@@ -185,6 +185,17 @@ function getDescriptionFromImageUrl(imageUrl) {
     return "Ingen beskrivning hittades.";
 }
 
+function getBreedFromImageUrl(imageUrl) {
+    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
+    let breed;
+    if (match && match[1]) {
+        breed = match[1].replace(/-/g, " ");
+    } else {
+        breed = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
+    }
+
+    return breed.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+}
 
 async function showRandomDogFact() {
 
@@ -259,13 +270,21 @@ async function checkForMatch() {
 
         const imageUrl = card1.dataset.image;
         const desc = getDescriptionFromImageUrl(imageUrl);
+        const breed = getBreedFromImageUrl(imageUrl);
 
-        const descContainer = document.getElementById("desc")
-        const descDiv = document.createElement("div")
-        descContainer.append(descDiv)
+        const descContainer = document.getElementById("desc");
+        const descDiv = document.createElement("div");
+        descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions")
-        descDiv.textContent = desc
-        console.log("Beskrivning:", desc);
+
+        const divBreed = document.createElement("div");
+        descDiv.append(divBreed);
+        divBreed.textContent = `${breed}:`;
+        divBreed.classList.add("descBreed")
+
+        const description = document.createElement("div");
+        descDiv.append(description);
+        description.textContent = desc;
 
         matchPairCounter++;
 
@@ -515,16 +534,18 @@ createButton.addEventListener("click", async function () {
     const username = document.getElementById("createUsername").value;
     const password = document.getElementById("createPassword").value;
 
-    const response = await fetch("http://localhost:8000/savedAcounts", {
+    if (!username && !password) {
+        alert("Please enter both a username and a password.");
+        return;
+    }
+
+    const response = await fetch("http://localhost:8000/savedAccounts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password })
     });
 
-    if (!username && !password) {
-        alert("Please enter both a username and a password.");
-        return;
-    }
+
 
     if (response.status == 409) {
         alert("The username is already taken");
@@ -532,6 +553,7 @@ createButton.addEventListener("click", async function () {
     }
 
     if (response.ok) {
+        currentUser = username;
         isLoggedin = true
         alert("Account created!");
         authPopup.classList.remove("show");
@@ -541,6 +563,7 @@ createButton.addEventListener("click", async function () {
         document.getElementById("createPassword").value = "";
         buttonDesign();
         await showHighscoreBox();
+        await checkAndSendHighscore()
     }
 });
 
@@ -570,13 +593,14 @@ loginButton.addEventListener("click", async function () {
         currentUser = username;
         alert("Login successful!");
 
+
         await showHighscoreBox()
 
         if (isGameWon()) {
             await checkAndSendHighscore();
         }
 
-        localStorage.setItem("loggedInUser", username);
+
     } else {
         alert("Wrong username or password.");
     }
@@ -596,8 +620,6 @@ function buttonDesign() {
 
 //spara highscore
 async function checkAndSendHighscore() {
-    // const totalCards = document.querySelectorAll(".memoryCard").length;
-    // const totalPairs = totalCards / 2;
     if (isLoggedin && currentUser) {
         const data = { highscore: matchCounter, currentUser: currentUser };
 
@@ -625,7 +647,7 @@ async function checkAndSendHighscore() {
 async function showHighscoreBox() {
     const highScoreBox = document.getElementById("savedHighscore");
     highScoreBox.classList.add("showBox");
-
+    
     const response = await fetch("http://localhost:8000/getAllAccounts")
     console.log(response)
 
@@ -633,9 +655,9 @@ async function showHighscoreBox() {
         const data = await response.json()
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
         console.log(userAccount)
+        let highscore = matchCounter;
         if (userAccount) {
-            const highscore = userAccount.highscore
-
+            highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
             matchCounter = highscore;
             highScoreBox.innerHTML = `<h2>Highscore:${highscore}</h2>`
         }
