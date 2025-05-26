@@ -16,9 +16,9 @@ body {
 
 
 .openAuthPopup {
-  position: absolute;
-  top: 50px;
-  right: 100px;
+    position: absolute;
+    top: 50px;
+    right: 100px;
 }
 
 #secondButton {
@@ -66,16 +66,31 @@ h1 {
 }
 
 p {
-
     font-size: 15px;
     color: #0F3665;
     margin-bottom: 5px;
+}
+
+#pairsandtries {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 #tries {
     font-weight: bold;
     margin-top: 3px;
     margin-bottom: 8px;
+    text-align: center;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#pairs {
+    grid-column: 1;
+    grid-row: 1;
+    margin-left: 37px;
+    font-size: 18px;
 }
 
 #memory-Container {
@@ -325,17 +340,17 @@ h4 {
     margin: 15px 0px 5px;
 }
 
-.showBox{
+.showBox {
     margin-left: 15px;
     height: 250px;
     background-color: #EBC6E5;
     border: 2px solid #E875D7;
     border-radius: 10px;
 
-    
+
 }
 
-.showBox h2{
+.showBox h2 {
     text-align: center;
     font-family: "Jua", sans-serif;
     font-size: 35px;
