@@ -6,10 +6,6 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 
-
-
-
-
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -17,7 +13,7 @@ let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
-const loginButton = document.getElementById("loginButton");
+const loginButton = document.getElementById("authButton");
 const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
 function updateCounterDisplay() {
@@ -675,27 +671,26 @@ openAuthPopupButton.addEventListener("click", function () {
 
 //Login
 const authPopup = document.getElementById("authPopup");
-const openAuthPopup = document.querySelector(".openAuthPopup");
+const loginRegisterButton = document.querySelector(".openAuthPopup");
 const highScoreBox = document.getElementById("savedHighscore");
 
-openAuthPopup.addEventListener("click", () => {
+
+loginRegisterButton.addEventListener("click", () => {
     if (!isLoggedin) {
         authPopup.classList.add("show");
-
     } else {
+        // Logga ut
         isLoggedin = false;
         currentUser = null;
         localStorage.removeItem("loggedInUser");
-        alert("Du är nu utloggad!");
-        restartGame();
-        flipTheCards();
+        alert("You are now logged out!");
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
-        openAuthPopup.innerHTML = "Login/Register";
-        openAuthPopup.removeAttribute("style");
+        authButton.textContent = "Login / Register";
         document.getElementById("myAccount").style.display = "none";
+        restartGame();
+        flipTheCards();
     }
-
 });
 
 createCloseX(document.getElementById("authPopup"));
@@ -725,12 +720,13 @@ createButton.addEventListener("click", async function () {
         isLoggedin = true
         currentUser = username;
         alert("Account created!");
+        authButton.textContent = "Log out";
         authPopup.classList.remove("show");
         localStorage.setItem("loggedInUser", username);
 
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
-        buttonDesign();
+
         await showHighscoreBox();
         await checkAndSendHighscore()
         await showFavoritesBox();
@@ -757,9 +753,9 @@ loginButton.addEventListener("click", async function () {
     const result = await response.json();
     if (result.success) {
         isLoggedin = true
-        buttonDesign();
         currentUser = username;
         alert("Login successful!");
+        authButton.textContent = "Log out";
 
         await checkAndSendHighscore()
         await showHighscoreBox()
@@ -777,15 +773,6 @@ loginButton.addEventListener("click", async function () {
     document.getElementById("loginUsername").value = "";
     document.getElementById("loginPassword").value = "";
 });
-
-function buttonDesign() {
-    authPopup.classList.remove("show");
-    openAuthPopup.style.backgroundColor = "#E2EFFF"
-    openAuthPopup.style.color = "#0F3665"
-    openAuthPopup.style.fontFamily = "Jua, sans-serif"
-    openAuthPopup.style.fontSize = "24px"
-    openAuthPopup.textContent = "Log out"
-}
 
 
 //spara highscore
@@ -847,7 +834,7 @@ const overlay = document.createElement("div");
 overlay.id = "startOverlay";
 
 const startGameButton = document.createElement("button");
-startGameButton.id = "tries";
+startGameButton.id = "authButton";
 startGameButton.textContent = "Start Game";
 
 overlay.appendChild(startGameButton);

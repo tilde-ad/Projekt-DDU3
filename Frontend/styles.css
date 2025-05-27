@@ -77,7 +77,7 @@ p {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-#tries {
+#authButton {
     font-family: "Jua";
     font-weight: bold;
     font-size: 25px;
