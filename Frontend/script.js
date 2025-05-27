@@ -643,6 +643,7 @@ async function restartGame() {
     const descriptions = descContainer.querySelectorAll('.descriptions');
     descriptions.forEach(d => d.remove());
     descContainer.style.display = "none";
+
     if (breedmanager) {
         await breedmanager.fetchBreed();
     }
