@@ -67,6 +67,25 @@ async function removeFavorite(breedName) {
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
     showFavoritesBox();
+    updateAllFaveBoxes();
+}
+async function updateAllFaveBoxes() {
+    const favorites = await getFavorites();
+    const lowerFavorites = favorites.map(function (f) { return f.toLowerCase(); });
+    let faveButtons = document.querySelectorAll(".faveButton:not(.listHeart");
+    for (let i = 0; i < faveButtons.length; i++) {
+        const btn = faveButtons[i];
+        const breedDiv = btn.parentElement.querySelector(".descBreed");
+        if (!breedDiv) continue;
+        let breed = breedDiv.textContent.replace(":", "").trim().toLowerCase();
+        if (lowerFavorites.includes(breed)) {
+            btn.innerHTML = "♥";
+            btn.classList.add("favorited");
+        } else {
+            btn.innerHTML = "♡";
+            btn.classList.remove("favorited");
+        }
+    }
 }
 
 async function showFavoritesBox() {
