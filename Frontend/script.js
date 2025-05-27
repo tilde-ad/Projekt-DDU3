@@ -65,7 +65,9 @@ async function saveFavorite(breedName) {
     });
 
     const ul = document.getElementById("favoritesList");
-    if (ul && ![...ul.children].some(li => li.dataset.breed === breedName)) {
+    if (ul && ![...ul.children].some(function (li) {
+        return li.dataset.breed === breedName;
+    })) {
         if (ul.children.length === 1 && ul.children[0].tagName === "P") ul.innerHTML = "";
         ul.appendChild(createFavoriteLi(breedName));
     }
@@ -79,11 +81,13 @@ async function getFavorites() {
     const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`)
     if (response.ok) {
         const data = await response.json();
-        const favorites = Array.isArray(data.favorites) ? data.favorites : [];
+        let favorites = [];
+        if (data.favorites) {
+            favorites = data.favorites;
+        }
         return favorites;
     } else {
         return [];
-
     }
 }
 
@@ -104,6 +108,7 @@ async function removeFavorite(breedName) {
     }
     updateAllFaveBoxes();
 }
+
 async function updateAllFaveBoxes() {
     const favorites = await getFavorites();
     const lowerFavorites = favorites.map(function (f) { return f.toLowerCase(); });
@@ -138,8 +143,9 @@ async function showFavoritesBox() {
         faveBox.appendChild(ul);
         document.getElementById("myAccount").appendChild(faveBox);
     }
+
     const ul = document.getElementById("favoritesList");
-    ul.innerHTML = ""; // Töm listan
+    ul.innerHTML = "";
     if (!currentUser) return;
     const favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
