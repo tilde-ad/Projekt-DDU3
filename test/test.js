@@ -232,8 +232,41 @@ async function testSaveFavorite() {
     document.body.appendChild(div);
 }
 
+//test 10 - ta bort en hund från favoriter
+async function testDeleteFavorite() {
+    const username = "testuser123";
+    const breedToDelete = "Rottweiler";
 
+    const options = {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, breed: breedToDelete })
+    };
 
+    const response = await fetch("http://localhost:8000/favorite", options);
+
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>Test 10: Delete Favorite</h2>`;
+
+    if (response.status === 200) {
+        const data = await response.json();
+        div.innerHTML += `<p>The breed "${breedToDelete}" was successfully removed.</p>`;
+        div.innerHTML += `<p>Updated favorites:</p>`;
+        const ul = document.createElement("ul");
+        for (let i = 0; i < data.favorites.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = data.favorites[i];
+            ul.appendChild(li);
+        }
+        div.appendChild(ul);
+    } else {
+        const data = await response.json();
+        div.innerHTML += `<p>Failed to delete breed "${breedToDelete}".</p>`;
+        div.innerHTML += `<p>Message from server: ${data.message}</p>`;
+    }
+
+    document.body.appendChild(div);
+}
 
 async function runTest() {
     await getDogFact();
@@ -245,6 +278,7 @@ async function runTest() {
     await updateHighscoreTest();
     await getAllAccountsTest();
     await testSaveFavorite();
+    await testDeleteFavorite();
 }
 
 runTest();
