@@ -861,7 +861,6 @@ ContainerMemory.appendChild(overlay); // Lägg in overlay direkt i memory-contai
 
 startGameButton.addEventListener("click", async function () {
     overlay.style.display = "none";
-    await getDogPic();
 });
 
 if (firstLoad) {
