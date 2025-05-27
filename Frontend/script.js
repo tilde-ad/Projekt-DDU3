@@ -159,7 +159,7 @@ async function showFavoritesBox() {
         ul.appendChild(createFavoriteLi(favorites[i]));
     }
 }
-
+//hjälper 
 
 class Dog {
     constructor({ name, description }) {
