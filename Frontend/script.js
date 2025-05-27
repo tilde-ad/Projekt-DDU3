@@ -907,11 +907,32 @@ function winGameInstantly() {
 
 // Custom alert TEST
 
-function showAlert(message) {
-    document.getElementById("alertMessage").textContent = message;
-    document.getElementById("customAlert").classList.remove("hidden");
-}
+let alertResolve = null;
+let alertTimeout = null;
 
 function hideAlert() {
     document.getElementById("customAlert").classList.add("hidden");
+    document.getElementById("alertOverlay").classList.add("hidden");
+    document.body.style.overflow = "";
+    if (alertTimeout) {
+        clearTimeout(alertTimeout);
+        alertTimeout = null;
+    }
+    if (alertResolve) {
+        alertResolve();
+        alertResolve = null;
+    }
+}
+
+function showAlert(message) {
+    document.getElementById("alertMessage").textContent = message;
+    document.getElementById("customAlert").classList.remove("hidden");
+    document.getElementById("alertOverlay").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    return new Promise(resolve => {
+        alertResolve = resolve;
+        alertTimeout = setTimeout(() => {
+            hideAlert();
+        }, 2000);
+    });
 }
