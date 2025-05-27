@@ -3,6 +3,10 @@
     src: url("Jua/Jua-Regular.ttf");
 }
 
+* {
+    scrollbar-width: thin;
+}
+
 body {
     margin: 0;
     font-family: "Jua";
@@ -42,6 +46,7 @@ body {
 }
 
 #container {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     margin: 0;
@@ -75,7 +80,7 @@ p {
 #pairsandtries {
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 745px 1fr;
 }
 
 .blueButton {
@@ -97,6 +102,7 @@ p {
 
 #tries {
     width: 100px;
+    justify-self: center;
 }
 
 #pairs {
@@ -357,20 +363,15 @@ button:active {
 }
 
 #desc {
+    justify-self: center;
     border-radius: 10px;
-    position: relative;
-    padding-top: 50px;
-    max-height: 600px;
-    margin-left: 15px;
-    margin-right: 15px;
+    max-height: 620px;
     overflow-y: auto;
     background-color: rgba(255, 255, 255, 0.5);
-    width: 317.5px;
-    ;
-
+    position: relative;
     display: flex;
     flex-direction: column;
-    height: 550px;
+    width: 315px;
 
 }
 
@@ -383,17 +384,41 @@ button:active {
     border-radius: 10px;
     padding: 10px;
     padding-right: 35px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.3;
-    overflow: scroll;
     font-family: "poppins", sans-serif;
-    height: 120px;
     flex-shrink: 0;
+    box-sizing: border-box;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+.descriptions .faveButton {
+    position: absolute;
+    top: -8px;
+    right: 6px;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #E875D7;
+    transition: color 0.2s;
+    padding: 0;
+    border-radius: 0px;
 }
 
 .descBreed {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
+}
+
+.descText {
+    width: 111%;
+    max-height: 75px;
+    overflow-y: scroll;
 }
 
 h4 {
@@ -410,7 +435,6 @@ h4 {
     border: 2px solid #aa7aa3;
     border-radius: 10px;
     box-sizing: border-box;
-
     display: none;
 }
 
@@ -422,12 +446,11 @@ h4 {
 
 #favoritesList {
     max-height: 457px;
-    overflow-y: scroll;
+    overflow-x: auto;
 }
 
 #favoritesList p {
     margin: 16px 0 0 12px;
-    /* topp, höger, botten, vänster */
     padding: 8px 0 8px 0;
     text-align: center;
 
@@ -440,7 +463,6 @@ h4 {
     color: white;
     margin: 10px 0;
 }
-
 
 #startOverlay {
     position: absolute;
@@ -558,21 +580,21 @@ h4 {
 }
 
 #drop-down {
+    justify-self: center;
     grid-column: 1;
     background-color: white;
-    width: 302.5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #0F3665;
-    margin: 15px 15px 0 15px;
-    padding-left: 15px;
     border-radius: 10px;
     cursor: pointer;
     user-select: none;
-
+    width: 315px;
     z-index: 2;
     top: 143px;
+
+    box-sizing: border-box;
 }
 
 
@@ -587,7 +609,7 @@ h4 {
 }
 
 #drop-down p {
-    margin: 0px;
+    padding: 3px;
 }
 
 

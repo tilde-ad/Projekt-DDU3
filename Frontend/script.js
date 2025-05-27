@@ -430,6 +430,7 @@ async function checkForMatch() {
         divBreed.classList.add("descBreed")
 
         const description = document.createElement("div");
+        description.classList.add("descText");
         descDiv.append(description);
         description.textContent = desc;
 
