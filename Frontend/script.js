@@ -9,6 +9,7 @@ let isLoggedin = false;
 
 
 
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -51,10 +52,8 @@ async function getFavorites() {
     if (response.ok) {
         const data = await response.json();
         const favorites = Array.isArray(data.favorites) ? data.favorites : [];
-        console.log("favoriter hämtade:", favorites);
         return favorites;
     } else {
-        console.log(currentUser, "kunde inte hämta favoriter");
         return [];
 
     }
@@ -78,7 +77,7 @@ async function showFavoritesBox() {
     faveBox.id = "favoritesBox";
     document.getElementById("myAccount").appendChild(faveBox);
 
-    document.getElementById("myAccount").style.display = "flex";
+    document.getElementById("myAccount").style.display = "block";
     faveBox.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {
@@ -88,17 +87,39 @@ async function showFavoritesBox() {
     let favorites = await getFavorites();
 
     if (!favorites || favorites.length === 0) {
-        faveBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
+        faveBox.innerHTML += "<p>Your saved dogs will appear here!</p>";
         return;
     }
 
     let ul = document.createElement("ul");
+    ul.style.listStyle = "none";
+    ul.style.padding = "0";
+
     for (let i = 0; i < favorites.length; i++) {
         let li = document.createElement("li");
-        li.textContent = favorites[i]
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+
+
+        let heartBtn = document.createElement("button");
+        heartBtn.innerHTML = "♥";
+        heartBtn.className = "faveButton favorited listHeart";
+
+
+        heartBtn.addEventListener("click", async function () {
+            await removeFavorite(favorites[i]);
+            await showFavoritesBox();
+        });
+
+
+        let span = document.createElement("span");
+        span.textContent = favorites[i]
             .split(" ")
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+
+        li.appendChild(heartBtn);
+        li.appendChild(span);
         ul.appendChild(li);
     }
     faveBox.appendChild(ul);
@@ -375,25 +396,25 @@ async function checkForMatch() {
         descDiv.appendChild(faveButton);
 
         getFavorites().then(function (favorites) {
-            if (favorites.map(function (f) { return f.toLowerCase(); }).includes(breed)) {
+            if (favorites.map(function (f) { return f.toLowerCase(); }).includes(breedLower)) {
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
             }
         })
-
+        const breedLower = breed.toLowerCase();
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
                 alert("You need to be logged in to save favorites!");
                 return;
             }
             let favorites = (await getFavorites()).map(function (f) { return f.toLowerCase(); });
-            if (favorites.includes(breed)) {
-                await removeFavorite(breed);
+            if (favorites.includes(breedLower)) {
+                await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
                 await showFavoritesBox();
             } else {
-                await saveFavorite(breed);
+                await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
                 await showFavoritesBox();
@@ -767,7 +788,7 @@ async function checkAndSendHighscore() {
 
 async function showHighscoreBox() {
     const myAccount = document.getElementById("myAccount");
-    myAccount.style.display = "flex";
+    myAccount.style.display = "block";
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
 
