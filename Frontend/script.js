@@ -29,6 +29,30 @@ async function fetchAllBreedsWithDesc() {
     allBreedsWithDesc = await response.json();
 }
 
+function createFavoriteLi(breed) {
+    const li = document.createElement("li");
+    li.style.display = "flex";
+    li.style.alignItems = "center";
+    li.dataset.breed = breed;
+
+    let heartBtn = document.createElement("button");
+    heartBtn.innerHTML = "♥";
+    heartBtn.className = "faveButton favorited listHeart";
+    heartBtn.addEventListener("click", async function () {
+        await removeFavorite(breed);
+    });
+
+    let span = document.createElement("span");
+    span.textContent = breed
+        .split(" ")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+
+    li.appendChild(heartBtn);
+    li.appendChild(span);
+    return li;
+}
+
 async function saveFavorite(breedName) {
     if (!currentUser) {
         alert("You need to be logged in to save favorites!");
@@ -40,7 +64,11 @@ async function saveFavorite(breedName) {
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
 
-    showFavoritesBox();
+    const ul = document.getElementById("favoritesList");
+    if (ul && ![...ul.children].some(li => li.dataset.breed === breedName)) {
+        if (ul.children.length === 1 && ul.children[0].tagName === "P") ul.innerHTML = "";
+        ul.appendChild(createFavoriteLi(breedName));
+    }
 }
 
 async function getFavorites() {
@@ -66,7 +94,14 @@ async function removeFavorite(breedName) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
-    showFavoritesBox();
+    const ul = document.getElementById("favoritesList");
+    if (ul) {
+        const li = [...ul.children].find(li => li.dataset.breed === breedName);
+        if (li) li.remove();
+        if (ul.children.length === 0) {
+            ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
+        }
+    }
     updateAllFaveBoxes();
 }
 async function updateAllFaveBoxes() {
@@ -84,65 +119,38 @@ async function updateAllFaveBoxes() {
         } else {
             btn.innerHTML = "♡";
             btn.classList.remove("favorited");
+
         }
     }
 }
 
 async function showFavoritesBox() {
-    const oldBoxes = document.querySelectorAll("#favoritesBox");
-    oldBoxes.forEach(box => box.remove());
-
-    let faveBox = document.createElement("div");
-    faveBox.id = "favoritesBox";
-    document.getElementById("myAccount").appendChild(faveBox);
-
     document.getElementById("myAccount").style.display = "block";
-    faveBox.innerHTML = "<h2>Saved Breeds</h2>";
-
-    if (!currentUser) {
-        return;
+    let faveBox = document.getElementById("favoritesBox");
+    if (!faveBox) {
+        faveBox = document.createElement("div");
+        faveBox.id = "favoritesBox";
+        faveBox.innerHTML = "<h2>Saved Breeds</h2>";
+        const ul = document.createElement("ul");
+        ul.id = "favoritesList";
+        ul.style.listStyle = "none";
+        ul.style.padding = "0";
+        faveBox.appendChild(ul);
+        document.getElementById("myAccount").appendChild(faveBox);
     }
-
-    let favorites = await getFavorites();
-
+    const ul = document.getElementById("favoritesList");
+    ul.innerHTML = ""; // Töm listan
+    if (!currentUser) return;
+    const favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
-        faveBox.innerHTML += "<p>Your saved dogs will appear here!</p>";
+        ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
         return;
     }
-
-    let ul = document.createElement("ul");
-    ul.style.listStyle = "none";
-    ul.style.padding = "0";
-
     for (let i = 0; i < favorites.length; i++) {
-        let li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.alignItems = "center";
-
-
-        let heartBtn = document.createElement("button");
-        heartBtn.innerHTML = "♥";
-        heartBtn.className = "faveButton favorited listHeart";
-
-
-        heartBtn.addEventListener("click", async function () {
-            await removeFavorite(favorites[i]);
-            await showFavoritesBox();
-        });
-
-
-        let span = document.createElement("span");
-        span.textContent = favorites[i]
-            .split(" ")
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
-
-        li.appendChild(heartBtn);
-        li.appendChild(span);
-        ul.appendChild(li);
+        ul.appendChild(createFavoriteLi(favorites[i]));
     }
-    faveBox.appendChild(ul);
 }
+
 
 class Dog {
     constructor({ name, description }) {
@@ -431,12 +439,10 @@ async function checkForMatch() {
                 await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
-                await showFavoritesBox();
             } else {
                 await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
-                await showFavoritesBox();
             }
         });
 
