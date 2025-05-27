@@ -23,7 +23,7 @@ async function getDogPic() {
     img.src = data.message;
     img.style.maxWidth = "450px";
     img.style.height = "500px";
-    img.style.objectFit = "cover";
+    img.style.objectFit = "contain";
 
     document.body.appendChild(heading);
     document.body.appendChild(img);
@@ -165,34 +165,27 @@ async function updateHighscoreTest() {
     document.body.appendChild(div);
 }
 
-// Test 8 – Hämta alla konton
+//test 8 - hämta alla konton
 async function getAllAccountsTest() {
     const response = await fetch("http://localhost:8000/getAllAccounts");
 
     const div = document.createElement("div");
-    div.innerHTML = `<h2>Test 8: Hämta alla konton</h2>`;
+    div.innerHTML = `<h2>Test 8: Get all accounts</h2>`;
 
     if (response.status === 200) {
         const data = await response.json();
 
-        // Kontrollera att det finns en accounts-array
-        if (Array.isArray(data.accounts)) {
-            div.innerHTML += `<p>Lyckades hämta ${data.accounts.length} konto(n).</p>`;
+        div.innerHTML += `<p>Successfully retrieved ${data.accounts.length} account(s).</p>`;
 
-            // Valfri: kontrollera om ett specifikt konto finns (ex. testuser123)
-            const found = data.accounts.find(acc => acc.username === "testuser123");
-            if (found) {
-                div.innerHTML += `<p>Kontot 'testuser123' hittades.</p>`;
-            } else {
-                div.innerHTML += `<p>Kontot 'testuser123' hittades inte.</p>`;
-            }
-
+        const found = data.accounts.find(acc => acc.username === "testuser123");
+        if (found) {
+            div.innerHTML += `<p>The account "testuser123" has been found.</p>`;
         } else {
-            div.innerHTML += `<p>Felaktigt format på response-body (saknar accounts-array).</p>`;
+            div.innerHTML += `<p>The account "testuser123" was not found.</p>`;
         }
 
     } else {
-        div.innerHTML += `<p>Misslyckades att hämta konton. Statuskod: ${response.status}</p>`;
+        div.innerHTML += `<p>Failed to retrieve accounts. Status code: ${response.status}</p>`;
     }
 
     document.body.appendChild(div);
@@ -202,7 +195,12 @@ async function getAllAccountsTest() {
 async function testSaveFavorite() {
     const testData = {
         username: "testuser123",
-        breed: "golden retriever"
+        breed: [
+            "Shetland Sheepdog",
+            "Dvärgschnauzer",
+            "Border Collie",
+            "Rottweiler"
+        ]
     };
 
     const options = {
@@ -212,15 +210,14 @@ async function testSaveFavorite() {
     };
 
     const response = await fetch("http://localhost:8000/favorite", options);
-    const data = await response.json();
 
     const div = document.createElement("div");
     div.innerHTML = `<h2>Test 9: Save Favorite</h2>`;
 
     if (response.status === 200) {
-        div.innerHTML += `<p>Favorite "${testData.breed}" saved for user "${testData.username}".</p>`;
+        div.innerHTML += `<p>Favorite breed "${testData.breed}" saved for user "${testData.username}".</p>`;
     } else {
-        div.innerHTML += `<p>Failed to save favorite. Status: ${response.status}<br>Message: ${data.message}</p>`;
+        div.innerHTML += `<p>Failed to save favorite.</p>`;
     }
 
     document.body.appendChild(div);
@@ -237,7 +234,7 @@ async function runTest() {
     await loginToAccount();
     await updateHighscoreTest();
     await getAllAccountsTest();
-    // await testSaveFavorite();
+    await testSaveFavorite();
 }
 
 runTest();
