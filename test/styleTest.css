@@ -12,3 +12,17 @@ h1 {
 #firstDiv {
     text-align: center;
 }
+
+#secondDiv {
+    text-align: center;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+
+    color: red;
+    font-size: 16px;
+}
+
+#sizeText {
+    font-size: 18px;
+}
