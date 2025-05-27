@@ -218,6 +218,9 @@ function createCloseX(popupElement) {
             popupElement.parentElement.classList.remove("show");
             popupElement.parentElement.classList.remove("narrow");
         }
+        if (popupElement.id === "popupWin" || popupElement.parentElement.id === "popupWin") {
+            document.getElementById("restartButton").style.display = "block";
+        }
     });
 }
 
