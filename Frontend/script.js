@@ -19,6 +19,8 @@ const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
 const openAuthPopupButton = document.querySelector(".openAuthPopup");
+const loginRegisterButton = document.querySelector(".openAuthPopup");
+
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
