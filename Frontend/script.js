@@ -861,7 +861,7 @@ const overlay = document.createElement("div");
 overlay.id = "startOverlay";
 
 const startGameButton = document.createElement("button");
-startGameButton.id = "tries";
+startGameButton.classList.add("blueButton");
 startGameButton.textContent = "Start Game";
 
 overlay.appendChild(startGameButton);
@@ -875,24 +875,24 @@ if (firstLoad) {
     overlay.style.display = "flex";
 }
 function dropdown() {
-  const dropdown = document.getElementById("drop-down");
-  const desc = document.getElementById("desc");
-  const scrollIndicator = document.getElementById("scroll-indicator");
-  console.log(scrollIndicator)
+    const dropdown = document.getElementById("drop-down");
+    const desc = document.getElementById("desc");
+    const scrollIndicator = document.getElementById("scroll-indicator");
+    console.log(scrollIndicator)
 
-  dropdown.addEventListener("click", () => {
-    if (desc.style.display === "none" || desc.style.display === "") {
-      desc.style.display = "flex";
-      dropdown.classList.add("active");
-      dropdown.style.borderRadius = "10px 10px 0px 0px"
-      scrollIndicator.style.display = "block"; // visa indikatorn
-    } else {
-      desc.style.display = "none";
-      dropdown.style.borderRadius = "10px"
-      dropdown.classList.remove("active");
-      scrollIndicator.style.display = "none"; // göm indikatorn
-    }
-  });
+    dropdown.addEventListener("click", () => {
+        if (desc.style.display === "none" || desc.style.display === "") {
+            desc.style.display = "flex";
+            dropdown.classList.add("active");
+            dropdown.style.borderRadius = "10px 10px 0px 0px"
+            scrollIndicator.style.display = "block"; // visa indikatorn
+        } else {
+            desc.style.display = "none";
+            dropdown.style.borderRadius = "10px"
+            dropdown.classList.remove("active");
+            scrollIndicator.style.display = "none"; // göm indikatorn
+        }
+    });
 }
 
 dropdown()

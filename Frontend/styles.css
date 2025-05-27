@@ -69,7 +69,7 @@ h1 {
 p {
     font-size: 20px;
     color: #0F3665;
-    margin-bottom: 5px;
+    margin: 5px;
 }
 
 #pairsandtries {
@@ -78,7 +78,7 @@ p {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-#tries {
+.blueButton {
     font-family: "Jua";
     font-weight: bold;
     font-size: 25px;
@@ -90,8 +90,13 @@ p {
     border: 3px solid #0F3665;
     padding: 10px;
     text-align: center;
+    width: 220px;
     grid-column: 2;
     grid-row: 1;
+}
+
+#tries {
+    width: 100px;
 }
 
 #pairs {
