@@ -195,33 +195,43 @@ async function getAllAccountsTest() {
 async function testSaveFavorite() {
     const testData = {
         username: "testuser123",
-        breed: [
-            "Shetland Sheepdog",
-            "Dvärgschnauzer",
-            "Border Collie",
-            "Rottweiler"
-        ]
+        breeds: ["Shetland Sheepdog", "Dvärgschnauzer", "Border Collie", "Rottweiler"]
     };
 
-    const options = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(testData)
-    };
-
-    const response = await fetch("http://localhost:8000/favorite", options);
+    const savedFavorites = [];
 
     const div = document.createElement("div");
     div.innerHTML = `<h2>Test 9: Save Favorite</h2>`;
 
-    if (response.status === 200) {
-        div.innerHTML += `<p>Favorite breed "${testData.breed}" saved for user "${testData.username}".</p>`;
-    } else {
-        div.innerHTML += `<p>Failed to save favorite.</p>`;
+    for (const breed of testData.breeds) {
+        const response = await fetch("http://localhost:8000/favorite", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: testData.username, breed })
+        });
+
+        if (response.status === 200) {
+            savedFavorites.push(breed);
+        } else {
+            div.innerHTML += `<p>Failed to save breed: ${breed}</p>`;
+        }
     }
 
+    if (savedFavorites.length > 0) {
+        div.innerHTML += `<p>Successfully saved the following breeds:</p>`;
+        const ul = document.createElement("ul");
+
+        for (let i = 0; i < savedFavorites.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = savedFavorites[i];
+            ul.appendChild(li);
+        }
+
+        div.appendChild(ul);
+    }
     document.body.appendChild(div);
 }
+
 
 
 
