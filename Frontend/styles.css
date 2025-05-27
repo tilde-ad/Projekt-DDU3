@@ -363,6 +363,7 @@ button:active {
 }
 
 #desc {
+    margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
     max-height: 620px;
@@ -373,6 +374,7 @@ button:active {
     display: flex;
     flex-direction: column;
     width: 315px;
+    padding-top: 50px;
 
 }
 
@@ -594,11 +596,12 @@ h4 {
     border-radius: 10px;
     cursor: pointer;
     user-select: none;
-    width: 315px;
+    width: 317px;
     z-index: 2;
-    top: 143px;
-
+    top: 262px;
     box-sizing: border-box;
+    left: 15px;
+    position: absolute;
 }
 
 
