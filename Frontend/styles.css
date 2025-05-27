@@ -456,3 +456,56 @@ h4 {
 .faveButton.listHeart {
     position: static;
 }
+
+/* Simpel alert */
+
+.custom-alert {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #E2EFFF;
+    /* Ljusblå bakgrund, som i resten */
+    border: 3px solid #0F3665;
+    /* Stark blå kant */
+    padding: 25px 35px;
+    box-shadow: 0 8px 20px rgba(15, 54, 101, 0.25);
+    /* Mjukare skugga */
+    border-radius: 12px;
+    z-index: 1000;
+    text-align: center;
+    max-width: 90vw;
+    font-family: "Jua", sans-serif;
+    color: #0F3665;
+    font-size: 18px;
+    user-select: none;
+}
+
+.custom-alert button {
+    margin-top: 20px;
+    padding: 10px 28px;
+    background-color: #0F3665;
+    color: #E2EFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-family: "Jua", sans-serif;
+    font-size: 16px;
+    transition: background-color 0.3s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 10px rgba(15, 54, 101, 0.3);
+}
+
+.custom-alert button:hover {
+    background-color: #07182e;
+    box-shadow: 0 6px 14px rgba(7, 24, 46, 0.5);
+}
+
+.custom-alert button:active {
+    background-color: #04203f;
+    box-shadow: none;
+}
+
+.custom-alert.hidden {
+    display: none;
+}

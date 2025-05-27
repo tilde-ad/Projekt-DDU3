@@ -55,7 +55,7 @@ function createFavoriteLi(breed) {
 
 async function saveFavorite(breedName) {
     if (!currentUser) {
-        alert("You need to be logged in to save favorites!");
+        showAlert("Du är nu utloggad!");
         return;
     }
     await fetch("http://localhost:8000/favorite", {
@@ -437,7 +437,7 @@ async function checkForMatch() {
         const breedLower = breed.toLowerCase();
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
-                alert("You need to be logged in to save favorites!");
+                showAlert("You need to be logged in to save favorites!");
                 return;
             }
             let favorites = (await getFavorites()).map(function (f) { return f.toLowerCase(); });
@@ -683,7 +683,7 @@ openAuthPopup.addEventListener("click", () => {
         isLoggedin = false;
         currentUser = null;
         localStorage.removeItem("loggedInUser");
-        alert("Du är nu utloggad!");
+        showAlert("Du är nu utloggad!");
         restartGame();
         flipTheCards();
         authPopup.classList.remove("show");
@@ -702,7 +702,7 @@ createButton.addEventListener("click", async function () {
     const password = document.getElementById("createPassword").value;
 
     if (!username || !password) {
-        alert("Please enter both a username and a password.");
+        showAlert("Please enter both a username and a password.");
         return;
     }
 
@@ -713,7 +713,7 @@ createButton.addEventListener("click", async function () {
     });
 
     if (response.status == 409) {
-        alert("The username is already taken");
+        showAlert("The username is already taken");
         isLoggedin = false;
     }
 
@@ -721,7 +721,7 @@ createButton.addEventListener("click", async function () {
         currentUser = username;
         isLoggedin = true
         currentUser = username;
-        alert("Account created!");
+        showAlert("Account created!");
         authPopup.classList.remove("show");
         localStorage.setItem("loggedInUser", username);
 
@@ -756,7 +756,7 @@ loginButton.addEventListener("click", async function () {
         isLoggedin = true
         buttonDesign();
         currentUser = username;
-        alert("Login successful!");
+        showAlert("Login successful!");
 
         await checkAndSendHighscore()
         await showHighscoreBox()
@@ -768,7 +768,7 @@ loginButton.addEventListener("click", async function () {
 
 
     } else {
-        alert("Wrong username or password.");
+        showAlert("Wrong username or password.");
     }
 
     document.getElementById("loginUsername").value = "";
@@ -902,4 +902,15 @@ function winGameInstantly() {
 
         checkAndSendHighscore(); // Spara automatiskt 10 som highscore om inloggad
     }, 500);
+}
+
+// Custom alert TEST
+
+function showAlert(message) {
+    document.getElementById("alertMessage").textContent = message;
+    document.getElementById("customAlert").classList.remove("hidden");
+}
+
+function hideAlert() {
+    document.getElementById("customAlert").classList.add("hidden");
 }
