@@ -52,10 +52,8 @@ async function getFavorites() {
     if (response.ok) {
         const data = await response.json();
         const favorites = Array.isArray(data.favorites) ? data.favorites : [];
-        console.log("favoriter hämtade:", favorites);
         return favorites;
     } else {
-        console.log(currentUser, "kunde inte hämta favoriter");
         return [];
 
     }
@@ -79,7 +77,7 @@ async function showFavoritesBox() {
     faveBox.id = "favoritesBox";
     document.getElementById("myAccount").appendChild(faveBox);
 
-    document.getElementById("myAccount").style.display = "flex";
+    document.getElementById("myAccount").style.display = "block";
     faveBox.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {
@@ -768,7 +766,7 @@ async function checkAndSendHighscore() {
 
 async function showHighscoreBox() {
     const myAccount = document.getElementById("myAccount");
-    myAccount.style.display = "flex";
+    myAccount.style.display = "block";
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
 
