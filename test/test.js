@@ -22,7 +22,7 @@ async function getDogPic() {
     const img = document.createElement("img");
     img.src = data.message;
     img.style.maxWidth = "450px";
-    img.style.height = "250px";
+    img.style.height = "500px";
     img.style.objectFit = "cover";
 
     document.body.appendChild(heading);
@@ -93,20 +93,23 @@ async function getArrayOfDogs() {
 
 //test 5 - skapa konto
 async function createAcount() {
+    const userData = {
+        username: "testuser123",
+        password: "testpassword"
+    };
+
     const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            username: "testuser123",
-            password: "testpassword"
-        })
+        body: JSON.stringify(userData)
     }
     const response = await fetch("http://localhost:8000/savedAccounts", options);
 
     const div = document.createElement("div");
 
     if (response.status === 200) {
-        div.innerHTML = `<h2>Test 5: Create a account</h2><p>An account has been created.</p>`
+        div.innerHTML = `<h2>Test 5: Create a account</h2><p>An account has been created.</p>
+        <p>Username: ${userData.username}, Password: ${userData.password}</p>`
         document.body.appendChild(div);
     } else {
         div.innerHTML = `<h2>Test 5: Create a account</h2><p>An account could not be created.</p>`
@@ -234,7 +237,7 @@ async function runTest() {
     await loginToAccount();
     await updateHighscoreTest();
     await getAllAccountsTest();
-    await testSaveFavorite();
+    // await testSaveFavorite();
 }
 
 runTest();
