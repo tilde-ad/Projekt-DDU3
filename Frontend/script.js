@@ -630,16 +630,16 @@ openAuthPopup.addEventListener("click", () => {
 
     } else {
         isLoggedin = false;
-        currentUser = null
+        currentUser = null;
         localStorage.removeItem("loggedInUser");
         alert("Du är nu utloggad!");
-        restartGame()
-        flipTheCards()
+        restartGame();
+        flipTheCards();
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
-        highScoreBox.classList.remove("myAccount");
         openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
+        document.getElementById("myAccount").style.display = "none";
     }
 
 });
