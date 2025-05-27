@@ -38,6 +38,7 @@ async function saveFavorite(breedName) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
+
     showFavoritesBox();
 }
 
@@ -70,14 +71,14 @@ async function removeFavorite(breedName) {
 }
 
 async function showFavoritesBox() {
-    let faveBox = document.getElementById("favoritesBox");
-    document.getElementById("myAccount").style.display = "flex";
-    if (!faveBox) {
-        faveBox = document.createElement("div");
-        faveBox.id = "favoritesBox";
-        document.getElementById("myAccount").appendChild(faveBox);
-    }
+    const oldBoxes = document.querySelectorAll("#favoritesBox");
+    oldBoxes.forEach(box => box.remove());
 
+    let faveBox = document.createElement("div");
+    faveBox.id = "favoritesBox";
+    document.getElementById("myAccount").appendChild(faveBox);
+
+    document.getElementById("myAccount").style.display = "flex";
     faveBox.innerHTML = "<h2>Saved Breeds</h2>";
 
     if (!currentUser) {
@@ -85,8 +86,6 @@ async function showFavoritesBox() {
     }
 
     let favorites = await getFavorites();
-
-    console.log("Favoriter:", favorites);
 
     if (!favorites || favorites.length === 0) {
         faveBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";

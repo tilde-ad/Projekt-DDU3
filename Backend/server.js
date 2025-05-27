@@ -1,3 +1,5 @@
+import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
+
 // Byt till false inför inlämning
 const useDevMode = true;
 
@@ -14,6 +16,32 @@ if (useDevMode) {
     }
 }
 
+// Hantera förfrågningar till index.html, styles.css och script.js
+
+if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
+    const html = await Deno.readTextFile("../Frontend/index.html");
+    return new Response(html, {
+        status: 200,
+        headers: { "content-type": "text/html", ...headerCORS }
+    });
+}
+
+if (request.method === "GET" && url.pathname === "/styles.css") {
+    const css = await Deno.readTextFile("../Frontend/styles.css");
+    return new Response(css, {
+        status: 200,
+        headers: { "content-type": "text/css", ...headerCORS }
+    });
+}
+
+if (request.method === "GET" && url.pathname === "/script.js") {
+    const js = await Deno.readTextFile("../Frontend/script.js");
+    return new Response(js, {
+        status: 200,
+        headers: { "content-type": "application/javascript", ...headerCORS }
+    });
+}
+
 // === SERVER ===
 
 let acounts = []
@@ -28,6 +56,7 @@ async function handler(request) {
     if (request.method === "OPTIONS") {
         return new Response(null, { headers: headerCORS });
     }
+
 
 
     if (request.method === "GET") {
@@ -119,6 +148,36 @@ async function handler(request) {
             return new Response(JSON.stringify(data), {
                 status: 200,
                 headers: headerCORS,
+            });
+        }
+
+        // Hämta favoriter
+        if (url.pathname === "/favorite") {
+            const username = url.searchParams.get("username");
+            const file = await Deno.readTextFile("database.json");
+            const data = JSON.parse(file);
+            console.log("Alla konton:", data.accounts);
+
+            var user = null;
+            for (var i = 0; i < data.accounts.length; i++) {
+                if (data.accounts[i].username === username) {
+                    user = data.accounts[i];
+                    break;
+                }
+            }
+
+            console.log("Har nått GET i servern")
+
+            if (!user) {
+                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                    status: 404,
+                    headers: headerCORS
+                });
+            }
+
+            return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
+                status: 200,
+                headers: headerCORS
             });
         }
 
@@ -248,34 +307,6 @@ async function handler(request) {
         }
 
         return new Response(JSON.stringify({ success: true, favorites: user.favorites }), {
-            status: 200,
-            headers: headerCORS
-        });
-    }
-
-    // Hämta favoriter
-    if (url.pathname === "/favorite" && request.method === "GET") {
-        const username = url.searchParams.get("username");
-        const file = await Deno.readTextFile("database.json");
-        const data = JSON.parse(file);
-        console.log("Alla konton:", data.accounts);
-
-        var user = null;
-        for (var i = 0; i < data.accounts.length; i++) {
-            if (data.accounts[i].username === username) {
-                user = data.accounts[i];
-                break;
-            }
-        }
-
-        if (!user) {
-            return new Response(JSON.stringify({ success: false, message: "User not found" }), {
-                status: 404,
-                headers: headerCORS
-            });
-        }
-
-        return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
             status: 200,
             headers: headerCORS
         });
