@@ -33,6 +33,7 @@ function createFavoriteLi(breed) {
     const li = document.createElement("li");
     li.style.display = "flex";
     li.style.alignItems = "center";
+    li.style.margin = "-15px 0";
     li.dataset.breed = breed;
 
     let heartBtn = document.createElement("button");
@@ -47,6 +48,7 @@ function createFavoriteLi(breed) {
         .split(" ")
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
+    span.style.fontSize = "20px";
 
     li.appendChild(heartBtn);
     li.appendChild(span);
@@ -135,11 +137,12 @@ async function showFavoritesBox() {
     if (!faveBox) {
         faveBox = document.createElement("div");
         faveBox.id = "favoritesBox";
-        faveBox.innerHTML = "<h2>Saved Breeds</h2>";
+        faveBox.innerHTML = "<h2>Saved Breeds:</h2>";
         const ul = document.createElement("ul");
         ul.id = "favoritesList";
         ul.style.listStyle = "none";
         ul.style.padding = "0";
+        ul.style.margin = "30px 0";
         faveBox.appendChild(ul);
         document.getElementById("myAccount").appendChild(faveBox);
     }
@@ -833,7 +836,12 @@ async function showHighscoreBox() {
         let highscore = matchCounter;
         if (userAccount) {
             highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
-            highScoreBox.innerHTML = `<h2>Highscore:${highscore}</h2>`
+            if (highscore === 0) {
+                highScoreBox.innerHTML = `<h2>No Highscore <span style="color:#E875D7;">Yet!</span></h2>`;
+            } else {
+                highScoreBox.innerHTML = `<h2>Highscore: ${highscore}</h2>`
+            }
+
         }
     }
 }
