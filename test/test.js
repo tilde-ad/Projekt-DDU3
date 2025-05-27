@@ -1,3 +1,12 @@
+function markTestAsComplete(testId) {
+    const element = document.getElementById(testId);
+    if (element) {
+        element.style.color = "green";
+        element.style.fontWeight = "bold";
+    }
+}
+
+
 //test 1 - hundfakta
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
@@ -8,6 +17,8 @@ async function getDogFact() {
     const div = document.createElement("div");
     div.innerHTML = `<h2>Test 1: Dog fact</h2><p>${fact}</p>`;
     document.body.appendChild(div);
+
+    markTestAsComplete("test1");
 }
 
 //test 2 - bild
@@ -27,6 +38,8 @@ async function getDogPic() {
 
     document.body.appendChild(heading);
     document.body.appendChild(img);
+
+    markTestAsComplete("test2");
 }
 
 //test 3 - beskrivning av hundras
@@ -60,6 +73,8 @@ async function getRandomBreedAndInfo() {
     div2.appendChild(ol);
     document.body.appendChild(div);
     document.body.appendChild(div2);
+
+    markTestAsComplete("test3");
 }
 
 //test 4 - array av hundar
@@ -89,6 +104,8 @@ async function getArrayOfDogs() {
     div2.appendChild(ol);
     document.body.appendChild(div);
     document.body.appendChild(div2);
+
+    markTestAsComplete("test4");
 }
 
 //test 5 - skapa konto
@@ -115,6 +132,8 @@ async function createAcount() {
         div.innerHTML = `<h2>Test 5: Create a account</h2><p>An account could not be created.</p>`
         document.body.appendChild(div);
     }
+
+    markTestAsComplete("test5");
 }
 
 //test 6 - logga in
@@ -138,6 +157,8 @@ async function loginToAccount() {
         div.innerHTML += `<p>Login failed</p>`
     }
     document.body.appendChild(div);
+
+    markTestAsComplete("test6");
 }
 
 // test 7 - uppdatera highscore
@@ -163,6 +184,8 @@ async function updateHighscoreTest() {
     }
 
     document.body.appendChild(div);
+
+    markTestAsComplete("test7");
 }
 
 //test 8 - hämta alla konton
@@ -189,41 +212,116 @@ async function getAllAccountsTest() {
     }
 
     document.body.appendChild(div);
+
+    markTestAsComplete("test8");
 }
 
 //test 9 - spara favorit
 async function testSaveFavorite() {
     const testData = {
         username: "testuser123",
-        breed: [
-            "Shetland Sheepdog",
-            "Dvärgschnauzer",
-            "Border Collie",
-            "Rottweiler"
-        ]
+        breeds: ["Shetland Sheepdog", "Dvärgschnauzer", "Border Collie", "Rottweiler"]
     };
 
+    const savedFavorites = [];
+
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>Test 9: Save Favorite</h2>`;
+
+    for (const breed of testData.breeds) {
+        const response = await fetch("http://localhost:8000/favorite", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username: testData.username, breed })
+        });
+
+        if (response.status === 200) {
+            savedFavorites.push(breed.toLocaleLowerCase());
+        } else {
+            div.innerHTML += `<p>Failed to save breed: ${breed}</p>`;
+        }
+    }
+
+    if (savedFavorites.length > 0) {
+        div.innerHTML += `<p>Successfully saved the following breeds:</p>`;
+        const ul = document.createElement("ul");
+
+        for (let i = 0; i < savedFavorites.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = savedFavorites[i];
+            ul.appendChild(li);
+        }
+
+        div.appendChild(ul);
+    }
+    document.body.appendChild(div);
+
+    markTestAsComplete("test9");
+}
+
+async function testGetFavoritesFromUser() {
+    const username = "testuser123";
+
+    const response = await fetch(`http://localhost:8000/favorite?username=${username}`);
+    const data = await response.json();
+    const div = document.createElement("div");
+    div.innerHTML = `<h2>Test 10: Get Favorites for a specific user</h2>`;
+
+    if (response.status === 200) {
+        div.innerHTML += `<p>Favorites for ${username}:</p>`;
+        const ul = document.createElement("ul");
+        for (let i = 0; i < data.favorites.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = data.favorites[i];
+            ul.appendChild(li);
+        }
+        div.appendChild(ul);
+    } else {
+        div.innerHTML += `<p>Failed to retrieve favorites.</p>`;
+    }
+
+    document.body.appendChild(div);
+    markTestAsComplete("test10");
+}
+
+
+//test 11 - ta bort en hund från favoriter
+async function testDeleteFavorite() {
+    const username = "testuser123";
+    const breedToDelete = "Rottweiler";
+
     const options = {
-        method: "POST",
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(testData)
+        body: JSON.stringify({ username, breed: breedToDelete })
     };
 
     const response = await fetch("http://localhost:8000/favorite", options);
 
     const div = document.createElement("div");
-    div.innerHTML = `<h2>Test 9: Save Favorite</h2>`;
+    div.innerHTML = `<h2>Test 11: Delete Favorite</h2>`;
 
     if (response.status === 200) {
-        div.innerHTML += `<p>Favorite breed "${testData.breed}" saved for user "${testData.username}".</p>`;
+        const data = await response.json();
+        div.innerHTML += `<p>The breed "${breedToDelete}" was successfully removed.</p>`;
+        div.innerHTML += `<p>Updated favorites:</p>`;
+        const ul = document.createElement("ul");
+        for (let i = 0; i < data.favorites.length; i++) {
+            const li = document.createElement("li");
+            li.textContent = data.favorites[i];
+            ul.appendChild(li);
+        }
+        div.appendChild(ul);
     } else {
-        div.innerHTML += `<p>Failed to save favorite.</p>`;
+        const data = await response.json();
+        div.innerHTML += `<p>Failed to delete breed "${breedToDelete}".</p>`;
+        div.innerHTML += `<p>Message from server: ${data.message}</p>`;
     }
 
     document.body.appendChild(div);
+
+    markTestAsComplete("test11");
 }
-
-
 
 async function runTest() {
     await getDogFact();
@@ -235,6 +333,8 @@ async function runTest() {
     await updateHighscoreTest();
     await getAllAccountsTest();
     await testSaveFavorite();
+    await testGetFavoritesFromUser();
+    await testDeleteFavorite();
 }
 
 runTest();
