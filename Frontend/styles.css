@@ -452,3 +452,7 @@ h4 {
     box-shadow: none;
     background: none;
 }
+
+.faveButton.listHeart {
+    position: static;
+}

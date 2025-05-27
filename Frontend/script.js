@@ -87,17 +87,39 @@ async function showFavoritesBox() {
     let favorites = await getFavorites();
 
     if (!favorites || favorites.length === 0) {
-        faveBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
+        faveBox.innerHTML += "<p>Your saved dogs will appear here!</p>";
         return;
     }
 
     let ul = document.createElement("ul");
+    ul.style.listStyle = "none";
+    ul.style.padding = "0";
+
     for (let i = 0; i < favorites.length; i++) {
         let li = document.createElement("li");
-        li.textContent = favorites[i]
+        li.style.display = "flex";
+        li.style.alignItems = "center";
+
+
+        let heartBtn = document.createElement("button");
+        heartBtn.innerHTML = "♥";
+        heartBtn.className = "faveButton favorited listHeart";
+
+
+        heartBtn.addEventListener("click", async function () {
+            await removeFavorite(favorites[i]);
+            await showFavoritesBox();
+        });
+
+
+        let span = document.createElement("span");
+        span.textContent = favorites[i]
             .split(" ")
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(" ");
+
+        li.appendChild(heartBtn);
+        li.appendChild(span);
         ul.appendChild(li);
     }
     faveBox.appendChild(ul);
