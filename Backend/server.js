@@ -175,7 +175,6 @@ async function handler(request) {
     }
 
     if (request.method === "POST") {
-
         if (url.pathname === "/savedAccounts") {
             // Hämta nuvarande data
             const file = await Deno.readTextFile("database.json");
@@ -186,7 +185,7 @@ async function handler(request) {
 
             const existing = data.accounts.find(acc => acc.username === newAccount.username);
             if (existing) {
-                return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
+                return new Response(JSON.stringify({ success: false, message: "Username is already taken" }), {
                     status: 409,
                     headers: headerCORS
                 });
@@ -341,12 +340,6 @@ async function handler(request) {
         }
     }
 
-    // Om ingen route matchar, servera statiska filer från Frontend-mappen
-    return serveDir(request, {
-        fsRoot: "../Frontend",
-        urlRoot: "",
-        showDirListing: true,
-    });
 }
 
 Deno.serve(handler);
