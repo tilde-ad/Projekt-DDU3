@@ -594,7 +594,6 @@ loginButton.addEventListener("click", async function () {
         currentUser = username;
         alert("Login successful!");
 
-
         await showHighscoreBox()
 
         if (isGameWon()) {
@@ -672,8 +671,29 @@ async function showHighscoreBox() {
     }
 }
 
-//changed
-//changed
+
+// === START GAME BUTTON + OVERLAY ===
+const ContainerMemory = document.getElementById("memory-Container");
+ContainerMemory.style.position = "relative"; // Gör container till position-parent
+
+const overlay = document.createElement("div");
+overlay.id = "startOverlay";
+
+const startGameButton = document.createElement("button");
+startGameButton.id = "tries";
+startGameButton.textContent = "Start Game";
+
+overlay.appendChild(startGameButton);
+ContainerMemory.appendChild(overlay); // Lägg in overlay direkt i memory-container
+
+startGameButton.addEventListener("click", async function () {
+    overlay.style.display = "none";
+    await getDogPic();
+});
+
+if (firstLoad) {
+    overlay.style.display = "flex";
+}
 
 
 //ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
