@@ -12,7 +12,7 @@ body {
     background-repeat: repeat-y;
     min-height: 100vh;
     position: relative;
-    
+
 }
 
 
@@ -360,7 +360,8 @@ button:active {
     margin-right: 15px;
     overflow-y: auto;
     background-color: rgba(255, 255, 255, 0.5);
-    width: 317.5px;;
+    width: 317.5px;
+    ;
 
     display: flex;
     flex-direction: column;
@@ -550,7 +551,9 @@ h4 {
     font-size: 25px;
     margin-bottom: -15px;
 }
-#drop-down{
+
+#drop-down {
+    grid-column: 1;
     background-color: white;
     width: 302.5px;
     display: flex;
@@ -563,7 +566,6 @@ h4 {
     cursor: pointer;
     user-select: none;
 
-    position: absolute;
     z-index: 2;
     top: 143px;
 }
@@ -583,43 +585,37 @@ h4 {
     margin: 0px;
 }
 
-#tries {
-    display: none; /* Dölj till en början */
-    margin-left: 20px;
-  }
-
 
 .scroll-indicator {
-     position: sticky;
+    position: sticky;
     bottom: 0;
-  margin-top: auto;
-  text-align: center;
-  padding: 3px;
-  font-style: italic;
-  font-size: 14px;
-  color: #666;
-  animation: bounce 2s infinite;
+    margin-top: auto;
+    text-align: center;
+    padding: 3px;
+    font-style: italic;
+    font-size: 14px;
+    color: #666;
+    animation: bounce 2s infinite;
 
 
-  width: 310.5px;
-  text-align: center;
+    width: 310.5px;
+    text-align: center;
 
-  background-color: white;
-  border-radius: 0px 0px 10px 10px;
-  display: block;
-    z-index: 10; 
+    background-color: white;
+    border-radius: 0px 0px 10px 10px;
+    display: block;
+    z-index: 10;
 
 }
 
 .scroll-indicator img.scroll-arrow {
-  width: 20px;
-  height: 20px;
-  display: block;
-  margin: 5px auto 0;
-  animation: bounceArrow 2s infinite;
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin: 5px auto 0;
+    animation: bounceArrow 2s infinite;
 }
 
 .scroll-indicator p {
     margin: 3px;
 }
-
