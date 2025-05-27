@@ -1,3 +1,5 @@
+import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
+
 // Byt till false inför inlämning
 const useDevMode = true;
 
@@ -14,6 +16,32 @@ if (useDevMode) {
     }
 }
 
+// Hantera förfrågningar till index.html, styles.css och script.js
+
+if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
+    const html = await Deno.readTextFile("../Frontend/index.html");
+    return new Response(html, {
+        status: 200,
+        headers: { "content-type": "text/html", ...headerCORS }
+    });
+}
+
+if (request.method === "GET" && url.pathname === "/styles.css") {
+    const css = await Deno.readTextFile("../Frontend/styles.css");
+    return new Response(css, {
+        status: 200,
+        headers: { "content-type": "text/css", ...headerCORS }
+    });
+}
+
+if (request.method === "GET" && url.pathname === "/script.js") {
+    const js = await Deno.readTextFile("../Frontend/script.js");
+    return new Response(js, {
+        status: 200,
+        headers: { "content-type": "application/javascript", ...headerCORS }
+    });
+}
+
 // === SERVER ===
 
 let acounts = []
@@ -28,6 +56,8 @@ async function handler(request) {
     if (request.method === "OPTIONS") {
         return new Response(null, { headers: headerCORS });
     }
+
+
 
     if (request.method === "GET") {
         // Hundbild (med eller utan ras)
@@ -120,95 +150,211 @@ async function handler(request) {
                 headers: headerCORS,
             });
         }
-        return new Response("Not found", {
-            status: 404,
-            headers: headerCORS
-        });
-    }
 
-    if (request.method === "POST") {
-
-        if (url.pathname === "/savedAccounts") {
-            // Hämta nuvarande data
+        // Hämta favoriter
+        if (url.pathname === "/favorite") {
+            const username = url.searchParams.get("username");
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
+            console.log("Alla konton:", data.accounts);
 
-            // Läs in det nya kontot
-            const newAccount = await request.json();
+            var user = null;
+            for (var i = 0; i < data.accounts.length; i++) {
+                if (data.accounts[i].username === username) {
+                    user = data.accounts[i];
+                    break;
+                }
+            }
 
-            const existing = data.accounts.find(acc => acc.username === newAccount.username);
-            if (existing) {
-                return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
-                    status: 409,
+            console.log("Har nått GET i servern")
+
+            if (!user) {
+                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                    status: 404,
                     headers: headerCORS
                 });
             }
 
-            // Lägg till det i arrayen
-            data.accounts.push(newAccount);
-
-            // Spara tillbaka till filen
-            await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
-
-            return new Response(JSON.stringify({ success: true, message: "Account saved!" }), {
+            return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
                 status: 200,
                 headers: headerCORS
             });
         }
 
-        if (url.pathname === "/login") {
-            const body = await request.json();
-            const file = await Deno.readTextFile("database.json");
-            const data = JSON.parse(file);
+        // Returnera hela data (t.ex. alla accounts)
+        return new Response(JSON.stringify(data), {
+            status: 200,
+            headers: headerCORS,
+        });
+    }
+    return new Response("Not found", {
+        status: 404,
+        headers: headerCORS
+    });
 
-            // Kontrollera om kontot finns
-            const found = data.accounts.find(
-                acc => acc.username === body.username && acc.password === body.password
-            );
 
-            if (found) {
-                return new Response(JSON.stringify({ success: true, message: "Login successful" }), {
-                    status: 200,
-                    headers: headerCORS
-                });
-            } else {
-                return new Response(JSON.stringify({ success: false, message: "Invalid credentials" }), {
-                    status: 401,
-                    headers: headerCORS
-                });
-            }
+}
+
+if (request.method === "POST") {
+
+    if (url.pathname === "/savedAccounts") {
+        // Hämta nuvarande data
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+        // Läs in det nya kontot
+        const newAccount = await request.json();
+
+        const existing = data.accounts.find(acc => acc.username === newAccount.username);
+        if (existing) {
+            return new Response(JSON.stringify({ success: false, message: "Användarnamnet är redan upptaget" }), {
+                status: 409,
+                headers: headerCORS
+            });
         }
 
+        // Lägg till det i arrayen
+        data.accounts.push(newAccount);
+
+        // Spara tillbaka till filen
+        await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+        return new Response(JSON.stringify({ success: true, message: "Account saved!" }), {
+            status: 200,
+            headers: headerCORS
+        });
     }
 
-    if (request.method === "PATCH") {
-        if (url.pathname === "/highscore") {
-            // Hämta nuvarande data
-            const file = await Deno.readTextFile("database.json");
-            const data = JSON.parse(file);
+    if (url.pathname === "/login") {
+        const body = await request.json();
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
 
+        // Kontrollera om kontot finns
+        const found = data.accounts.find(
+            acc => acc.username === body.username && acc.password === body.password
+        );
 
-            const { highscore, currentUser } = await request.json();
-
-            // Hitta användarkontot med matchande username
-            const userAccount = data.accounts.find(account => account.username === currentUser);
-
-            if (userAccount) {
-                userAccount.highscore = highscore;
-
-                await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
-
-                return new Response(JSON.stringify({ success: true, message: "Highscore updated!" }), {
-                    status: 200,
-                    headers: headerCORS,
-                });
-            } else {
-                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
-                    status: 404,
-                    headers: headerCORS,
-                });
-            }
+        if (found) {
+            return new Response(JSON.stringify({ success: true, message: "Login successful" }), {
+                status: 200,
+                headers: headerCORS
+            });
+        } else {
+            return new Response(JSON.stringify({ success: false, message: "Invalid credentials" }), {
+                status: 401,
+                headers: headerCORS
+            });
         }
+    }
+
+}
+
+if (request.method === "PATCH") {
+    if (url.pathname === "/highscore") {
+        // Hämta nuvarande data
+        const file = await Deno.readTextFile("database.json");
+        const data = JSON.parse(file);
+
+
+        const { highscore, currentUser } = await request.json();
+
+        // Hitta användarkontot med matchande username
+        const userAccount = data.accounts.find(account => account.username === currentUser);
+
+        if (userAccount) {
+            userAccount.highscore = highscore;
+
+            await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
+            return new Response(JSON.stringify({ success: true, message: "Highscore updated!" }), {
+                status: 200,
+                headers: headerCORS,
+            });
+        } else {
+            return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+                status: 404,
+                headers: headerCORS,
+            });
+        }
+    }
+}
+// Spara favorit
+if (url.pathname === "/favorite" && request.method === "POST") {
+    const body = await request.json();
+    const username = body.username;
+    const breed = body.breed;
+    const file = await Deno.readTextFile("database.json");
+    const data = JSON.parse(file);
+
+    let user = null;
+
+
+    for (let i = 0; i < data.accounts.length; i++) {
+        if (data.accounts[i].username === username) {
+            user = data.accounts[i];
+            break;
+        }
+    }
+
+    if (!user) {
+        return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+            status: 404,
+            headers: headerCORS
+        });
+    }
+
+    if (!user.favorites) user.favorites = [];
+    const breedLower = breed.toLowerCase();
+    if (user.favorites.map(function (f) { return f.toLowerCase(); }).indexOf(breedLower) === -1) {
+        user.favorites.push(breedLower);
+        await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+    }
+
+    return new Response(JSON.stringify({ success: true, favorites: user.favorites }), {
+        status: 200,
+        headers: headerCORS
+    });
+}
+
+if (url.pathname === "/favorite" && request.method === "DELETE") {
+    const body = await request.json();
+    const username = body.username;
+    const breed = body.breed;
+    const file = await Deno.readTextFile("database.json");
+    const data = JSON.parse(file);
+
+    let user = null;
+    for (let i = 0; i < data.accounts.length; i++) {
+        if (data.accounts[i].username === username) {
+            user = data.accounts[i];
+            break;
+        }
+    }
+
+    if (!user) {
+        return new Response(JSON.stringify({ success: false, message: "User not found" }), {
+            status: 404,
+            headers: headerCORS
+        });
+    }
+
+    if (!user.favorites) user.favorites = [];
+    let index = -1;
+    for (let j = 0; j < user.favorites.length; j++) {
+        if (user.favorites[j].toLowerCase() === breed.toLowerCase()) {
+            index = j;
+            break;
+        }
+    }
+
+    if (index !== -1) {
+        user.favorites.splice(index, 1);
+        await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+        return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
+            status: 200,
+            headers: headerCORS
+        });
     }
 }
 
