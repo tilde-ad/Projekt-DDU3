@@ -416,6 +416,14 @@ async function checkForMatch() {
         descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions");
 
+        descContainer.style.display = "flex";
+        const dropdown = document.getElementById("drop-down")
+        dropdown.classList.add("active");
+        dropdown.style.borderRadius = "10px 10px 0px 0px"
+        document.getElementById("scroll-indicator").style.display = "block";
+
+        descDiv.classList.add("descriptions")
+
         const divBreed = document.createElement("div");
         descDiv.append(divBreed);
         divBreed.textContent = `${breed}:`;
@@ -866,6 +874,36 @@ startGameButton.addEventListener("click", async function () {
 if (firstLoad) {
     overlay.style.display = "flex";
 }
+function dropdown() {
+  const dropdown = document.getElementById("drop-down");
+  const desc = document.getElementById("desc");
+  const scrollIndicator = document.getElementById("scroll-indicator");
+  console.log(scrollIndicator)
+
+  dropdown.addEventListener("click", () => {
+    if (desc.style.display === "none" || desc.style.display === "") {
+      desc.style.display = "flex";
+      dropdown.classList.add("active");
+      dropdown.style.borderRadius = "10px 10px 0px 0px"
+      scrollIndicator.style.display = "block"; // visa indikatorn
+    } else {
+      desc.style.display = "none";
+      dropdown.style.borderRadius = "10px"
+      dropdown.classList.remove("active");
+      scrollIndicator.style.display = "none"; // göm indikatorn
+    }
+  });
+}
+
+dropdown()
+
+
+
+
+
+
+//changed
+//changed
 
 
 //ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT

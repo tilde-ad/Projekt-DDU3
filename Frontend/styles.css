@@ -12,6 +12,7 @@ body {
     background-repeat: repeat-y;
     min-height: 100vh;
     position: relative;
+    
 }
 
 
@@ -88,6 +89,17 @@ p {
     color: #0F3665;
     border: 3px solid #0F3665;
     padding: 10px;
+    text-align: center;
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#pairs {
+    grid-column: 1;
+    grid-row: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 18px;
 }
 
 #memory-Container {
@@ -101,6 +113,7 @@ p {
     border-radius: 15px;
     position: relative;
     margin: 20px 0px;
+    grid-column: 2;
 }
 
 .memoryCard {
@@ -339,16 +352,20 @@ button:active {
 }
 
 #desc {
-    min-width: 300px;
-    max-height: 575px;
+    border-radius: 10px;
+    position: relative;
+    padding-top: 50px;
+    max-height: 600px;
     margin-left: 15px;
     margin-right: 15px;
-    margin-top: 10px;
     overflow-y: auto;
-    border-radius: 20px;
-    display: grid;
-    grid-auto-rows: 133px;
-    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.5);
+    width: 317.5px;;
+
+    display: flex;
+    flex-direction: column;
+    height: 550px;
+
 }
 
 .descriptions {
@@ -356,7 +373,7 @@ button:active {
     background-color: #EBC6E5;
     border: 2px solid #E875D7;
     color: white;
-    margin-top: 10px;
+    margin: 10px;
     border-radius: 10px;
     padding: 10px;
     padding-right: 35px;
@@ -364,6 +381,8 @@ button:active {
     line-height: 1.3;
     overflow: scroll;
     font-family: "poppins", sans-serif;
+    height: 120px;
+    flex-shrink: 0;
 }
 
 .descBreed {
@@ -531,3 +550,76 @@ h4 {
     font-size: 25px;
     margin-bottom: -15px;
 }
+#drop-down{
+    background-color: white;
+    width: 302.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #0F3665;
+    margin: 15px 15px 0 15px;
+    padding-left: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    user-select: none;
+
+    position: absolute;
+    z-index: 2;
+    top: 143px;
+}
+
+
+#drop-down img {
+    margin-right: 5px;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+#drop-down.active img {
+    transform: rotate(180deg);
+}
+
+#drop-down p {
+    margin: 0px;
+}
+
+#tries {
+    display: none; /* Dölj till en början */
+    margin-left: 20px;
+  }
+
+
+.scroll-indicator {
+     position: sticky;
+    bottom: 0;
+  margin-top: auto;
+  text-align: center;
+  padding: 3px;
+  font-style: italic;
+  font-size: 14px;
+  color: #666;
+  animation: bounce 2s infinite;
+
+
+  width: 310.5px;
+  text-align: center;
+
+  background-color: white;
+  border-radius: 0px 0px 10px 10px;
+  display: block;
+    z-index: 10; 
+
+}
+
+.scroll-indicator img.scroll-arrow {
+  width: 20px;
+  height: 20px;
+  display: block;
+  margin: 5px auto 0;
+  animation: bounceArrow 2s infinite;
+}
+
+.scroll-indicator p {
+    margin: 3px;
+}
+
