@@ -6,6 +6,10 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 
+
+
+
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -13,7 +17,7 @@ let breedmanager;
 const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
-const loginButton = document.getElementById("authButton");
+const loginButton = document.getElementById("loginButton");
 const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
 function updateCounterDisplay() {
@@ -23,30 +27,6 @@ function updateCounterDisplay() {
 async function fetchAllBreedsWithDesc() {
     const response = await fetch("http://localhost:8000/dogbreed");
     allBreedsWithDesc = await response.json();
-}
-
-function createFavoriteLi(breed) {
-    const li = document.createElement("li");
-    li.style.display = "flex";
-    li.style.alignItems = "center";
-    li.dataset.breed = breed;
-
-    let heartBtn = document.createElement("button");
-    heartBtn.innerHTML = "♥";
-    heartBtn.className = "faveButton favorited listHeart";
-    heartBtn.addEventListener("click", async function () {
-        await removeFavorite(breed);
-    });
-
-    let span = document.createElement("span");
-    span.textContent = breed
-        .split(" ")
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
-
-    li.appendChild(heartBtn);
-    li.appendChild(span);
-    return li;
 }
 
 async function saveFavorite(breedName) {
@@ -60,13 +40,7 @@ async function saveFavorite(breedName) {
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
 
-    const ul = document.getElementById("favoritesList");
-    if (ul && ![...ul.children].some(function (li) {
-        return li.dataset.breed === breedName;
-    })) {
-        if (ul.children.length === 1 && ul.children[0].tagName === "P") ul.innerHTML = "";
-        ul.appendChild(createFavoriteLi(breedName));
-    }
+    showFavoritesBox();
 }
 
 async function getFavorites() {
@@ -77,13 +51,13 @@ async function getFavorites() {
     const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`)
     if (response.ok) {
         const data = await response.json();
-        let favorites = [];
-        if (data.favorites) {
-            favorites = data.favorites;
-        }
+        const favorites = Array.isArray(data.favorites) ? data.favorites : [];
+        console.log("favoriter hämtade:", favorites);
         return favorites;
     } else {
+        console.log(currentUser, "kunde inte hämta favoriter");
         return [];
+
     }
 }
 
@@ -94,65 +68,42 @@ async function removeFavorite(breedName) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
-    const ul = document.getElementById("favoritesList");
-    if (ul) {
-        const li = [...ul.children].find(li => li.dataset.breed === breedName);
-        if (li) li.remove();
-        if (ul.children.length === 0) {
-            ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
-        }
-    }
-    updateAllFaveBoxes();
-}
-
-async function updateAllFaveBoxes() {
-    const favorites = await getFavorites();
-    const lowerFavorites = favorites.map(function (f) { return f.toLowerCase(); });
-    let faveButtons = document.querySelectorAll(".faveButton:not(.listHeart");
-    for (let i = 0; i < faveButtons.length; i++) {
-        const btn = faveButtons[i];
-        const breedDiv = btn.parentElement.querySelector(".descBreed");
-        if (!breedDiv) continue;
-        let breed = breedDiv.textContent.replace(":", "").trim().toLowerCase();
-        if (lowerFavorites.includes(breed)) {
-            btn.innerHTML = "♥";
-            btn.classList.add("favorited");
-        } else {
-            btn.innerHTML = "♡";
-            btn.classList.remove("favorited");
-
-        }
-    }
+    showFavoritesBox();
 }
 
 async function showFavoritesBox() {
-    document.getElementById("myAccount").style.display = "block";
-    let faveBox = document.getElementById("favoritesBox");
-    if (!faveBox) {
-        faveBox = document.createElement("div");
-        faveBox.id = "favoritesBox";
-        faveBox.innerHTML = "<h2>Saved Breeds</h2>";
-        const ul = document.createElement("ul");
-        ul.id = "favoritesList";
-        ul.style.listStyle = "none";
-        ul.style.padding = "0";
-        faveBox.appendChild(ul);
-        document.getElementById("myAccount").appendChild(faveBox);
-    }
+    const oldBoxes = document.querySelectorAll("#favoritesBox");
+    oldBoxes.forEach(box => box.remove());
 
-    const ul = document.getElementById("favoritesList");
-    ul.innerHTML = "";
-    if (!currentUser) return;
-    const favorites = await getFavorites();
-    if (!favorites || favorites.length === 0) {
-        ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
+    let faveBox = document.createElement("div");
+    faveBox.id = "favoritesBox";
+    document.getElementById("myAccount").appendChild(faveBox);
+
+    document.getElementById("myAccount").style.display = "flex";
+    faveBox.innerHTML = "<h2>Saved Breeds</h2>";
+
+    if (!currentUser) {
         return;
     }
-    for (let i = 0; i < favorites.length; i++) {
-        ul.appendChild(createFavoriteLi(favorites[i]));
-    }
-}
 
+    let favorites = await getFavorites();
+
+    if (!favorites || favorites.length === 0) {
+        faveBox.innerHTML += "<p>You haven't saved any dog breeds yet :(</p>";
+        return;
+    }
+
+    let ul = document.createElement("ul");
+    for (let i = 0; i < favorites.length; i++) {
+        let li = document.createElement("li");
+        li.textContent = favorites[i]
+            .split(" ")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+        ul.appendChild(li);
+    }
+    faveBox.appendChild(ul);
+}
 
 class Dog {
     constructor({ name, description }) {
@@ -213,9 +164,6 @@ function createCloseX(popupElement) {
         } else if (popupElement.parentElement.classList.contains("popup")) {
             popupElement.parentElement.classList.remove("show");
             popupElement.parentElement.classList.remove("narrow");
-        }
-        if (popupElement.id === "popupWin" || popupElement.parentElement.id === "popupWin") {
-            document.getElementById("restartButton").style.display = "block";
         }
     });
 }
@@ -444,10 +392,12 @@ async function checkForMatch() {
                 await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
+                await showFavoritesBox();
             } else {
                 await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
+                await showFavoritesBox();
             }
         });
 
@@ -671,26 +621,27 @@ openAuthPopupButton.addEventListener("click", function () {
 
 //Login
 const authPopup = document.getElementById("authPopup");
-const loginRegisterButton = document.querySelector(".openAuthPopup");
+const openAuthPopup = document.querySelector(".openAuthPopup");
 const highScoreBox = document.getElementById("savedHighscore");
 
-
-loginRegisterButton.addEventListener("click", () => {
+openAuthPopup.addEventListener("click", () => {
     if (!isLoggedin) {
         authPopup.classList.add("show");
+
     } else {
-        // Logga ut
         isLoggedin = false;
         currentUser = null;
         localStorage.removeItem("loggedInUser");
-        alert("You are now logged out!");
-        authPopup.classList.remove("show");
-        highScoreBox.innerHTML = "";
-        authButton.textContent = "Login / Register";
-        document.getElementById("myAccount").style.display = "none";
+        alert("Du är nu utloggad!");
         restartGame();
         flipTheCards();
+        authPopup.classList.remove("show");
+        highScoreBox.innerHTML = "";
+        openAuthPopup.innerHTML = "Login/Register";
+        openAuthPopup.removeAttribute("style");
+        document.getElementById("myAccount").style.display = "none";
     }
+
 });
 
 createCloseX(document.getElementById("authPopup"));
@@ -720,21 +671,20 @@ createButton.addEventListener("click", async function () {
         isLoggedin = true
         currentUser = username;
         alert("Account created!");
-        authButton.textContent = "Log out";
         authPopup.classList.remove("show");
         localStorage.setItem("loggedInUser", username);
 
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
-
+        buttonDesign();
         await showHighscoreBox();
         await checkAndSendHighscore()
         await showFavoritesBox();
     }
 });
 
-
-loginButton.addEventListener("click", async function () {
+const loginSubmitButton = document.getElementById("loginSubmitButton");
+loginSubmitButton.addEventListener("click", async function () {
     const username = document.getElementById("loginUsername").value;
     const password = document.getElementById("loginPassword").value;
 
@@ -744,28 +694,17 @@ loginButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    function isGameWon() {
-        const allCards = document.querySelectorAll(".memoryCard");
-        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-        return allCards.length > 0 && allCardsMatch.length === allCards.length;
-    }
-
     const result = await response.json();
     if (result.success) {
-        isLoggedin = true
+        isLoggedin = true;
         currentUser = username;
         alert("Login successful!");
-        authButton.textContent = "Log out";
+        loginRegisterButton.textContent = "Log out";
+        authPopup.classList.remove("show");
 
-        await checkAndSendHighscore()
-        await showHighscoreBox()
+        await checkAndSendHighscore();
+        await showHighscoreBox();
         await showFavoritesBox();
-
-        if (isGameWon()) {
-            await checkAndSendHighscore();
-        }
-
-
     } else {
         alert("Wrong username or password.");
     }
@@ -773,6 +712,16 @@ loginButton.addEventListener("click", async function () {
     document.getElementById("loginUsername").value = "";
     document.getElementById("loginPassword").value = "";
 });
+
+function buttonDesign() {
+    authPopup.classList.remove("show");
+    openAuthPopup.style.backgroundColor = "#E2EFFF"
+    openAuthPopup.style.color = "#0F3665"
+    openAuthPopup.style.fontFamily = "Jua, sans-serif"
+    openAuthPopup.style.fontSize = "24px"
+    openAuthPopup.textContent = "Log out"
+}
+
 
 
 //spara highscore
@@ -809,7 +758,7 @@ async function checkAndSendHighscore() {
 
 async function showHighscoreBox() {
     const myAccount = document.getElementById("myAccount");
-    myAccount.style.display = "block";
+    myAccount.style.display = "flex";
 
     const response = await fetch("http://localhost:8000/getAllAccounts")
 
@@ -834,7 +783,7 @@ const overlay = document.createElement("div");
 overlay.id = "startOverlay";
 
 const startGameButton = document.createElement("button");
-startGameButton.id = "authButton";
+startGameButton.classList.add("buttonBlue");
 startGameButton.textContent = "Start Game";
 
 overlay.appendChild(startGameButton);
