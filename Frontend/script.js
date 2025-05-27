@@ -633,19 +633,21 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-function restartGame() {
+async function restartGame() {
     matchCounter = 0;
     matchPairCounter = 0;
     flippedCards = [];
     lockBoard = false;
     updateCounterDisplay();
     const descContainer = document.getElementById("desc");
-    descContainer.innerHTML = ""; // Rensa beskrivningar
-    // Vänta lite så att korten hinner vändas tillbaka
-    setTimeout(() => {
-        getDogPic();
-    }, 600); // Justera tiden om du vill
-
+    const descriptions = descContainer.querySelectorAll('.descriptions');
+    descriptions.forEach(d => d.remove());
+    descContainer.style.display = "none";
+    descContainer.style.display = "none";
+    if (breedmanager) {
+        await breedmanager.fetchBreed();
+    }
+    await getDogPic();
     const restartButtonBottom = document.getElementById("restartButton");
     restartButtonBottom.style.display = "block";
 }
