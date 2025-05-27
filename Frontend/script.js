@@ -55,7 +55,7 @@ function createFavoriteLi(breed) {
 
 async function saveFavorite(breedName) {
     if (!currentUser) {
-        showAlert("Du är nu utloggad!");
+        showAlert("Logged out!");
         return;
     }
     await fetch("http://localhost:8000/favorite", {
@@ -75,7 +75,6 @@ async function saveFavorite(breedName) {
 
 async function getFavorites() {
     if (!currentUser) {
-        console.log("ingen inloggad användare")
         return [];
     }
     const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`)
@@ -686,7 +685,7 @@ openAuthPopup.addEventListener("click", () => {
         isLoggedin = false;
         currentUser = null;
         localStorage.removeItem("loggedInUser");
-        showAlert("Du är nu utloggad!");
+        showAlert("Logged out!");
         restartGame();
         flipTheCards();
         authPopup.classList.remove("show");
@@ -759,7 +758,6 @@ loginButton.addEventListener("click", async function () {
         isLoggedin = true
         buttonDesign();
         currentUser = username;
-        showAlert("Login successful!");
 
         await checkAndSendHighscore()
         await showHighscoreBox()
