@@ -9,6 +9,7 @@ let isLoggedin = false;
 
 
 
+
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -375,25 +376,25 @@ async function checkForMatch() {
         descDiv.appendChild(faveButton);
 
         getFavorites().then(function (favorites) {
-            if (favorites.map(function (f) { return f.toLowerCase(); }).includes(breed)) {
+            if (favorites.map(function (f) { return f.toLowerCase(); }).includes(breedLower)) {
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
             }
         })
-
+        const breedLower = breed.toLowerCase();
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
                 alert("You need to be logged in to save favorites!");
                 return;
             }
             let favorites = (await getFavorites()).map(function (f) { return f.toLowerCase(); });
-            if (favorites.includes(breed)) {
-                await removeFavorite(breed);
+            if (favorites.includes(breedLower)) {
+                await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
                 await showFavoritesBox();
             } else {
-                await saveFavorite(breed);
+                await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
                 await showFavoritesBox();
