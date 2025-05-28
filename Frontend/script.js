@@ -10,9 +10,9 @@ let firstLoad = true;
 let alertResolve = null;
 let alertTimeout = null;
 
-const restartButton = document.getElementById("restartButton");
 let allBreedsWithDesc = [];
 let breedmanager;
+const restartButton = document.getElementById("restartButton");
 const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
@@ -162,7 +162,6 @@ const devImages = [
 
 const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"];
 
-
 function hideAlert() {
     document.getElementById("customAlert").classList.add("hidden");
     document.getElementById("alertOverlay").classList.add("hidden");
@@ -283,7 +282,6 @@ function getDescriptionFromImageUrl(imageUrl) {
             }
         }
     }
-
     return "Ingen beskrivning hittades.";
 }
 
@@ -301,7 +299,6 @@ function getBreedFromImageUrl(imageUrl) {
             capitalized += " ";
         }
     }
-
     return capitalized;
 }
 
@@ -345,7 +342,6 @@ function extractBreedName(imageUrl) {
 }
 
 async function showRandomDogFact() {
-
     const h3 = document.getElementById("h3");
     const indexH3 = Math.floor(Math.random() * arrayDogFrase.length);
     h3.textContent = arrayDogFrase[indexH3];
@@ -473,7 +469,6 @@ async function checkForMatch() {
             faveButton.classList.add("favorited");
         }
 
-
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
                 showAlert("You need to be logged in to save favorites!");
@@ -525,7 +520,7 @@ async function checkForMatch() {
         }, 1000);
     }
 
-    //vinst av spelet
+    //Vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
     const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
 
@@ -555,7 +550,6 @@ async function checkForMatch() {
                     document.getElementById("restartButton").style.display = "block";
                 });
             }
-
         }, 800);
     }
 }
@@ -788,7 +782,6 @@ async function updateAllFaveBoxes() {
 
     let faveButtons = document.querySelectorAll(".faveButton:not(.listHeart)");
 
-
     for (let i = 0; i < faveButtons.length; i++) {
         const btn = faveButtons[i];
         const breedDiv = btn.parentElement.querySelector(".descBreed");
@@ -968,7 +961,7 @@ createButton.addEventListener("click", async function () {
 
     if (response.ok) {
         currentUser = username;
-        isLoggedin = true
+        isLoggedin = true;
         currentUser = username;
         showAlert("Account created!");
         authPopup.classList.remove("show");
@@ -979,7 +972,7 @@ createButton.addEventListener("click", async function () {
 
         buttonDesign();
         await showHighscoreBox();
-        await checkAndSendHighscore()
+        await checkAndSendHighscore();
         await showFavoritesBox();
     }
 });
@@ -1007,8 +1000,8 @@ loginButton.addEventListener("click", async function () {
         buttonDesign();
         currentUser = username;
 
-        await checkAndSendHighscore()
-        await showHighscoreBox()
+        await checkAndSendHighscore();
+        await showHighscoreBox();
         await showFavoritesBox();
 
         if (isGameWon()) {
@@ -1035,7 +1028,7 @@ async function initGame() {
     breedmanager = new DogbreedManager();
     await breedmanager.fetchBreed();
     await getDogPic();
-    await dropdown();
+    dropdown();
 }
 
 initGame();
