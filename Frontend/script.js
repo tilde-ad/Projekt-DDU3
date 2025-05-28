@@ -416,7 +416,7 @@ async function checkForMatch() {
         descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions");
 
-        descContainer.style.display = "flex";
+        descContainer.style.display = "block";
         const dropdown = document.getElementById("drop-down")
         dropdown.classList.add("active");
         dropdown.style.borderRadius = "10px 10px 0px 0px"
@@ -883,7 +883,7 @@ function dropdown() {
 
     dropdown.addEventListener("click", () => {
         if (desc.style.display === "none" || desc.style.display === "") {
-            desc.style.display = "flex";
+            desc.style.display = "block";
             dropdown.classList.add("active");
             dropdown.style.borderRadius = "10px 10px 0px 0px"
             scrollIndicator.style.display = "block"; // visa indikatorn
