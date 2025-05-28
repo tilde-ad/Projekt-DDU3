@@ -389,8 +389,8 @@ button:active {
 }
 
 #desc {
-    position: relative;
-    display: none;
+    /* position: relative;
+    display: none; */
     margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
@@ -401,7 +401,6 @@ button:active {
     display: flex;
     flex-direction: column;
     width: 315px;
-    padding-top: 50px;
 
 }
 
@@ -614,9 +613,9 @@ h4 {
 
 #drop-down {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    /* top: 0;
+    left: 0; */
+    width: 315px;
     background-color: white;
     display: flex;
     justify-content: space-between;
