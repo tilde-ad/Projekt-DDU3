@@ -199,6 +199,7 @@ p {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
     background-position: center;
+    background-size: cover; 
     position: absolute;
     top: 50%;
     left: 50%;
@@ -211,6 +212,8 @@ p {
     box-sizing: border-box;
 
     display: none;
+    overflow: hidden;
+    border-radius: 20px;
 }
 
 #popup-inner {
