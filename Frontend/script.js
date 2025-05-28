@@ -29,7 +29,6 @@ function createFavoriteLi(breed) {
     const li = document.createElement("li");
     li.style.display = "flex";
     li.style.alignItems = "center";
-    li.style.margin = "-15px 0";
     li.dataset.breed = breed;
 
     let heartBtn = document.createElement("button");
