@@ -45,6 +45,14 @@ body {
     flex-direction: column;
 }
 
+#body-Container p {
+    margin-top: 10px;
+}
+
+#tries {
+    padding: 0px;
+}
+
 #container {
     width: 100%;
     display: grid;
@@ -92,8 +100,8 @@ p {
     font-weight: bold;
     font-size: 25px;
     border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     background-color: #E2EFFF;
     color: #0F3665;
     border: 3px solid #0F3665;
