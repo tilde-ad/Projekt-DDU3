@@ -1,9 +1,5 @@
-import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
-
 // Byt till false inför inlämning
 const useDevMode = true;
-
-// === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
 
 // === Hämta och spara 20 hundfakta lokalt (endast i dev-läge) ===
@@ -29,7 +25,6 @@ async function handler(request) {
         return new Response(null, { headers: headerCORS });
     }
 
-    // Hantera förfrågningar till index.html, styles.css och script.js
     if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
         const html = await Deno.readTextFile("../Frontend/index.html");
         return new Response(html, {
@@ -55,7 +50,7 @@ async function handler(request) {
     }
 
     if (request.method === "GET") {
-        // Hundbild (med eller utan ras)
+
         if (url.pathname === "/dogpic") {
             const breed = url.searchParams.get("breed");
             let apiUrl = "https://dog.ceo/api/breeds/image/random";
@@ -73,50 +68,62 @@ async function handler(request) {
             });
         }
 
-        // Hämta alla hundraser (med beskrivningar)
         if (url.pathname === "/dogbreed") {
-            let breeds = [];
-            let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
-            while (apiUrl) {
-                const apiResponse = await fetch(apiUrl);
-                const data = await apiResponse.json();
-                breeds = breeds.concat(
-                    data.data.map(breed => ({
+
+            let allBreeds = [];
+            let currentPageUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
+
+            while (currentPageUrl) {
+                const apiResponse = await fetch(currentPageUrl);
+                const jsonData = await apiResponse.json();
+
+                const breedsOnPage = jsonData.data.map(breed => {
+                    return {
                         name: breed.attributes.name,
                         description: breed.attributes.description
-                    }))
-                );
-                apiUrl = data.links?.next || null;
-            }
-            return new Response(JSON.stringify(breeds), {
-                status: 200,
-                headers: headerCORS
-            });
-        }
+                    };
+                });
 
-        // Gemensamma raser från dog.ceo
-        if (url.pathname === "/dogbreedsecond") {
-            const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
-            const ceoData = await ceoResponse.json();
-            const ceoBreeds = [];
+                allBreeds = allBreeds.concat(breedsOnPage);
 
-            for (const [breed, subBreeds] of Object.entries(ceoData.message)) {
-                if (subBreeds.length === 0) {
-                    ceoBreeds.push(breed);
+                if (jsonData.links && jsonData.links.next) {
+                    currentPageUrl = jsonData.links.next;
                 } else {
-                    subBreeds.forEach(sub => {
-                        ceoBreeds.push(`${sub} ${breed}`);
-                    });
+                    currentPageUrl = null;
                 }
             }
 
-            return new Response(JSON.stringify(ceoBreeds), {
+            return new Response(JSON.stringify(allBreeds), {
                 status: 200,
                 headers: headerCORS
             });
         }
 
-        // Fakta om hundar
+        if (url.pathname === "/dogbreedsecond") {
+            const response = await fetch("https://dog.ceo/api/breeds/list/all");
+            const data = await response.json();
+            const allBreeds = [];
+
+            for (const breedName in data.message) {
+                const subBreeds = data.message[breedName];
+
+                if (subBreeds.length > 0) {
+                    for (let i = 0; i < subBreeds.length; i++) {
+                        const sub = subBreeds[i];
+                        const fullName = sub + " " + breedName;
+                        allBreeds.push(fullName);
+                    }
+                } else {
+                    allBreeds.push(breedName);
+                }
+            }
+
+            return new Response(JSON.stringify(allBreeds), {
+                status: 200,
+                headers: headerCORS
+            });
+        }
+
         if (url.pathname === "/dogfact") {
             if (useDevMode) {
                 return new Response(JSON.stringify(arrayDogFact), {
@@ -125,15 +132,21 @@ async function handler(request) {
                 });
             } else {
                 const apiUrl = "https://dogapi.dog/api/v2/facts";
-                const apiResponse = await fetch(apiUrl);
-                const data = await apiResponse.json();
-                const facts = data.data.map(fact => fact.attributes.body);
-                return new Response(JSON.stringify(facts), {
+                const response = await fetch(apiUrl);
+                const jsonData = await response.json();
+
+                // Här hämtar vi bara själva texten (body) från varje faktaruta
+                const factList = jsonData.data.map(item => {
+                    return item.attributes.body;
+                });
+
+                return new Response(JSON.stringify(factList), {
                     status: 200,
                     headers: headerCORS
                 });
             }
         }
+
 
         if (url.pathname === "/getAllAccounts") {
             const file = await Deno.readTextFile("database.json");
