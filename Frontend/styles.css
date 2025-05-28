@@ -3,9 +3,7 @@
     src: url("Jua/Jua-Regular.ttf");
 }
 
-* {
-    scrollbar-width: thin;
-}
+/* Body */
 
 body {
     margin: 0;
@@ -16,57 +14,9 @@ body {
     background-repeat: repeat-y;
     min-height: 100vh;
     position: relative;
-
 }
 
-
-.openAuthPopup {
-    position: absolute;
-    top: 50px;
-    right: 100px;
-}
-
-#secondButton {
-    position: absolute;
-    top: 275px;
-    right: 173px;
-}
-
-#popupWin h4 {
-    position: absolute;
-    top: 220px;
-    right: 80px;
-}
-
-#body-Container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-#body-Container p {
-    margin-top: 10px;
-}
-
-#tries {
-    padding: 0px;
-}
-
-#container {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-#container {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    margin: 0;
-    box-sizing: border-box;
-}
+/* Generella texter */
 
 h1 {
     font-family: "Jua";
@@ -83,16 +33,14 @@ h3 {
     font-size: 25px;
 }
 
+h4 {
+    margin: 15px 0px 5px;
+}
+
 p {
     font-size: 20px;
     color: #0F3665;
     margin: 5px 0px;
-}
-
-#pairsandtries {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr 745px 1fr;
 }
 
 .blueButton {
@@ -112,285 +60,40 @@ p {
     grid-row: 1;
 }
 
+/* Body Container */
+
+#body-Container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#body-Container p {
+    margin-top: 10px;
+}
+
+/* Tries */
+
 #tries {
     width: 100px;
     justify-self: center;
+    padding: 0px;
 }
 
-#pairs {
-    grid-column: 1;
-    grid-row: 1;
-    margin-left: 10px;
-    margin-right: 10px;
-    font-size: 18px;
-}
+/* Container */
 
-#memory-Container {
-    padding: 15px;
+#container {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(5, 125px);
-    grid-template-rows: repeat(4, 125px);
-    gap: 20px;
-    background-color: #E2EFFF;
-    border: 5px solid #0F3665;
-    border-radius: 15px;
-    position: relative;
-    margin: 20px 0px;
-    grid-column: 2;
-}
-
-.memoryCard {
-    position: relative;
-    overflow: hidden;
-}
-
-.memoryCard img {
-    object-fit: cover;
-    object-position: center;
-}
-
-/* nytt */
-.memoryCardInner {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-}
-
-/* När kortet är vänt */
-.memoryCard.flipped .memoryCardInner {
-    transform: rotateY(180deg);
-}
-
-.cardFront,
-.cardBack {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    backface-visibility: hidden;
-    border-radius: 13px;
-}
-
-/* Bilden på hunden */
-.cardFront {
-    transform: rotateY(180deg);
-    border: 5px solid #95a6c2;
+    grid-template-columns: 1fr auto 1fr;
+    margin: 0;
     box-sizing: border-box;
 }
 
-/* Baksidan (innan vändning) */
-.cardBack {
-    background-image: url(images/Dog-card.png);
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-}
-
-.popup h3 {
-    margin-bottom: 20px;
-}
-
-.popup {
-    background-image: url(images/PopDawg.png);
-    background-repeat: no-repeat;
-    background-position: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    height: 430px;
-    border-radius: 10px;
-    padding: 20px;
-    z-index: 1000;
-    box-sizing: border-box;
-
-    display: none;
-    overflow: hidden;
-    border-radius: 20px;
-}
-
-#popup-inner {
-    position: relative;
-    padding: 20px;
-}
-
-.popup.narrow {
-    width: auto;
-    max-width: 90vw;
-    min-width: 0;
-    height: auto;
-    left: auto;
-    right: -375px;
-    top: 190px;
-    transform: none;
-}
-
-.popup .closeX {
-    right: 32px;
-    top: 10px;
-    position: absolute;
-    z-index: 10;
-}
-
-.popup.narrow .closeX {
-    right: 10px;
-    top: 5px;
-}
-
-.popup.show {
-    display: block;
-    animation: fadeIn 0.5s ease forwards;
-}
-
-.popup-content-login {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    margin-left: 365px;
-    margin-top: 5px;
-}
-
-.popup.narrow .popup-content-login {
-    margin-left: 0;
-    margin-top: 5px;
-    gap: 5px;
-}
-
-.popup-content-login input {
-    margin-bottom: 10px;
-}
-
-
-#winRestartButton {
-    margin-left: 100px;
-}
-
-#restartButton {
-    margin-top: -10px;
-    margin-bottom: 10px;
-}
-
-
-#fact,
-#inner {
-    width: 53%;
-    margin-left: 312px;
-    margin-top: 51px;
-}
-
-#dogFact {
-    margin: 0 auto;
-    max-height: 100px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-
-.colorText {
-    color: #0F3665;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -60%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-    }
-}
-
-
-button {
-    padding: 10px 20px;
-    background-color: #0F3665;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: #07182e 0px 0px 2px;
-}
-
-button:hover {
-    background-color: #0b274a;
-    color: white;
-    border-color: white;
-}
-
-button:active {
-    background-color: #07182e;
-    color: white;
-    box-shadow: none;
-}
-
-#loading-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("images/background.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: repeat-y;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-}
-
-#loading-screen.instant {
-    transition: none;
-}
-
-#loading-screen h1 {
-    color: #0F3665;
-    margin-bottom: 20px;
-}
-
-#loading-screen.show {
-    opacity: 1;
-    pointer-events: all;
-}
-
-
-.spinner {
-    border: 8px solid #f3f3f3;
-    border-top: 8px solid #555;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 20px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
-
-    100% {
-        transform: rotate(360deg);
-    }
-}
+/* Desc */
 
 #desc {
-    /* position: relative;
-    display: none; */
     margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
@@ -402,6 +105,81 @@ button:active {
     flex-direction: column;
     width: 315px;
 
+
+}
+
+/* Dropdown */
+
+#drop-down {
+    position: absolute;
+    width: 315px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #0F3665;
+    border-radius: 10px 10px 0 0;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+#drop-down img {
+    margin-right: 5px;
+    padding: 10px;
+    transition: transform 0.3s ease;
+}
+
+#drop-down.active img {
+    transform: rotate(180deg);
+}
+
+#drop-down p {
+    padding: 3px;
+}
+
+#pairs {
+    grid-column: 1;
+    grid-row: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+/* Scroll indicator */
+
+.scroll-indicator {
+    display: none;
+    position: sticky;
+    bottom: 0;
+    margin-top: auto;
+    text-align: center;
+    padding: 3px;
+    font-style: italic;
+    font-size: 14px;
+    color: #666;
+    animation: bounce 2s infinite;
+    width: 310.5px;
+    text-align: center;
+    background-color: white;
+    border-radius: 0px 0px 10px 10px;
+    display: block;
+    z-index: 10;
+
+}
+
+.scroll-indicator img.scroll-arrow {
+    width: 20px;
+    height: 20px;
+    display: block;
+    margin: 5px auto 0;
+    animation: bounceArrow 2s infinite;
+}
+
+.scroll-indicator p {
+    margin: 3px;
 }
 
 #desc .descriptions:first-of-type {
@@ -457,9 +235,285 @@ button:active {
     overflow-x: hidden;
 }
 
-h4 {
-    margin: 15px 0px 5px;
+#desc .descriptions:first-of-type {
+    margin-top: 50px;
 }
+
+.descriptions {
+    position: relative;
+    background-color: #EBC6E5;
+    border: 2px solid #E875D7;
+    color: white;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    padding-right: 35px;
+    padding-top: 10px;
+    font-size: 14px;
+    line-height: 1.3;
+    font-family: "poppins", sans-serif;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+.descriptions .faveButton {
+    position: absolute;
+    top: -8px;
+    right: 6px;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #E875D7;
+    transition: color 0.2s;
+    padding: 0;
+    border-radius: 0px;
+    margin-top: 5px;
+}
+
+.descBreed {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.descText {
+    width: 111%;
+    max-height: 75px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+/* Memory container */
+
+#memory-Container {
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(5, 125px);
+    grid-template-rows: repeat(4, 125px);
+    gap: 20px;
+    background-color: #E2EFFF;
+    border: 5px solid #0F3665;
+    border-radius: 15px;
+    position: relative;
+    margin: 20px 0px;
+    grid-column: 2;
+}
+
+.memoryCard {
+    position: relative;
+    overflow: hidden;
+}
+
+.memoryCard img {
+    object-fit: cover;
+    object-position: center;
+}
+
+.memoryCardInner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+}
+
+.memoryCard.flipped .memoryCardInner {
+    transform: rotateY(180deg);
+}
+
+.cardFront,
+.cardBack {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    border-radius: 13px;
+}
+
+.cardFront {
+    transform: rotateY(180deg);
+    border: 5px solid #95a6c2;
+    box-sizing: border-box;
+}
+
+.cardBack {
+    background-image: url(images/Dog-card.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+/* Popup */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+.openAuthPopup {
+    position: absolute;
+    top: 50px;
+    right: 100px;
+}
+
+.popup {
+    background-image: url(images/PopDawg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 430px;
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 1000;
+    box-sizing: border-box;
+
+    display: none;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+.popup.show {
+    display: block;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.popup .closeX {
+    right: 32px;
+    top: 10px;
+    position: absolute;
+    z-index: 10;
+}
+
+.popup h3 {
+    margin-bottom: 20px;
+}
+
+#popupWin h4 {
+    position: absolute;
+    top: 220px;
+    right: 80px;
+}
+
+#popup-inner {
+    position: relative;
+    padding: 20px;
+}
+
+.popup-content-login {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-left: 365px;
+    margin-top: 5px;
+}
+
+.popup-content-login input {
+    margin-bottom: 10px;
+}
+
+.popup.narrow {
+    width: auto;
+    max-width: 90vw;
+    min-width: 0;
+    height: auto;
+    left: auto;
+    right: -375px;
+    top: 190px;
+    transform: none;
+}
+
+.popup.narrow .closeX {
+    right: 10px;
+    top: 5px;
+}
+
+.popup.narrow .popup-content-login {
+    margin-left: 0;
+    margin-top: 5px;
+    gap: 5px;
+}
+
+#dogFact {
+    margin: 0 auto;
+    max-height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+#fact,
+#inner {
+    width: 53%;
+    margin-left: 312px;
+    margin-top: 51px;
+}
+
+.colorText {
+    color: #0F3665;
+}
+
+/* Generalla buttons */
+
+button {
+    padding: 10px 20px;
+    background-color: #0F3665;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: #07182e 0px 0px 2px;
+}
+
+button:hover {
+    background-color: #0b274a;
+    color: white;
+    border-color: white;
+}
+
+button:active {
+    background-color: #07182e;
+    color: white;
+    box-shadow: none;
+}
+
+#winRestartButton {
+    margin-left: 100px;
+}
+
+#winLoginRegisterButton {
+    position: absolute;
+    top: 275px;
+    right: 173px;
+}
+
+#restartButton {
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+/* My Account */
 
 #myAccount {
     justify-self: center;
@@ -468,16 +522,29 @@ h4 {
     max-height: 600px;
     margin-top: 20px;
     background-color: #EBC6E5;
-    border: 2px solid #aa7aa3;
+    border: 2px solid #E875D7;
     border-radius: 10px;
     box-sizing: border-box;
     display: none;
+}
+
+#myAccount h2 {
+    text-align: center;
+    font-family: "Jua", sans-serif;
+    font-size: 35px;
+    color: white;
+    margin: 10px 0;
 }
 
 #favoritesBox {
     color: white;
     font-size: 14px;
     line-height: 1.3;
+}
+
+#favoritesBox h2 {
+    font-size: 25px;
+    margin-bottom: -15px;
 }
 
 #favoritesList {
@@ -489,29 +556,9 @@ h4 {
     margin: 16px 0 0 12px;
     padding: 8px 0 8px 0;
     text-align: center;
-
 }
 
-#myAccount h2 {
-    text-align: center;
-    font-family: "Jua", sans-serif;
-    font-size: 35px;
-    color: white;
-    margin: 10px 0;
-}
-
-#startOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* Fave button */
 
 .faveButton {
     position: absolute;
@@ -549,7 +596,63 @@ h4 {
     position: static;
 }
 
-/* Simpel alert */
+/* Loading screen */
+
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("images/background.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: repeat-y;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+#loading-screen.instant {
+    transition: none;
+}
+
+#loading-screen h1 {
+    color: #0F3665;
+    margin-bottom: 20px;
+}
+
+#loading-screen.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.spinner {
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #555;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Alert */
 
 .custom-alert {
     position: fixed;
@@ -596,6 +699,19 @@ h4 {
     display: none;
 }
 
+#startOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .alert-overlay {
     position: fixed;
     top: 0;
@@ -608,75 +724,4 @@ h4 {
 
 .alert-overlay.hidden {
     display: none;
-}
-
-#favoritesBox h2 {
-    font-size: 25px;
-    margin-bottom: -15px;
-}
-
-#drop-down {
-    position: absolute;
-    /* top: 0;
-    left: 0; */
-    width: 315px;
-    background-color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #0F3665;
-    border-radius: 10px 10px 0 0;
-    cursor: pointer;
-    user-select: none;
-    z-index: 2;
-    box-sizing: border-box;
-    padding: 0 10px;
-}
-
-
-#drop-down img {
-    margin-right: 5px;
-    padding: 10px;
-    transition: transform 0.3s ease;
-}
-
-#drop-down.active img {
-    transform: rotate(180deg);
-}
-
-#drop-down p {
-    padding: 3px;
-}
-
-
-.scroll-indicator {
-    display: none;
-    position: sticky;
-    bottom: 0;
-    margin-top: auto;
-    text-align: center;
-    padding: 3px;
-    font-style: italic;
-    font-size: 14px;
-    color: #666;
-    animation: bounce 2s infinite;
-    width: 310.5px;
-    text-align: center;
-    background-color: white;
-    border-radius: 0px 0px 10px 10px;
-    display: block;
-    z-index: 10;
-
-}
-
-.scroll-indicator img.scroll-arrow {
-    width: 20px;
-    height: 20px;
-    display: block;
-    margin: 5px auto 0;
-    animation: bounceArrow 2s infinite;
-}
-
-.scroll-indicator p {
-    margin: 3px;
 }
