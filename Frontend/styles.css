@@ -321,6 +321,7 @@ button {
 button:hover {
     background-color: #0b274a;
     color: white;
+    border-color: white;
 }
 
 button:active {
