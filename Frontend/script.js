@@ -466,12 +466,13 @@ async function checkForMatch() {
         const favorites = await getFavorites();
         const lowerCaseFavorites = favorites.map(f => f.toLowerCase());
 
+        const breedLower = breed.toLowerCase();
+
         if (lowerCaseFavorites.includes(breedLower)) {
             faveButton.innerHTML = "♥";
             faveButton.classList.add("favorited");
         }
 
-        const breedLower = breed.toLowerCase();
 
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
@@ -631,7 +632,6 @@ openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("narrow");
 });
 
-
 async function findLoggedUserHighscore() {
     const response = await fetch("http://localhost:8000/getAllAccounts")
     const data = await response.json()
@@ -639,6 +639,7 @@ async function findLoggedUserHighscore() {
     const userHighscore = userAccount.highscore
     return userHighscore
 }
+
 async function checkAndSendHighscore() {
     if (isLoggedin && currentUser) {
         const currentHighscore = await findLoggedUserHighscore();
@@ -701,7 +702,6 @@ function createFavoriteLi(breed) {
     const words = breed.split(" ");
     for (let i = 0; i < words.length; i++) {
         words[i] = words[i][0].toUpperCase() + words[i].slice(1);
-
     }
     span.textContent = words.join(" ");
 
@@ -718,6 +718,7 @@ async function saveFavorite(breedName) {
         showAlert("Logged out!");
         return;
     }
+
     await fetch("http://localhost:8000/favorite", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -725,15 +726,16 @@ async function saveFavorite(breedName) {
     });
 
     const ul = document.getElementById("favoritesList");
-    if (ul && ![...ul.children].some(function (li) {
-        return li.dataset.breed === breedName;
-    })) {
-        if (ul.children.length === 1 && ul.children[0].tagName === "P") ul.innerHTML = "";
-        ul.appendChild(createFavoriteLi(breedName));
+    const existingBreed = document.querySelector(`[data-breed="${breedName}"]`);
+
+    if (!existingBreed) {
+        const noSavedDogs = document.getElementById("noSavedDogs");
+        if (noSavedDogs) noSavedDogs.remove();
+
+        const newLi = createFavoriteLi(breedName);
+        ul.appendChild(newLi);
     }
 }
-
-// JOSEFIN - FORTSÄTT HÄR
 
 async function getFavorites() {
     if (!currentUser) {
@@ -754,38 +756,53 @@ async function getFavorites() {
 
 async function removeFavorite(breedName) {
     if (!currentUser) return;
+
     await fetch("http://localhost:8000/favorite", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username: currentUser, breed: breedName })
     });
-    const ul = document.getElementById("favoritesList");
-    if (ul) {
-        const li = [...ul.children].find(li => li.dataset.breed === breedName);
-        if (li) li.remove();
-        if (ul.children.length === 0) {
-            ul.innerHTML = "<p>Your saved dogs <br> will appear here!</p>";
-        }
+
+    const ulList = document.getElementById("favoritesList");
+
+    const liToRemove = document.querySelector(`[data-breed="${breedName}"]`);
+    if (liToRemove) liToRemove.remove();
+
+    const remainingItems = ulList.querySelectorAll("li");
+    if (remainingItems.length === 0) {
+        const noSavedDogs = document.createElement("p");
+        noSavedDogs.id = "noSavedDogs";
+        noSavedDogs.innerHTML = "Your saved dogs <br> will appear here!";
+        ulList.appendChild(noSavedDogs);
     }
     updateAllFaveBoxes();
 }
 
 async function updateAllFaveBoxes() {
     const favorites = await getFavorites();
-    const lowerFavorites = favorites.map(function (f) { return f.toLowerCase(); });
-    let faveButtons = document.querySelectorAll(".faveButton:not(.listHeart");
+    let lowerFavorites = [];
+
+    for (let i = 0; i < favorites.length; i++) {
+        lowerFavorites.push(favorites[i].toLowerCase());
+    }
+
+    let faveButtons = document.querySelectorAll(".faveButton:not(.listHeart)");
+
+
     for (let i = 0; i < faveButtons.length; i++) {
         const btn = faveButtons[i];
         const breedDiv = btn.parentElement.querySelector(".descBreed");
+
         if (!breedDiv) continue;
+
         let breed = breedDiv.textContent.replace(":", "").trim().toLowerCase();
+
         if (lowerFavorites.includes(breed)) {
             btn.innerHTML = "♥";
             btn.classList.add("favorited");
         } else {
             btn.innerHTML = "♡";
             btn.classList.remove("favorited");
-
         }
     }
 }
@@ -793,22 +810,27 @@ async function updateAllFaveBoxes() {
 async function showFavoritesBox() {
     document.getElementById("myAccount").style.display = "block";
     let faveBox = document.getElementById("favoritesBox");
+
     if (!faveBox) {
         faveBox = document.createElement("div");
         faveBox.id = "favoritesBox";
         faveBox.innerHTML = "<h2>Saved Breeds:</h2>";
+
         const ul = document.createElement("ul");
         ul.id = "favoritesList";
         ul.style.listStyle = "none";
         ul.style.padding = "0";
         ul.style.margin = "30px 0";
         faveBox.appendChild(ul);
+
         document.getElementById("myAccount").appendChild(faveBox);
     }
 
     const ul = document.getElementById("favoritesList");
     ul.innerHTML = "";
+
     if (!currentUser) return;
+
     const favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
         ul.innerHTML = "<p>Your saved dogs <br> will appear here!</p>";
@@ -821,7 +843,7 @@ async function showFavoritesBox() {
 
 // === START GAME BUTTON + OVERLAY ===
 const ContainerMemory = document.getElementById("memory-Container");
-ContainerMemory.style.position = "relative"; // Gör container till position-parent
+ContainerMemory.style.position = "relative";
 
 const overlay = document.createElement("div");
 overlay.id = "startOverlay";
@@ -831,7 +853,7 @@ startGameButton.classList.add("blueButton");
 startGameButton.textContent = "Start Game";
 
 overlay.appendChild(startGameButton);
-ContainerMemory.appendChild(overlay); // Lägg in overlay direkt i memory-container
+ContainerMemory.appendChild(overlay);
 
 startGameButton.addEventListener("click", async function () {
     overlay.style.display = "none";
@@ -848,24 +870,25 @@ function dropdown() {
 
     let open = false;
 
-    // Startläge: bara dropdown syns, ingen bakgrund på desc och dropdown stängd
+    // Startläge
     scrollIndicator.style.display = "none";
     desc.style.background = "none";
     dropdown.classList.remove("active");
     dropdown.style.borderRadius = "10px";
+
     const descriptions = desc.querySelectorAll('.descriptions');
     for (let i = 0; i < descriptions.length; i++) {
         descriptions[i].style.display = "none";
     }
+
     function setDropdownOpen(state) {
         open = state;
-        // Visa/dölj scroll-indicator
         if (open) {
             scrollIndicator.style.display = "block";
         } else {
             scrollIndicator.style.display = "none";
         }
-        // Visa/dölj alla descriptions
+
         const descriptions = desc.querySelectorAll('.descriptions');
         for (let i = 0; i < descriptions.length; i++) {
             if (open) {
@@ -874,15 +897,15 @@ function dropdown() {
                 descriptions[i].style.display = "none";
             }
         }
-        // Ändra pil och border och bakgrund
+
         if (open) {
             dropdown.classList.add("active");
             dropdown.style.borderRadius = "10px 10px 0px 0px";
-            desc.style.background = ""; // Återställ bakgrund när öppen
+            desc.style.background = "";
         } else {
             dropdown.classList.remove("active");
             dropdown.style.borderRadius = "10px";
-            desc.style.background = "none"; // Ingen bakgrund när stängd
+            desc.style.background = "none";
         }
     }
 
@@ -890,14 +913,10 @@ function dropdown() {
         setDropdownOpen(!open);
     });
 
-    // Gör funktionen tillgänglig globalt
     window.setDropdownOpen = setDropdownOpen;
 }
 
-dropdown();
-
 // === 👤 7. Användarhantering ===
-// ... Funktionerna från originalkoden (createAccount, loginAccount, logoutUser)
 
 //Login
 const authPopup = document.getElementById("authPopup");
@@ -913,15 +932,16 @@ openAuthPopup.addEventListener("click", function () {
         currentUser = null;
         localStorage.removeItem("loggedInUser");
         showAlert("Logged out!");
+
         restartGame();
         flipTheCards();
+
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
         openAuthPopup.innerHTML = "Login/Register";
         openAuthPopup.removeAttribute("style");
         document.getElementById("myAccount").style.display = "none";
     }
-
 });
 
 createCloseX(document.getElementById("authPopup"));
@@ -956,13 +976,13 @@ createButton.addEventListener("click", async function () {
 
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
+
         buttonDesign();
         await showHighscoreBox();
         await checkAndSendHighscore()
         await showFavoritesBox();
     }
 });
-
 
 loginButton.addEventListener("click", async function () {
     const username = document.getElementById("loginUsername").value;
@@ -977,6 +997,7 @@ loginButton.addEventListener("click", async function () {
     function isGameWon() {
         const allCards = document.querySelectorAll(".memoryCard");
         const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
         return allCards.length > 0 && allCardsMatch.length === allCards.length;
     }
 
@@ -993,12 +1014,9 @@ loginButton.addEventListener("click", async function () {
         if (isGameWon()) {
             await checkAndSendHighscore();
         }
-
-
     } else {
         showAlert("Wrong username or password.");
     }
-
     document.getElementById("loginUsername").value = "";
     document.getElementById("loginPassword").value = "";
 });
@@ -1017,6 +1035,7 @@ async function initGame() {
     breedmanager = new DogbreedManager();
     await breedmanager.fetchBreed();
     await getDogPic();
+    await dropdown();
 }
 
 initGame();
