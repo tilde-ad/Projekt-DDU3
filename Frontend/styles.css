@@ -199,7 +199,7 @@ p {
     background-image: url(images/PopDawg.png);
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover; 
+    background-size: cover;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -218,6 +218,7 @@ p {
 
 #popup-inner {
     position: relative;
+    padding: 20px;
 }
 
 .popup.narrow {
@@ -288,7 +289,10 @@ p {
 }
 
 #dogFact {
-    margin: 0px auto;
+    margin: 0 auto;
+    max-height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .colorText {
