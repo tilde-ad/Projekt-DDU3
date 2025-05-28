@@ -71,10 +71,14 @@ h1 {
     color: #0F3665;
 }
 
+h3 {
+    font-size: 25px;
+}
+
 p {
     font-size: 20px;
     color: #0F3665;
-    margin: 5px;
+    margin: 5px 0px;
 }
 
 #pairsandtries {
@@ -265,9 +269,9 @@ p {
 
 #fact,
 #inner {
-    width: 50%;
-    margin-left: 315px;
-    margin-top: 85px;
+    width: 53%;
+    margin-left: 312px;
+    margin-top: 51px;
 }
 
 #dogFact {
