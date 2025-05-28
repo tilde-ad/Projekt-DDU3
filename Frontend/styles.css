@@ -369,10 +369,11 @@ button:active {
 
 #desc {
     position: relative;
+    display: none;
     margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
-    max-height: 590px;
+    max-height: 550px;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgba(255, 255, 255, 0.5);
@@ -625,6 +626,7 @@ h4 {
 
 
 .scroll-indicator {
+    display: none;
     position: sticky;
     bottom: 0;
     margin-top: auto;
@@ -634,11 +636,8 @@ h4 {
     font-size: 14px;
     color: #666;
     animation: bounce 2s infinite;
-
-
     width: 310.5px;
     text-align: center;
-
     background-color: white;
     border-radius: 0px 0px 10px 10px;
     display: block;

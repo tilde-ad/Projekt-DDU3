@@ -404,6 +404,7 @@ async function checkForMatch() {
     const isMatch = card1.dataset.image === card2.dataset.image;
 
     if (isMatch) {
+        window.setDropdownOpen(true);
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
@@ -414,16 +415,10 @@ async function checkForMatch() {
 
         const descContainer = document.getElementById("desc");
         const descDiv = document.createElement("div");
-        descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions");
+        descContainer.prepend(descDiv);
 
-        descContainer.style.display = "flex";
-        const dropdown = document.getElementById("drop-down")
-        dropdown.classList.add("active");
-        dropdown.style.borderRadius = "10px 10px 0px 0px"
-        document.getElementById("scroll-indicator").style.display = "block";
-
-        descDiv.classList.add("descriptions")
+        window.setDropdownOpen(true);
 
         const divBreed = document.createElement("div");
         descDiv.append(divBreed);
@@ -881,54 +876,59 @@ startGameButton.addEventListener("click", async function () {
 if (firstLoad) {
     overlay.style.display = "flex";
 }
+
 function dropdown() {
     const dropdown = document.getElementById("drop-down");
     const scrollIndicator = document.getElementById("scroll-indicator");
     const desc = document.getElementById("desc");
 
-    dropdown.addEventListener("click", () => {
-        const show = scrollIndicator.style.display === "none" || scrollIndicator.style.display === "";
-        scrollIndicator.style.display = show ? "block" : "none";
-        dropdown.classList.toggle("active", show);
-        dropdown.style.borderRadius = show ? "10px 10px 0px 0px" : "10px";
-        desc.style.background = show ? "" : "none";
+    let open = false;
 
-        // Hämta alla element som ska döljas/visas
-        const descriptions = desc.querySelectorAll('.descriptions');
-        const descTexts = desc.querySelectorAll('.descText');
-        const descBreeds = desc.querySelectorAll('.descBreed');
-        const faveButtons = desc.querySelectorAll('.faveButton');
-
-        // Visa eller dölj dem
-        for (var i = 0; i < descriptions.length; i++) {
-            if (show) {
-                descriptions[i].style.display = "";
-            } else {
-                descriptions[i].style.display = "none";
-            }
-        }
-        for (var i = 0; i < descTexts.length; i++) {
-            if (show) {
-                descTexts[i].style.display = "";
-            } else {
-                descTexts[i].style.display = "none";
-            }
-        }
-        for (var i = 0; i < descBreeds.length; i++) {
-            if (show) {
-                descBreeds[i].style.display = "";
-            } else {
-                descBreeds[i].style.display = "none";
-            }
-        }
-        for (var i = 0; i < faveButtons.length; i++) {
-            if (show) {
-                faveButtons[i].style.display = "";
-            } else {
-                faveButtons[i].style.display = "none";
-            }
-        }
+    // Startläge: bara dropdown syns, ingen bakgrund på desc och dropdown stängd
+    scrollIndicator.style.display = "none";
+    desc.style.background = "none";
+    dropdown.classList.remove("active");
+    dropdown.style.borderRadius = "10px";
+    const descriptions = desc.querySelectorAll('.descriptions');
+    descriptions.forEach(function (d) {
+        d.style.display = "none";
     });
+
+    function setDropdownOpen(state) {
+        open = state;
+        // Visa/dölj scroll-indicator
+        if (open) {
+            scrollIndicator.style.display = "block";
+        } else {
+            scrollIndicator.style.display = "none";
+        }
+        // Visa/dölj alla descriptions
+        const descriptions = desc.querySelectorAll('.descriptions');
+        descriptions.forEach(function (d) {
+            if (open) {
+                d.style.display = "";
+            } else {
+                d.style.display = "none";
+            }
+        });
+        // Ändra pil och border och bakgrund
+        if (open) {
+            dropdown.classList.add("active");
+            dropdown.style.borderRadius = "10px 10px 0px 0px";
+            desc.style.background = ""; // Återställ bakgrund när öppen
+        } else {
+            dropdown.classList.remove("active");
+            dropdown.style.borderRadius = "10px";
+            desc.style.background = "none"; // Ingen bakgrund när stängd
+        }
+    }
+
+    dropdown.addEventListener("click", function () {
+        setDropdownOpen(!open);
+    });
+
+    // Gör funktionen tillgänglig globalt
+    window.setDropdownOpen = setDropdownOpen;
 }
 
 dropdown();
