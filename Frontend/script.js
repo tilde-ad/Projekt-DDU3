@@ -105,7 +105,7 @@ async function removeFavorite(breedName) {
         const li = [...ul.children].find(li => li.dataset.breed === breedName);
         if (li) li.remove();
         if (ul.children.length === 0) {
-            ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
+            ul.innerHTML = "<p>Your saved dogs <br> will appear here!</p>";
         }
     }
     updateAllFaveBoxes();
@@ -152,7 +152,7 @@ async function showFavoritesBox() {
     if (!currentUser) return;
     const favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
-        ul.innerHTML = "<p>Your saved dogs will appear here!</p>";
+        ul.innerHTML = "<p>Your saved dogs <br> will appear here!</p>";
         return;
     }
     for (let i = 0; i < favorites.length; i++) {
