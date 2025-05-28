@@ -6,10 +6,6 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 
-
-
-
-
 const restartButton = document.getElementById('restartButton');
 let firstLoad = true;
 let allBreedsWithDesc = [];
@@ -294,9 +290,7 @@ const devImages = [
     "welsh-terrier.jpg",
     "whippet.jpg",
     "yorkshire-terrier.jpg"
-    // För när vi inte vill hämta från sidan!
 ];
-
 
 const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"]
 
@@ -398,7 +392,6 @@ let matchPairCounter = 0;
 async function checkForMatch() {
     matchCounter++;
     updateCounterDisplay();
-
 
     const [card1, card2] = flippedCards;
     const isMatch = card1.dataset.image === card2.dataset.image;
@@ -639,8 +632,11 @@ async function restartGame() {
     updateCounterDisplay();
     const descContainer = document.getElementById("desc");
     const descriptions = descContainer.querySelectorAll('.descriptions');
-    descriptions.forEach(d => d.remove());
-    descContainer.style.display = "none";
+    for (let i = 0; i < descriptions.length; i++) {
+        descriptions[i].remove();
+    }
+    descContainer.style.display = "flex";
+    window.setDropdownOpen(false);
 
     if (breedmanager) {
         await breedmanager.fetchBreed();
@@ -852,7 +848,6 @@ async function showHighscoreBox() {
         }
     }
 }
-
 
 // === START GAME BUTTON + OVERLAY ===
 const ContainerMemory = document.getElementById("memory-Container");
