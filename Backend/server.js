@@ -1,12 +1,7 @@
-import { serveDir } from "https://deno.land/std@0.224.0/http/file_server.ts";
-
 // Byt till false inför inlämning
 const useDevMode = true;
-
-// === För utvecklingsläge: förladdade data ===
 let arrayDogFact = [];
 
-// === Hämta och spara 20 hundfakta lokalt (endast i dev-läge) ===
 if (useDevMode) {
     for (let i = 0; i < 20; i++) {
         const apiUrl = "https://dogapi.dog/api/v2/facts";
@@ -26,10 +21,12 @@ async function handler(request) {
     headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
 
     if (request.method === "OPTIONS") {
-        return new Response(null, { headers: headerCORS });
+        return new Response(null, {
+            status: 204,
+            headers: headerCORS
+        });
     }
 
-    // Hantera förfrågningar till index.html, styles.css och script.js
     if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
         const html = await Deno.readTextFile("../Frontend/index.html");
         return new Response(html, {
@@ -55,7 +52,7 @@ async function handler(request) {
     }
 
     if (request.method === "GET") {
-        // Hundbild (med eller utan ras)
+
         if (url.pathname === "/dogpic") {
             const breed = url.searchParams.get("breed");
             let apiUrl = "https://dog.ceo/api/breeds/image/random";
@@ -73,50 +70,62 @@ async function handler(request) {
             });
         }
 
-        // Hämta alla hundraser (med beskrivningar)
         if (url.pathname === "/dogbreed") {
-            let breeds = [];
-            let apiUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
-            while (apiUrl) {
-                const apiResponse = await fetch(apiUrl);
-                const data = await apiResponse.json();
-                breeds = breeds.concat(
-                    data.data.map(breed => ({
+
+            let allBreeds = [];
+            let currentPageUrl = "https://dogapi.dog/api/v2/breeds?page[size]=100";
+
+            while (currentPageUrl) {
+                const apiResponse = await fetch(currentPageUrl);
+                const jsonData = await apiResponse.json();
+
+                const breedsOnPage = jsonData.data.map(breed => {
+                    return {
                         name: breed.attributes.name,
                         description: breed.attributes.description
-                    }))
-                );
-                apiUrl = data.links?.next || null;
-            }
-            return new Response(JSON.stringify(breeds), {
-                status: 200,
-                headers: headerCORS
-            });
-        }
+                    };
+                });
 
-        // Gemensamma raser från dog.ceo
-        if (url.pathname === "/dogbreedsecond") {
-            const ceoResponse = await fetch("https://dog.ceo/api/breeds/list/all");
-            const ceoData = await ceoResponse.json();
-            const ceoBreeds = [];
+                allBreeds = allBreeds.concat(breedsOnPage);
 
-            for (const [breed, subBreeds] of Object.entries(ceoData.message)) {
-                if (subBreeds.length === 0) {
-                    ceoBreeds.push(breed);
+                if (jsonData.links && jsonData.links.next) {
+                    currentPageUrl = jsonData.links.next;
                 } else {
-                    subBreeds.forEach(sub => {
-                        ceoBreeds.push(`${sub} ${breed}`);
-                    });
+                    currentPageUrl = null;
                 }
             }
 
-            return new Response(JSON.stringify(ceoBreeds), {
+            return new Response(JSON.stringify(allBreeds), {
                 status: 200,
                 headers: headerCORS
             });
         }
 
-        // Fakta om hundar
+        if (url.pathname === "/dogbreedsecond") {
+            const response = await fetch("https://dog.ceo/api/breeds/list/all");
+            const data = await response.json();
+            const allBreeds = [];
+
+            for (const breedName in data.message) {
+                const subBreeds = data.message[breedName];
+
+                if (subBreeds.length > 0) {
+                    for (let i = 0; i < subBreeds.length; i++) {
+                        const sub = subBreeds[i];
+                        const fullName = sub + " " + breedName;
+                        allBreeds.push(fullName);
+                    }
+                } else {
+                    allBreeds.push(breedName);
+                }
+            }
+
+            return new Response(JSON.stringify(allBreeds), {
+                status: 200,
+                headers: headerCORS
+            });
+        }
+
         if (url.pathname === "/dogfact") {
             if (useDevMode) {
                 return new Response(JSON.stringify(arrayDogFact), {
@@ -125,10 +134,15 @@ async function handler(request) {
                 });
             } else {
                 const apiUrl = "https://dogapi.dog/api/v2/facts";
-                const apiResponse = await fetch(apiUrl);
-                const data = await apiResponse.json();
-                const facts = data.data.map(fact => fact.attributes.body);
-                return new Response(JSON.stringify(facts), {
+                const response = await fetch(apiUrl);
+                const jsonData = await response.json();
+
+                // Här hämtar vi bara själva texten (body) från varje faktaruta
+                const factList = jsonData.data.map(item => {
+                    return item.attributes.body;
+                });
+
+                return new Response(JSON.stringify(factList), {
                     status: 200,
                     headers: headerCORS
                 });
@@ -139,21 +153,19 @@ async function handler(request) {
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
-            // Returnera hela data (t.ex. alla accounts)
             return new Response(JSON.stringify(data), {
                 status: 200,
                 headers: headerCORS,
             });
         }
 
-        // Hämta favoriter
         if (url.pathname === "/favorite") {
             const username = url.searchParams.get("username");
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
-            var user = null;
-            for (var i = 0; i < data.accounts.length; i++) {
+            let user = null;
+            for (let i = 0; i < data.accounts.length; i++) {
                 if (data.accounts[i].username === username) {
                     user = data.accounts[i];
                     break;
@@ -175,15 +187,14 @@ async function handler(request) {
     }
 
     if (request.method === "POST") {
+
         if (url.pathname === "/savedAccounts") {
-            // Hämta nuvarande data
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
-
-            // Läs in det nya kontot
             const newAccount = await request.json();
 
             const existing = data.accounts.find(acc => acc.username === newAccount.username);
+
             if (existing) {
                 return new Response(JSON.stringify({ success: false, message: "Username is already taken" }), {
                     status: 409,
@@ -191,10 +202,7 @@ async function handler(request) {
                 });
             }
 
-            // Lägg till det i arrayen
             data.accounts.push(newAccount);
-
-            // Spara tillbaka till filen
             await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
 
             return new Response(JSON.stringify({ success: true, message: "Account saved!" }), {
@@ -208,7 +216,6 @@ async function handler(request) {
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
-            // Kontrollera om kontot finns
             const found = data.accounts.find(
                 acc => acc.username === body.username && acc.password === body.password
             );
@@ -226,15 +233,16 @@ async function handler(request) {
             }
         }
 
-        // Spara favorit
         if (url.pathname === "/favorite") {
             const body = await request.json();
             const username = body.username;
             const breed = body.breed;
+
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
             let user = null;
+
             for (let i = 0; i < data.accounts.length; i++) {
                 if (data.accounts[i].username === username) {
                     user = data.accounts[i];
@@ -243,35 +251,48 @@ async function handler(request) {
             }
 
             if (!user) {
-                return new Response(JSON.stringify({ success: false, message: "User not found" }), {
-                    status: 404,
-                    headers: headerCORS
-                });
+                return new Response(
+                    JSON.stringify({ success: false, message: "User not found" }),
+                    {
+                        status: 404,
+                        headers: headerCORS
+                    }
+                );
             }
 
-            if (!user.favorites) user.favorites = [];
+            if (!user.favorites) {
+                user.favorites = [];
+            }
+
             const breedLower = breed.toLowerCase();
-            if (user.favorites.map(function (f) { return f.toLowerCase(); }).indexOf(breedLower) === -1) {
+
+            const alreadyExists = user.favorites.some(fav => fav.toLowerCase() === breedLower);
+
+            if (!alreadyExists) {
                 user.favorites.push(breedLower);
+
                 await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
             }
 
-            return new Response(JSON.stringify({ success: true, favorites: user.favorites }), {
+            return new Response(
+                JSON.stringify({ success: true, favorites: user.favorites }), {
                 status: 200,
                 headers: headerCORS
-            });
+            }
+            );
         }
     }
 
     if (request.method === "PATCH") {
+
         if (url.pathname === "/highscore") {
-            // Hämta nuvarande data
             const file = await Deno.readTextFile("database.json");
             const data = JSON.parse(file);
 
-            const { highscore, currentUser } = await request.json();
+            const body = await request.json();
+            const highscore = body.highscore;
+            const currentUser = body.currentUser;
 
-            // Hitta användarkontot med matchande username
             const userAccount = data.accounts.find(account => account.username === currentUser);
 
             if (userAccount) {
@@ -293,6 +314,7 @@ async function handler(request) {
     }
 
     if (request.method === "DELETE") {
+
         if (url.pathname === "/favorite") {
             const body = await request.json();
             const username = body.username;
@@ -327,6 +349,7 @@ async function handler(request) {
             if (index !== -1) {
                 user.favorites.splice(index, 1);
                 await Deno.writeTextFile("database.json", JSON.stringify(data, null, 2));
+
                 return new Response(JSON.stringify({ success: true, favorites: user.favorites || [] }), {
                     status: 200,
                     headers: headerCORS
