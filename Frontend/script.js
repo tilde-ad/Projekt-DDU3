@@ -663,7 +663,7 @@ async function showHighscoreBox() {
         let highscore = matchCounter;
         if (userAccount) {
             highscore = userAccount.highscore;
-            if (highscore === 0) {
+            if (highscore === 0 || highscore === null || highscore === undefined) {
                 highScoreBox.innerHTML = `<h2>No Highscore <span style="color:#E875D7;">Yet!</span></h2>`;
             } else {
                 highScoreBox.innerHTML = `<h2>Highscore: ${highscore}</h2>`
@@ -826,7 +826,7 @@ async function showFavoritesBox() {
 
     const favorites = await getFavorites();
     if (!favorites || favorites.length === 0) {
-        ul.innerHTML = "<p>Your saved dogs <br> will appear here!</p>";
+        ul.innerHTML = '<p id="noSavedDogs">Your saved dogs <br> will appear here!</p>';
         return;
     }
     for (let i = 0; i < favorites.length; i++) {
