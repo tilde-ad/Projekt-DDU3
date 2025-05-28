@@ -404,7 +404,6 @@ async function checkForMatch() {
     const isMatch = card1.dataset.image === card2.dataset.image;
 
     if (isMatch) {
-        window.setDropdownOpen(true);
         card1.classList.add("matched");
         card2.classList.add("matched");
         flippedCards = [];
@@ -890,10 +889,9 @@ function dropdown() {
     dropdown.classList.remove("active");
     dropdown.style.borderRadius = "10px";
     const descriptions = desc.querySelectorAll('.descriptions');
-    descriptions.forEach(function (d) {
-        d.style.display = "none";
-    });
-
+    for (let i = 0; i < descriptions.length; i++) {
+        descriptions[i].style.display = "none";
+    }
     function setDropdownOpen(state) {
         open = state;
         // Visa/dölj scroll-indicator
@@ -904,13 +902,13 @@ function dropdown() {
         }
         // Visa/dölj alla descriptions
         const descriptions = desc.querySelectorAll('.descriptions');
-        descriptions.forEach(function (d) {
+        for (let i = 0; i < descriptions.length; i++) {
             if (open) {
-                d.style.display = "";
+                descriptions[i].style.display = "";
             } else {
-                d.style.display = "none";
+                descriptions[i].style.display = "none";
             }
-        });
+        }
         // Ändra pil och border och bakgrund
         if (open) {
             dropdown.classList.add("active");
