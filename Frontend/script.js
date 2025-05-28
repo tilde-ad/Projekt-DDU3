@@ -510,6 +510,7 @@ async function checkForMatch() {
                     winPopup.classList.remove("show");
                     authPopup.classList.add("show");
                     authPopup.classList.remove("narrow");
+                    document.getElementById("restartButton").style.display = "block";
                 });
             }
 
