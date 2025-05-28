@@ -1,4 +1,3 @@
-// === 🧩 1. Globala variabler & inställningar ===
 const useDevMode = true;
 
 let matchCounter = 0;
@@ -20,7 +19,7 @@ const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
 const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
-// === 🎧 2. classer ===
+
 class Dog {
     constructor({ name, description }) {
         this.name = name;
@@ -62,7 +61,6 @@ class DogbreedManager {
     }
 }
 
-// === 🧰 3. Hjälpfunktioner ===
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -180,17 +178,19 @@ function hideAlert() {
 }
 
 function showAlert(message) {
+    const alertBox = document.getElementById("customAlert");
+    const alertOverlay = document.getElementById("alertOverlay");
     document.getElementById("alertMessage").textContent = message;
-    document.getElementById("customAlert").classList.remove("hidden");
-    document.getElementById("alertOverlay").classList.remove("hidden");
+
+    alertBox.classList.remove("hidden");
+    alertOverlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
-    return new Promise(resolve => {
-        alertResolve = resolve;
-        alertTimeout = setTimeout(() => {
-            hideAlert();
-        }, 3000);
-    });
+
+    setTimeout(() => {
+        hideAlert();
+    }, 3000);
 }
+
 
 // === 🌐 4. API-anrop ===
 // ... Funktionerna från originalkoden för API-hämtning (getDogPic, fetchDogFact, fetchAllBreedsWithDesc, getFavorites, removeFavorite)
@@ -247,27 +247,23 @@ async function getDogPic() {
             allDogPics.push(data.message);
         }
     }
-    // Blanda bilderna
+
     const shuffledPics = [];
     while (allDogPics.length > 0) {
         const index = Math.floor(Math.random() * allDogPics.length);
         shuffledPics.push(allDogPics.splice(index, 1)[0]);
     }
 
-    // Vänta tills alla bilder är laddade
     await preloadImages(shuffledPics);
-
-    // Rensa gamla kort
     const cards = memoryContainer.querySelectorAll('.memoryCard');
     cards.forEach(card => memoryContainer.removeChild(card));
 
-    // Skapa nya kort
     for (let i = 0; i < shuffledPics.length; i++) {
         const card = createCard(shuffledPics[i]);
         memoryContainer.appendChild(card);
     }
 
-    loadingScreen.classList.remove("show"); // Dölj loading
+    loadingScreen.classList.remove("show");
     return selectedImages;
 }
 
@@ -277,45 +273,80 @@ async function fetchAllBreedsWithDesc() {
 }
 
 function getDescriptionFromImageUrl(imageUrl) {
-    // Extrahera rasnamn
-    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
-    let breedName;
-    if (match && match[1]) {
-        const parts = match[1].split("-");
-        if (parts.length === 2) {
-            breedName = parts[1] + " " + parts[0];
-        } else {
-            breedName = parts.join(" ");
-        }
-    } else {
-        breedName = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
-    }
+    let breedName = extractBreedName(imageUrl);
 
     if (breedmanager && breedmanager.instances) {
         for (let i = 0; i < breedmanager.instances.length; i++) {
-            if (breedmanager.instances[i].name.toLowerCase() === breedName.toLowerCase()) {
-                return breedmanager.instances[i].description;
+            let dog = breedmanager.instances[i];
+            if (dog.name.toLowerCase() === breedName.toLowerCase()) {
+                return dog.description;
             }
         }
     }
+
     return "Ingen beskrivning hittades.";
 }
 
 function getBreedFromImageUrl(imageUrl) {
-    const match = imageUrl.match(/\/breeds\/([^/]+)\//);
-    let breed;
-    if (match && match[1]) {
-        breed = match[1].replace(/-/g, " ");
-    } else {
-        breed = imageUrl.split("/").pop().split(".")[0].replace(/-/g, " ");
+    let breedName = extractBreedName(imageUrl);
+    let words = breedName.split(" ");
+    let capitalized = "";
+
+    for (let i = 0; i < words.length; i++) {
+        let word = words[i];
+        if (word.length > 0) {
+            capitalized += word.charAt(0).toUpperCase() + word.slice(1);
+        }
+        if (i < words.length - 1) {
+            capitalized += " ";
+        }
     }
 
-    return breed.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+    return capitalized;
+}
+
+function extractBreedName(imageUrl) {
+    const parts = imageUrl.split("/");
+
+    const index = parts.indexOf("breeds");
+    if (index !== -1 && index + 1 < parts.length) {
+        const breedPart = parts[index + 1];
+        const nameParts = breedPart.split("-");
+
+        if (nameParts.length === 2) {
+            return nameParts[1] + " " + nameParts[0];
+        }
+
+        let joinedName = "";
+        for (let i = 0; i < nameParts.length; i++) {
+            joinedName += nameParts[i];
+            if (i < nameParts.length - 1) {
+                joinedName += " ";
+            }
+        }
+        return joinedName;
+    }
+
+    const urlParts = imageUrl.split("/");
+    const lastIndex = urlParts.length - 1;
+    const fileNameWithExtension = urlParts[lastIndex];
+    const fileNameParts = fileNameWithExtension.split(".");
+    const fileName = fileNameParts[0];
+
+    let breedName = "";
+    for (let i = 0; i < fileName.length; i++) {
+        if (fileName[i] === "-") {
+            breedName += " ";
+        } else {
+            breedName += fileName[i];
+        }
+    }
+    return breedName;
 }
 
 async function showRandomDogFact() {
 
-    const h3 = document.getElementById("wof");
+    const h3 = document.getElementById("h3");
     const indexH3 = Math.floor(Math.random() * arrayDogFrase.length);
     h3.textContent = arrayDogFrase[indexH3];
 
@@ -329,24 +360,27 @@ async function showRandomDogFact() {
 }
 
 async function getCommonBreeds() {
-    // Hämta redan platt array från din backend
     const ceoResponse = await fetch("http://localhost:8000/dogbreedsecond");
-    const ceoBreeds = (await ceoResponse.json()).map(b => b.toLowerCase());
+    const ceoJson = await ceoResponse.json();
+    const ceoBreeds = ceoJson.map(breed => breed.toLowerCase());
 
     const dogApiResponse = await fetch("http://localhost:8000/dogbreed");
-    const dogApiBreeds = (await dogApiResponse.json()).map(b => b.name.toLowerCase());
+    const dogApiJson = await dogApiResponse.json();
+    const dogApiBreeds = dogApiJson.map(breed => breed.name.toLowerCase());
 
     let commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
-    commonBreeds = commonBreeds.filter(breed => breed !== "russell terrier" && breed !== "russell-terrier");
+
+    commonBreeds = commonBreeds.filter(breed =>
+        breed !== "russell terrier" && breed !== "russell-terrier"
+    );
     return commonBreeds;
 }
 
 // === 🎮 5. Spellogik ===
 // ... Funktionerna från originalkoden (restartGame, checkMatch, resetBoard, disableCards, flipCard, addFactPopup)
 
-//skapa framsida och baksida på kort samt att vända på korten
 let flippedCards = [];
-let lockBoard = false; //låser korten så att man inte kan klicka på mer än 2 åt gången
+let lockBoard = false;
 
 function createCard(imageUrl) {
     const card = document.createElement("div");
@@ -366,7 +400,7 @@ function createCard(imageUrl) {
     cardInner.appendChild(back);
     card.appendChild(cardInner);
 
-    card.setAttribute("data-image", imageUrl); //lägger till ett html-attribut "data-image" till card
+    card.setAttribute("data-image", imageUrl);
 
     card.addEventListener("click", function () {
         if (lockBoard) return;
@@ -429,20 +463,30 @@ async function checkForMatch() {
         faveButton.title = "Save dog to favorites";
         descDiv.appendChild(faveButton);
 
-        getFavorites().then(function (favorites) {
-            if (favorites.map(function (f) { return f.toLowerCase(); }).includes(breedLower)) {
-                faveButton.innerHTML = "♥";
-                faveButton.classList.add("favorited");
-            }
-        })
+        const favorites = await getFavorites();
+        const lowerCaseFavorites = favorites.map(f => f.toLowerCase());
+
+        if (lowerCaseFavorites.includes(breedLower)) {
+            faveButton.innerHTML = "♥";
+            faveButton.classList.add("favorited");
+        }
+
         const breedLower = breed.toLowerCase();
+
         faveButton.addEventListener("click", async function () {
             if (!currentUser) {
                 showAlert("You need to be logged in to save favorites!");
                 return;
             }
-            let favorites = (await getFavorites()).map(function (f) { return f.toLowerCase(); });
-            if (favorites.includes(breedLower)) {
+
+            let favorites = await getFavorites();
+
+            let lowercaseFavorites = [];
+            for (let i = 0; i < favorites.length; i++) {
+                lowercaseFavorites.push(favorites[i].toLowerCase());
+            }
+
+            if (lowercaseFavorites.includes(breedLower)) {
                 await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
@@ -451,17 +495,15 @@ async function checkForMatch() {
                 await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
-                faveButton.title = "Remove dog from favorite";
+                faveButton.title = "Remove dog from favorites";
             }
         });
 
         if (matchPairCounter % 3 === 0) {
-            // Visa popup bara var 3:e gång
             setTimeout(async function () {
                 await showRandomDogFact();
                 const popup = document.getElementById("popupFact");
                 popup.classList.remove("show");
-                // void popup.offsetWidth;
                 popup.classList.add("show");
             }, 400);
         }
@@ -481,7 +523,6 @@ async function checkForMatch() {
             lockBoard = false;
         }, 1000);
     }
-
 
     //vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
@@ -506,7 +547,7 @@ async function checkForMatch() {
                 button.id = "winLoginRegisterButton"
                 winPopup.append(button)
 
-                button.addEventListener("click", () => {
+                button.addEventListener("click", function () {
                     winPopup.classList.remove("show");
                     authPopup.classList.add("show");
                     authPopup.classList.remove("narrow");
@@ -514,11 +555,10 @@ async function checkForMatch() {
                 });
             }
 
-        }, 800); // lite delay så man hinner se sista kortet vändas
+        }, 800);
     }
 }
 
-//få bilder och blanda dem
 const memoryContainer = document.getElementById("memory-Container");
 async function preloadImages(imageUrls) {
     const promises = imageUrls.map(url => {
@@ -556,40 +596,41 @@ async function restartGame() {
 
 function flipTheCards() {
     const flipped = document.querySelectorAll('.memoryCard.flipped');
-    flipped.forEach(card => {
-        card.classList.remove('flipped');
-    });
+    for (let i = 0; i < flipped.length; i++) {
+        flipped[i].classList.remove('flipped');
+    }
 }
 
 restartButton.addEventListener('click', function () {
     flipTheCards()
-    // Vänta lite innan spelet laddas om
+
     setTimeout(async () => {
-        restartGame(); // eller getDogPic(), beroende på vad du använder
+        restartGame();
         loadingScreen.classList.remove("show");
-    }, 100); // Delay för fade-effekt
+    }, 100);
 });
 
 winRestartButton.addEventListener("click", function () {
     const flippedCards = document.querySelectorAll('.memoryCard.flipped');
-    flippedCards.forEach(card => {
-        card.classList.remove('flipped');
-    });
+
+    for (let i = 0; i < flippedCards.length; i++) {
+        flippedCards[i].classList.remove('flipped');
+    }
+
     restartGame();
+
     const winPopup = document.getElementById("popupWin");
     winPopup.classList.remove("show");
 });
 
-createCloseX(document.getElementById("popupWin"));
 
+createCloseX(document.getElementById("popupWin"));
 
 openAuthPopupButton.addEventListener("click", function () {
     authPopup.classList.add("show");
     authPopup.classList.add("narrow");
 });
 
-
-//spara highscore
 
 async function findLoggedUserHighscore() {
     const response = await fetch("http://localhost:8000/getAllAccounts")
@@ -610,7 +651,7 @@ async function checkAndSendHighscore() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data)
             });
-            await showHighscoreBox()
+            await showHighscoreBox();
         }
     }
 }
@@ -626,7 +667,7 @@ async function showHighscoreBox() {
         const userAccount = data.accounts.find(acc => acc.username === currentUser);
         let highscore = matchCounter;
         if (userAccount) {
-            highscore = userAccount.highscore ?? 0;  // Sätt highscore till userAccount.highscore eller 0 om undefined/null
+            highscore = userAccount.highscore;
             if (highscore === 0) {
                 highScoreBox.innerHTML = `<h2>No Highscore <span style="color:#E875D7;">Yet!</span></h2>`;
             } else {
@@ -659,7 +700,8 @@ function createFavoriteLi(breed) {
 
     const words = breed.split(" ");
     for (let i = 0; i < words.length; i++) {
-        words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
+        words[i] = words[i][0].toUpperCase() + words[i].slice(1);
+
     }
     span.textContent = words.join(" ");
 
@@ -690,6 +732,8 @@ async function saveFavorite(breedName) {
         ul.appendChild(createFavoriteLi(breedName));
     }
 }
+
+// JOSEFIN - FORTSÄTT HÄR
 
 async function getFavorites() {
     if (!currentUser) {
