@@ -883,35 +883,55 @@ if (firstLoad) {
 }
 function dropdown() {
     const dropdown = document.getElementById("drop-down");
-    const desc = document.getElementById("desc");
     const scrollIndicator = document.getElementById("scroll-indicator");
-    console.log(scrollIndicator)
+    const desc = document.getElementById("desc");
 
     dropdown.addEventListener("click", () => {
-        if (desc.style.display === "none" || desc.style.display === "") {
-            desc.style.display = "flex";
-            dropdown.classList.add("active");
-            dropdown.style.borderRadius = "10px 10px 0px 0px"
-            scrollIndicator.style.display = "block"; // visa indikatorn
-        } else {
-            desc.style.display = "none";
-            dropdown.style.borderRadius = "10px"
-            dropdown.classList.remove("active");
-            scrollIndicator.style.display = "none"; // göm indikatorn
+        const show = scrollIndicator.style.display === "none" || scrollIndicator.style.display === "";
+        scrollIndicator.style.display = show ? "block" : "none";
+        dropdown.classList.toggle("active", show);
+        dropdown.style.borderRadius = show ? "10px 10px 0px 0px" : "10px";
+        desc.style.background = show ? "" : "none";
+
+        // Hämta alla element som ska döljas/visas
+        const descriptions = desc.querySelectorAll('.descriptions');
+        const descTexts = desc.querySelectorAll('.descText');
+        const descBreeds = desc.querySelectorAll('.descBreed');
+        const faveButtons = desc.querySelectorAll('.faveButton');
+
+        // Visa eller dölj dem
+        for (var i = 0; i < descriptions.length; i++) {
+            if (show) {
+                descriptions[i].style.display = "";
+            } else {
+                descriptions[i].style.display = "none";
+            }
+        }
+        for (var i = 0; i < descTexts.length; i++) {
+            if (show) {
+                descTexts[i].style.display = "";
+            } else {
+                descTexts[i].style.display = "none";
+            }
+        }
+        for (var i = 0; i < descBreeds.length; i++) {
+            if (show) {
+                descBreeds[i].style.display = "";
+            } else {
+                descBreeds[i].style.display = "none";
+            }
+        }
+        for (var i = 0; i < faveButtons.length; i++) {
+            if (show) {
+                faveButtons[i].style.display = "";
+            } else {
+                faveButtons[i].style.display = "none";
+            }
         }
     });
 }
 
-dropdown()
-
-
-
-
-
-
-//changed
-//changed
-
+dropdown();
 
 //ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
 //ANROPA winGameInstantly() I KONSOLLEN
