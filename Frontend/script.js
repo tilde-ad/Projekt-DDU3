@@ -504,7 +504,7 @@ async function checkForMatch() {
                 const button = document.createElement("button")
                 button.classList.add("openAuthPopup")
                 button.textContent = "Login/Register"
-                button.id = "secondButton"
+                button.id = "winLoginRegisterButton"
                 winPopup.append(button)
 
                 button.addEventListener("click", () => {
