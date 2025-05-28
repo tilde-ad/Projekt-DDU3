@@ -414,16 +414,10 @@ async function checkForMatch() {
 
         const descContainer = document.getElementById("desc");
         const descDiv = document.createElement("div");
-        descContainer.prepend(descDiv);
         descDiv.classList.add("descriptions");
+        descContainer.prepend(descDiv);
 
-        descContainer.style.display = "flex";
-        const dropdown = document.getElementById("drop-down")
-        dropdown.classList.add("active");
-        dropdown.style.borderRadius = "10px 10px 0px 0px"
-        document.getElementById("scroll-indicator").style.display = "block";
-
-        descDiv.classList.add("descriptions")
+        window.setDropdownOpen(true);
 
         const divBreed = document.createElement("div");
         descDiv.append(divBreed);
@@ -881,37 +875,61 @@ startGameButton.addEventListener("click", async function () {
 if (firstLoad) {
     overlay.style.display = "flex";
 }
+
 function dropdown() {
     const dropdown = document.getElementById("drop-down");
-    const desc = document.getElementById("desc");
     const scrollIndicator = document.getElementById("scroll-indicator");
-    console.log(scrollIndicator)
+    const desc = document.getElementById("desc");
 
-    dropdown.addEventListener("click", () => {
-        if (desc.style.display === "none" || desc.style.display === "") {
-            desc.style.display = "flex";
-            dropdown.classList.add("active");
-            dropdown.style.borderRadius = "10px 10px 0px 0px"
-            scrollIndicator.style.display = "block"; // visa indikatorn
+    let open = false;
+
+    // Startläge: bara dropdown syns, ingen bakgrund på desc och dropdown stängd
+    scrollIndicator.style.display = "none";
+    desc.style.background = "none";
+    dropdown.classList.remove("active");
+    dropdown.style.borderRadius = "10px";
+    const descriptions = desc.querySelectorAll('.descriptions');
+    for (let i = 0; i < descriptions.length; i++) {
+        descriptions[i].style.display = "none";
+    }
+    function setDropdownOpen(state) {
+        open = state;
+        // Visa/dölj scroll-indicator
+        if (open) {
+            scrollIndicator.style.display = "block";
         } else {
-            desc.style.display = "none";
-            dropdown.style.borderRadius = "10px"
-            dropdown.classList.remove("active");
-            scrollIndicator.style.display = "none"; // göm indikatorn
+            scrollIndicator.style.display = "none";
         }
+        // Visa/dölj alla descriptions
+        const descriptions = desc.querySelectorAll('.descriptions');
+        for (let i = 0; i < descriptions.length; i++) {
+            if (open) {
+                descriptions[i].style.display = "";
+            } else {
+                descriptions[i].style.display = "none";
+            }
+        }
+        // Ändra pil och border och bakgrund
+        if (open) {
+            dropdown.classList.add("active");
+            dropdown.style.borderRadius = "10px 10px 0px 0px";
+            desc.style.background = ""; // Återställ bakgrund när öppen
+        } else {
+            dropdown.classList.remove("active");
+            dropdown.style.borderRadius = "10px";
+            desc.style.background = "none"; // Ingen bakgrund när stängd
+        }
+    }
+
+    dropdown.addEventListener("click", function () {
+        setDropdownOpen(!open);
     });
+
+    // Gör funktionen tillgänglig globalt
+    window.setDropdownOpen = setDropdownOpen;
 }
 
-dropdown()
-
-
-
-
-
-
-//changed
-//changed
-
+dropdown();
 
 //ANVÄND DENNA FUNKTION OM DU VILL ATT SPELET SKA VINNA DRIEKT
 //ANROPA winGameInstantly() I KONSOLLEN

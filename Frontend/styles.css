@@ -380,14 +380,15 @@ button:active {
 }
 
 #desc {
+    position: relative;
+    display: none;
     margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
-    max-height: 620px;
+    max-height: 550px;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgba(255, 255, 255, 0.5);
-    position: relative;
     display: flex;
     flex-direction: column;
     width: 315px;
@@ -603,22 +604,21 @@ h4 {
 }
 
 #drop-down {
-    justify-self: center;
-    grid-column: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     background-color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #0F3665;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
     cursor: pointer;
     user-select: none;
-    width: 315px;
     z-index: 2;
-    top: 262px;
     box-sizing: border-box;
-    left: 16px;
-    position: absolute;
+    padding: 0 10px;
 }
 
 
@@ -638,6 +638,7 @@ h4 {
 
 
 .scroll-indicator {
+    display: none;
     position: sticky;
     bottom: 0;
     margin-top: auto;
@@ -647,11 +648,8 @@ h4 {
     font-size: 14px;
     color: #666;
     animation: bounce 2s infinite;
-
-
     width: 310.5px;
     text-align: center;
-
     background-color: white;
     border-radius: 0px 0px 10px 10px;
     display: block;
