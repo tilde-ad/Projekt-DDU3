@@ -39,6 +39,7 @@ function createFavoriteLi(breed) {
     let heartBtn = document.createElement("button");
     heartBtn.innerHTML = "♥";
     heartBtn.className = "faveButton favorited listHeart";
+    heartBtn.title = "Remove dog from favorite";
     heartBtn.addEventListener("click", async function () {
         await removeFavorite(breed);
     });
@@ -440,6 +441,7 @@ async function checkForMatch() {
         faveButton.type = "button";
         faveButton.innerHTML = "♡";
         faveButton.classList.add("faveButton");
+        faveButton.title = "Save dog to favorites";
         descDiv.appendChild(faveButton);
 
         getFavorites().then(function (favorites) {
@@ -459,10 +461,12 @@ async function checkForMatch() {
                 await removeFavorite(breedLower);
                 faveButton.innerHTML = "♡";
                 faveButton.classList.remove("favorited");
+                faveButton.title = "Save dog to favorites";
             } else {
                 await saveFavorite(breedLower);
                 faveButton.innerHTML = "♥";
                 faveButton.classList.add("favorited");
+                faveButton.title = "Remove dog from favorite";
             }
         });
 
