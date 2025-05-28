@@ -394,7 +394,7 @@ button:active {
     margin: 20px 0px;
     justify-self: center;
     border-radius: 10px;
-    max-height: 550px;
+    max-height: 600px;
     overflow-y: auto;
     overflow-x: hidden;
     background-color: rgba(255, 255, 255, 0.5);
@@ -402,6 +402,10 @@ button:active {
     flex-direction: column;
     width: 315px;
 
+}
+
+#desc .descriptions:first-of-type {
+    margin-top: 50px;
 }
 
 .descriptions {
