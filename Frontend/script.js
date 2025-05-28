@@ -985,6 +985,6 @@ function showAlert(message) {
         alertResolve = resolve;
         alertTimeout = setTimeout(() => {
             hideAlert();
-        }, 2000);
+        }, 3000);
     });
 }
