@@ -923,7 +923,6 @@ openAuthPopup.addEventListener("click", function () {
     } else {
         isLoggedin = false;
         currentUser = null;
-        localStorage.removeItem("loggedInUser");
         showAlert("Logged out!");
 
         restartGame();
@@ -965,7 +964,6 @@ createButton.addEventListener("click", async function () {
         currentUser = username;
         showAlert("Account created!");
         authPopup.classList.remove("show");
-        localStorage.setItem("loggedInUser", username);
 
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
