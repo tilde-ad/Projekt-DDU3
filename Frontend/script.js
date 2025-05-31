@@ -183,6 +183,10 @@ async function getDogPic() {
 function getDescriptionFromImageUrl(imageUrl) {
     let breedName = extractBreedName(imageUrl);
 
+    if (breedName.toLowerCase() === "puggle") {
+        return "The Puggle is a crossbreed between a Pug and a Beagle. They are known for their playful and affectionate nature, making them great family pets.";
+    }
+
     if (breedmanager && breedmanager.instances) {
         for (let i = 0; i < breedmanager.instances.length; i++) {
             let dog = breedmanager.instances[i];
