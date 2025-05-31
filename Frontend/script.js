@@ -635,7 +635,6 @@ winRestartButton.addEventListener("click", function () {
     winPopup.classList.remove("show");
 });
 
-
 createCloseX(document.getElementById("popupWin"));
 
 openAuthPopupButton.addEventListener("click", function () {
@@ -644,11 +643,11 @@ openAuthPopupButton.addEventListener("click", function () {
 });
 
 async function findLoggedUserHighscore() {
-    const response = await fetch("http://localhost:8000/getAllAccounts")
-    const data = await response.json()
+    const response = await fetch("http://localhost:8000/getAllAccounts");
+    const data = await response.json();
     const userAccount = data.accounts.find(acc => acc.username === currentUser);
-    const userHighscore = userAccount.highscore
-    return userHighscore
+    const userHighscore = userAccount.highscore;
+    return userHighscore;
 }
 
 async function checkAndSendHighscore() {
