@@ -922,7 +922,7 @@ loginButton.addEventListener("click", async function () {
     const result = await response.json();
     if (result.success) {
         isLoggedin = true
-        buttonDesign();
+        logoutButtonDesign();
         currentUser = username;
 
         await checkAndSendHighscore();
@@ -939,7 +939,7 @@ loginButton.addEventListener("click", async function () {
     document.getElementById("loginPassword").value = "";
 });
 
-function buttonDesign() {
+function logoutButtonDesign() {
     authPopup.classList.remove("show");
     openAuthPopup.style.backgroundColor = "#E2EFFF"
     openAuthPopup.style.color = "#0F3665"
