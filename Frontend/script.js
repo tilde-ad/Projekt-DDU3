@@ -16,7 +16,6 @@ const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
 
-
 class Dog {
     constructor({ name, description }) {
         this.name = name;
@@ -50,13 +49,11 @@ class DogbreedManager {
     set dogBreed(value) {
 
         if (!this.breeds.some(b => b.name === value)) {
-            console.log("error");
             return;
         }
         this._dogBreed = value;
     }
 }
-
 
 function updateCounterDisplay() {
     count.textContent = matchCounter;
@@ -547,7 +544,6 @@ winRestartButton.addEventListener("click", function () {
     }, 700);
 });
 
-
 createCloseX(document.getElementById("popupWin"));
 
 async function findLoggedUserHighscore() {
@@ -833,7 +829,6 @@ function dropdown() {
     window.setDropdownOpen = setDropdownOpen;
 }
 
-
 const authPopup = document.getElementById("authPopup");
 const highScoreBox = document.getElementById("savedHighscore");
 const accountButton = document.getElementById("accountButton");
@@ -939,7 +934,6 @@ function logoutButtonDesign() {
     accountButton.style.fontSize = "24px"
     accountButton.textContent = "Log out"
 }
-
 
 async function initGame() {
     breedmanager = new DogbreedManager();
