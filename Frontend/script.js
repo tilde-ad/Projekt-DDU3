@@ -834,6 +834,7 @@ accountButton.addEventListener("click", function () {
     if (!isLoggedin) {
         authPopup.classList.add("show");
         authPopup.classList.add("narrow");
+        accountButton.style.display = "block";
     } else {
         isLoggedin = false;
         currentUser = null;
@@ -870,6 +871,7 @@ createButton.addEventListener("click", async function () {
     }
 
     if (response.ok) {
+        accountButton.style.display = "block";
         currentUser = username;
         isLoggedin = true;
 
@@ -905,6 +907,7 @@ loginButton.addEventListener("click", async function () {
 
     const result = await response.json();
     if (result.success) {
+        accountButton.style.display = "block";
         isLoggedin = true
         logoutButtonDesign();
         currentUser = username;
@@ -931,6 +934,45 @@ function logoutButtonDesign() {
     accountButton.style.fontSize = "24px"
     accountButton.textContent = "Log out"
 }
+
+function winGameInstantly() {
+    const allCards = document.querySelectorAll(".memoryCard");
+
+    allCards.forEach(card => {
+        card.classList.add("matched");
+    });
+
+    // Visa vinst-popup och dölj accountButton
+    setTimeout(() => {
+        const restartButtonBottom = document.getElementById("restartButton");
+        restartButtonBottom.style.display = "none";
+        const winPopup = document.getElementById("popupWin");
+        winPopup.classList.add("show");
+
+        accountButton.style.display = "none";
+
+        if (isLoggedin == false) {
+            const wantToSaveHighscore = document.createElement("h4")
+            wantToSaveHighscore.textContent = "Login or register to save your highscore!"
+            wantToSaveHighscore.style.textAlign = "center"
+            winPopup.append(wantToSaveHighscore)
+
+            const buttonToLogInWhenWonGame = document.createElement("button");
+            buttonToLogInWhenWonGame.classList.add("accountButton")
+            buttonToLogInWhenWonGame.textContent = "Login/Register"
+            buttonToLogInWhenWonGame.id = "winLoginRegisterButton"
+            winPopup.append(buttonToLogInWhenWonGame);
+
+            buttonToLogInWhenWonGame.addEventListener("click", function () {
+                winPopup.classList.remove("show");
+                authPopup.classList.add("show");
+                authPopup.classList.remove("narrow");
+                document.getElementById("restartButton").style.display = "block";
+            });
+        }
+    }, 800);
+}
+
 
 async function initGame() {
     breedmanager = new DogbreedManager();
