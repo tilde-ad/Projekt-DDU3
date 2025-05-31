@@ -600,6 +600,7 @@ async function restartGame() {
     if (breedmanager) {
         await breedmanager.fetchBreed();
     }
+
     await getDogPic();
     const restartButtonBottom = document.getElementById("restartButton");
     restartButtonBottom.style.display = "block";
@@ -613,9 +614,9 @@ function flipTheCards() {
 }
 
 restartButton.addEventListener('click', function () {
-    flipTheCards()
+    flipTheCards();
 
-    setTimeout(async () => {
+    setTimeout(async function () {
         restartGame();
         loadingScreen.classList.remove("show");
     }, 100);
