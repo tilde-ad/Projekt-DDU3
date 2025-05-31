@@ -524,11 +524,13 @@ function flipTheCards() {
 
 restartButton.addEventListener('click', function () {
     flipTheCards();
+    setTimeout(() => {
+        loadingScreen.classList.add("show");
+    }, 300);
 
-    setTimeout(async function () {
-        restartGame();
-        loadingScreen.classList.remove("show");
-    }, 100);
+    setTimeout(async () => {
+        await restartGame();
+    }, 700);
 });
 
 winRestartButton.addEventListener("click", function () {
