@@ -120,7 +120,6 @@ function showAlert(message) {
 
 document.getElementById("alertOkButton").addEventListener("click", hideAlert);
 
-// ===API-anrop ===
 async function getDogPic() {
     if (firstLoad) {
         loadingScreen.classList.add("instant");
@@ -167,7 +166,6 @@ async function getDogPic() {
         allDogPics.push(data.message);
         allDogPics.push(data.message);
     }
-
 
     const shuffledPics = [];
     while (allDogPics.length > 0) {
@@ -299,8 +297,6 @@ async function getCommonBreeds() {
     );
     return commonBreeds;
 }
-
-// ===Spellogik ===
 
 let flippedCards = [];
 let lockBoard = false;
@@ -447,7 +443,6 @@ async function checkForMatch() {
         }, 1000);
     }
 
-    //Vinst av spelet
     const allCards = document.querySelectorAll(".memoryCard");
     const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
 
@@ -606,7 +601,6 @@ async function showHighscoreBox() {
     }
 }
 
-// ===Favoritlogik ===
 function createFavoriteLi(breed) {
     const li = document.createElement("li");
 
@@ -767,7 +761,6 @@ async function showFavoritesBox() {
     }
 }
 
-// === START GAME BUTTON + OVERLAY ===
 const ContainerMemory = document.getElementById("memory-Container");
 ContainerMemory.style.position = "relative";
 
@@ -796,7 +789,6 @@ function dropdown() {
 
     let open = false;
 
-    // Startläge
     scrollIndicator.style.display = "none";
     desc.style.background = "none";
     dropdown.classList.remove("active");
@@ -842,9 +834,7 @@ function dropdown() {
     window.setDropdownOpen = setDropdownOpen;
 }
 
-// === 👤 7. Användarhantering ===
 
-//Login
 const authPopup = document.getElementById("authPopup");
 const openAuthPopup = document.querySelector(".openAuthPopup");
 const highScoreBox = document.getElementById("savedHighscore");
@@ -954,7 +944,7 @@ function buttonDesign() {
     openAuthPopup.textContent = "Log out"
 }
 
-// === 🚀 9. Initiering ===
+
 async function initGame() {
     breedmanager = new DogbreedManager();
     await breedmanager.fetchBreed();
