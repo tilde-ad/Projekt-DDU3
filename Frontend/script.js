@@ -878,9 +878,9 @@ createButton.addEventListener("click", async function () {
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
 
+        
         logoutButtonDesign();
         await showHighscoreBox();
-        await checkAndSendHighscore();
         await showFavoritesBox();
     }
 });
