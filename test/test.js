@@ -1,13 +1,4 @@
-function markTestAsComplete(testId) {
-    const element = document.getElementById(testId);
-    if (element) {
-        element.style.color = "green";
-        element.style.fontWeight = "bold";
-    }
-}
-
-
-//test 1 - hundfakta
+//test 1
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
     const data = await response.json();
@@ -21,12 +12,11 @@ async function getDogFact() {
     markTestAsComplete("test1");
 }
 
-//test 2 - bild
+//test 2
 async function getDogPic() {
     const response = await fetch("https://dog.ceo/api/breeds/image/random");
     const data = await response.json();
 
-    // Skapa rubriken
     const heading = document.createElement("h2");
     heading.textContent = "Test 2: A picture of a random dog breed";
 
@@ -42,7 +32,7 @@ async function getDogPic() {
     markTestAsComplete("test2");
 }
 
-//test 3 - beskrivning av hundras
+//test 3
 async function getRandomBreedAndInfo() {
     const response = await fetch("http://localhost:8000/dogbreed");
     const data = await response.json();
@@ -77,7 +67,7 @@ async function getRandomBreedAndInfo() {
     markTestAsComplete("test3");
 }
 
-//test 4 - array av hundar
+//test 4
 async function getArrayOfDogs() {
     const response = await fetch("http://localhost:8000/dogbreedsecond");
     const data = await response.json();
@@ -108,7 +98,7 @@ async function getArrayOfDogs() {
     markTestAsComplete("test4");
 }
 
-//test 5 - skapa konto
+//test 5
 async function createAcount() {
     const userData = {
         username: "testuser123",
@@ -136,7 +126,7 @@ async function createAcount() {
     markTestAsComplete("test5");
 }
 
-//test 6 - logga in
+//test 6
 async function loginToAccount() {
     const options = {
         method: "POST",
@@ -161,7 +151,7 @@ async function loginToAccount() {
     markTestAsComplete("test6");
 }
 
-// test 7 - uppdatera highscore
+// test 7
 async function updateHighscoreTest() {
     const options = {
         method: "PATCH",
@@ -188,7 +178,7 @@ async function updateHighscoreTest() {
     markTestAsComplete("test7");
 }
 
-//test 8 - hämta alla konton
+//test 8
 async function getAllAccountsTest() {
     const response = await fetch("http://localhost:8000/getAllAccounts");
 
@@ -216,7 +206,7 @@ async function getAllAccountsTest() {
     markTestAsComplete("test8");
 }
 
-//test 9 - spara favorit
+//test 9 
 async function testSaveFavorite() {
     const testData = {
         username: "testuser123",
@@ -284,8 +274,7 @@ async function testGetFavoritesFromUser() {
     markTestAsComplete("test10");
 }
 
-
-//test 11 - ta bort en hund från favoriter
+//test 11
 async function testDeleteFavorite() {
     const username = "testuser123";
     const breedToDelete = "Rottweiler";
@@ -338,6 +327,3 @@ async function runTest() {
 }
 
 runTest();
-
-
-
