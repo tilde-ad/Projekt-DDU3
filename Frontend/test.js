@@ -1,3 +1,10 @@
+function markTestAsComplete(testId) {
+    const changeColor = document.getElementById(testId);
+    if (changeColor) {
+        changeColor.style.color = "green";
+    }
+}
+
 //test 1
 async function getDogFact() {
     const response = await fetch("http://localhost:8000/dogfact");
