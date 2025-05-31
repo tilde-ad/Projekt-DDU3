@@ -540,11 +540,17 @@ winRestartButton.addEventListener("click", function () {
         flippedCards[i].classList.remove('flipped');
     }
 
-    restartGame();
+    setTimeout(() => {
+        loadingScreen.classList.add("show");
+    }, 300);
 
-    const winPopup = document.getElementById("popupWin");
-    winPopup.classList.remove("show");
+    setTimeout(async () => {
+        await restartGame();
+        const winPopup = document.getElementById("popupWin");
+        winPopup.classList.remove("show");
+    }, 700);
 });
+
 
 createCloseX(document.getElementById("popupWin"));
 
