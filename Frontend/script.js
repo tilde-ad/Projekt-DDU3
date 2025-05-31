@@ -287,7 +287,9 @@ async function getCommonBreeds() {
     let commonBreeds = ceoBreeds.filter(breed => dogApiBreeds.includes(breed));
 
     commonBreeds = commonBreeds.filter(breed =>
-        breed !== "russell terrier" && breed !== "russell-terrier"
+        breed !== "russell terrier"
+        && breed !== "russell-terrier"
+        && breed !== "puggle"
     );
     return commonBreeds;
 }
