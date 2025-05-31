@@ -444,13 +444,13 @@ async function checkForMatch() {
                 wantToSaveHighscore.style.textAlign = "center"
                 winPopup.append(wantToSaveHighscore)
 
-                const button = document.createElement("button")
-                button.classList.add("accountButton")
-                button.textContent = "Login/Register"
-                button.id = "winLoginRegisterButton"
-                winPopup.append(button)
+                const buttonToLogInWhenWonGame = document.createElement("button");
+                buttonToLogInWhenWonGame.classList.add("accountButton")
+                buttonToLogInWhenWonGame.textContent = "Login/Register"
+                buttonToLogInWhenWonGame.id = "winLoginRegisterButton"
+                winPopup.append(buttonToLogInWhenWonGame);
 
-                button.addEventListener("click", function () {
+                buttonToLogInWhenWonGame.addEventListener("click", function () {
                     winPopup.classList.remove("show");
                     authPopup.classList.add("show");
                     authPopup.classList.remove("narrow");
