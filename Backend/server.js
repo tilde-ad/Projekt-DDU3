@@ -1,17 +1,3 @@
-// Byt till false inför inlämning
-const useDevMode = true;
-let arrayDogFact = [];
-
-if (useDevMode) {
-    for (let i = 0; i < 20; i++) {
-        const apiUrl = "https://dogapi.dog/api/v2/facts";
-        const apiResponse = await fetch(apiUrl);
-        const data = await apiResponse.json();
-        arrayDogFact.push(data.data[0].attributes.body);
-    }
-}
-// === SERVER ===
-
 async function handler(request) {
     const url = new URL(request.url);
 
@@ -127,26 +113,18 @@ async function handler(request) {
         }
 
         if (url.pathname === "/dogfact") {
-            if (useDevMode) {
-                return new Response(JSON.stringify(arrayDogFact), {
-                    status: 200,
-                    headers: headerCORS
-                });
-            } else {
-                const apiUrl = "https://dogapi.dog/api/v2/facts";
-                const response = await fetch(apiUrl);
-                const jsonData = await response.json();
+            const apiUrl = "https://dogapi.dog/api/v2/facts";
+            const response = await fetch(apiUrl);
+            const jsonData = await response.json();
 
-                // Här hämtar vi bara själva texten (body) från varje faktaruta
-                const factList = jsonData.data.map(item => {
-                    return item.attributes.body;
-                });
+            const factList = jsonData.data.map(item => {
+                return item.attributes.body;
+            });
 
-                return new Response(JSON.stringify(factList), {
-                    status: 200,
-                    headers: headerCORS
-                });
-            }
+            return new Response(JSON.stringify(factList), {
+                status: 200,
+                headers: headerCORS
+            });
         }
 
         if (url.pathname === "/getAllAccounts") {
