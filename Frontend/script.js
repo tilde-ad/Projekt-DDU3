@@ -6,7 +6,6 @@ let currentUser = null;
 let isLoggedin = false;
 let firstLoad = true;
 
-let allBreedsWithDesc = [];
 let breedmanager;
 const restartButton = document.getElementById("restartButton");
 const winRestartButton = document.getElementById("winRestartButton");
@@ -179,11 +178,6 @@ async function getDogPic() {
     loadingScreen.classList.remove("show");
 
     return selectedImages;
-}
-
-async function fetchAllBreedsWithDesc() {
-    const response = await fetch("http://localhost:8000/dogbreed");
-    allBreedsWithDesc = await response.json();
 }
 
 function getDescriptionFromImageUrl(imageUrl) {
