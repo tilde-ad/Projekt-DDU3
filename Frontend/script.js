@@ -835,7 +835,7 @@ function dropdown() {
 
 const authPopup = document.getElementById("authPopup");
 const highScoreBox = document.getElementById("savedHighscore");
-const accountButton = document.querySelector(".accountButton");
+const accountButton = document.getElementById("accountButton");
 
 accountButton.addEventListener("click", function () {
     if (!isLoggedin) {
