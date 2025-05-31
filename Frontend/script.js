@@ -189,7 +189,7 @@ function showAlert(message) {
     }, 3000);
 }
 
-// ===4. API-anrop ===
+// ===API-anrop ===
 async function getDogPic() {
     if (firstLoad) {
         loadingScreen.classList.add("instant");
@@ -386,7 +386,7 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-// ===5. Spellogik ===
+// ===Spellogik ===
 
 let flippedCards = [];
 let lockBoard = false;
@@ -656,7 +656,11 @@ async function checkAndSendHighscore() {
         const noHighscoreYet = currentHighscore === null || currentHighscore === undefined || currentHighscore === 0;
 
         if (matchCounter >= 10 && (noHighscoreYet || matchCounter < currentHighscore)) {
-            const data = { highscore: matchCounter, currentUser: currentUser };
+            const data = {
+                highscore: matchCounter,
+                currentUser: currentUser
+            };
+
             const response = await fetch("http://localhost:8000/highscore", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
@@ -688,9 +692,7 @@ async function showHighscoreBox() {
     }
 }
 
-// === ❤️ 6. Favoritlogik ===
-// ... Funktionerna från originalkoden (createFavoriteLi, showFavoritesBox)
-
+// ===Favoritlogik ===
 function createFavoriteLi(breed) {
     const li = document.createElement("li");
 
