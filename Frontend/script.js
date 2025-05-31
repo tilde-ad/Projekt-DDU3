@@ -753,7 +753,8 @@ async function getFavorites() {
     if (!currentUser) {
         return [];
     }
-    const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`)
+    const response = await fetch(`http://localhost:8000/favorite?username=${currentUser}`);
+
     if (response.ok) {
         const data = await response.json();
         let favorites = [];
@@ -979,7 +980,7 @@ createButton.addEventListener("click", async function () {
     if (response.ok) {
         currentUser = username;
         isLoggedin = true;
-        currentUser = username;
+
         showAlert("Account created!");
         authPopup.classList.remove("show");
 
