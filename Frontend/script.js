@@ -908,7 +908,7 @@ loginButton.addEventListener("click", async function () {
         logoutButtonDesign();
         currentUser = username;
 
-        await checkAndSendHighscore();
+        
         await showHighscoreBox();
         await showFavoritesBox();
 
