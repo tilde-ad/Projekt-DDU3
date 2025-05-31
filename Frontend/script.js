@@ -307,7 +307,7 @@ function getBreedFromImageUrl(imageUrl) {
     for (let i = 0; i < words.length; i++) {
         let word = words[i];
         if (word.length > 0) {
-            capitalized += word.charAt(0).toUpperCase() + word.slice(1);
+            capitalized += word[0].toUpperCase() + word.slice(1);
         }
         if (i < words.length - 1) {
             capitalized += " ";
