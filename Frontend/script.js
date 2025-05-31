@@ -189,17 +189,16 @@ function showAlert(message) {
     }, 3000);
 }
 
-
-// === 🌐 4. API-anrop ===
-// ... Funktionerna från originalkoden för API-hämtning (getDogPic, fetchDogFact, fetchAllBreedsWithDesc, getFavorites, removeFavorite)
-
+// ===4. API-anrop ===
 async function getDogPic() {
     if (firstLoad) {
         loadingScreen.classList.add("instant");
         loadingScreen.classList.add("show");
+
         setTimeout(() => {
             loadingScreen.classList.remove("instant");
         }, 50);
+
         firstLoad = false;
     } else {
         loadingScreen.classList.add("show");
@@ -210,23 +209,30 @@ async function getDogPic() {
 
     if (useDevMode) {
         const imagesCopy = [...devImages];
+
         for (let i = 0; i < 10 && imagesCopy.length > 0; i++) {
             const idx = Math.floor(Math.random() * imagesCopy.length);
-            selectedImages.push(imagesCopy.splice(idx, 1)[0]);
+            const chosen = imagesCopy[idx];
+            selectedImages.push(chosen);
+            imagesCopy.splice(idx, 1);
         }
 
-        for (let img of selectedImages) {
-            allDogPics.push(`images/${img}`);
-            allDogPics.push(`images/${img}`);
+        for (let i = 0; i < selectedImages.length; i++) {
+            let img = selectedImages[i];
+            allDogPics.push("images/" + img);
+            allDogPics.push("images/" + img);
         }
+
     } else {
         const breeds = await getCommonBreeds();
-        const selectedBreeds = [];
         const breedsCopy = [...breeds];
+        const selectedBreeds = [];
 
         for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
             const idx = Math.floor(Math.random() * breedsCopy.length);
-            selectedBreeds.push(breedsCopy.splice(idx, 1)[0]);
+            const chosen = breedsCopy[idx];
+            selectedBreeds.push(chosen);
+            breedsCopy.splice(idx, 1);
         }
 
         function toDogCeoApiBreed(breed) {
@@ -237,10 +243,13 @@ async function getDogPic() {
             return parts.join("-");
         }
 
-        for (const breed of selectedBreeds) {
+        for (let i = 0; i < selectedBreeds.length; i++) {
+            const breed = selectedBreeds[i];
             const apiBreed = toDogCeoApiBreed(breed);
+
             const response = await fetch(`http://localhost:8000/dogpic?breed=${apiBreed}`);
             const data = await response.json();
+
             allDogPics.push(data.message);
             allDogPics.push(data.message);
         }
@@ -249,12 +258,17 @@ async function getDogPic() {
     const shuffledPics = [];
     while (allDogPics.length > 0) {
         const index = Math.floor(Math.random() * allDogPics.length);
-        shuffledPics.push(allDogPics.splice(index, 1)[0]);
+        const picked = allDogPics[index];
+        shuffledPics.push(picked);
+        allDogPics.splice(index, 1);
     }
 
     await preloadImages(shuffledPics);
+
     const cards = memoryContainer.querySelectorAll('.memoryCard');
-    cards.forEach(card => memoryContainer.removeChild(card));
+    for (let i = 0; i < cards.length; i++) {
+        memoryContainer.removeChild(cards[i]);
+    }
 
     for (let i = 0; i < shuffledPics.length; i++) {
         const card = createCard(shuffledPics[i]);
@@ -262,6 +276,7 @@ async function getDogPic() {
     }
 
     loadingScreen.classList.remove("show");
+
     return selectedImages;
 }
 
