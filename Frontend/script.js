@@ -118,6 +118,8 @@ function showAlert(message) {
     }, 3000);
 }
 
+document.getElementById("alertOkButton").addEventListener("click", hideAlert);
+
 // ===API-anrop ===
 async function getDogPic() {
     if (firstLoad) {
