@@ -386,8 +386,7 @@ async function getCommonBreeds() {
     return commonBreeds;
 }
 
-// === 🎮 5. Spellogik ===
-// ... Funktionerna från originalkoden (restartGame, checkMatch, resetBoard, disableCards, flipCard, addFactPopup)
+// ===5. Spellogik ===
 
 let flippedCards = [];
 let lockBoard = false;
