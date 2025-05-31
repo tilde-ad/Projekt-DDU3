@@ -78,6 +78,7 @@ function createCloseX(popupElement) {
         if (popupElement.id === "popupWin" || popupElement.parentElement.id === "popupWin") {
             document.getElementById("restartButton").style.display = "block";
         }
+        accountButton.style.display = "block";
     });
 }
 
@@ -438,6 +439,8 @@ async function checkForMatch() {
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
 
+            accountButton.style.display = "none";
+
             if (isLoggedin == false) {
                 const wantToSaveHighscore = document.createElement("h4")
                 wantToSaveHighscore.textContent = "Login or register to save your highscore!"
@@ -498,6 +501,8 @@ async function restartGame() {
     await getDogPic();
     const restartButtonBottom = document.getElementById("restartButton");
     restartButtonBottom.style.display = "block";
+
+    accountButton.style.display = "block";
 }
 
 function flipTheCards() {
