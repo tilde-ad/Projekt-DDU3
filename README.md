@@ -8,3 +8,10 @@ Vi har skapat ett memory-spel med hundtema. Det finns 20 kort, alltså 10 par, d
 För var tredje par som hittas visas en slumpmässig fakta om hundar. 
 
 Vi har använt oss av två olika apier, där vi hämtar hundraser och bilder från den ena, och beskrivningar och hundfakta från den andra. 
+
+Om ni vill testa spelet så har vi gjort vars en inloggning till er: 
+Användanamn: Sebbe
+Lösenord: hej
+
+Användarnamn: Erik
+Lösenord: hej
