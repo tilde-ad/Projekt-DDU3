@@ -1,5 +1,3 @@
-const useDevMode = true;
-
 let matchCounter = 0;
 const count = document.getElementById("count");
 count.textContent = matchCounter;
@@ -90,75 +88,6 @@ function createCloseX(popupElement) {
     });
 }
 
-const devImages = [
-    "affenpinscher.jpg",
-    "afghan-hound.jpg",
-    "akita.jpg",
-    "australian-terrier.jpg",
-    "basenji.jpg",
-    "basset-hound.jpg",
-    "beagle.jpg",
-    "bedlington-terrier.jpg",
-    "bichon-frise.jpg",
-    "border-collie.jpg",
-    "border-terrier.jpg",
-    "borzoi.jpg",
-    "boxer.jpg",
-    "briard.jpg",
-    "cairn-terrier.jpg",
-    "chihuahua.jpg",
-    "cocker-spaniel.jpg",
-    "dachshund.jpg",
-    "dalmatian.jpg",
-    "english-setter.jpg",
-    "french-bulldog.jpg",
-    "giant-schnauzer.jpg",
-    "golden-retriever.jpg",
-    "gordon-setter.jpg",
-    "great-dane.jpg",
-    "havanese.jpg",
-    "ibizan-hound.jpg",
-    "irish-setter.jpg",
-    "irish-terrier.jpg",
-    "irish-wolfhound.jpg",
-    "italian-greyhound.jpg",
-    "japanese-spitz.jpg",
-    "keeshond.jpg",
-    "komondor.jpg",
-    "kuvasz.jpg",
-    "lakeland-terrier.jpg",
-    "maltese.jpg",
-    "miniature-pinscher.jpg",
-    "miniature-schnauzer.jpg",
-    "newfoundland.jpg",
-    "norfolk-terrier.jpg",
-    "norwegian-buhund.jpg",
-    "norwegian-elkhound.jpg",
-    "norwich-terrier.jpg",
-    "otterhound.jpg",
-    "papillon.jpg",
-    "pomeranian.jpg",
-    "pug.jpg",
-    "rhodesian-ridgeback.jpg",
-    "rottweiler.jpg",
-    "saluki.jpg",
-    "samoyed.jpg",
-    "schipperke.jpg",
-    "scottish-deerhound.jpg",
-    "scottish-terrier.jpg",
-    "sealyham-terrier.jpg",
-    "shetland-sheepdog.jpg",
-    "silky-terrier.jpg",
-    "sussex-spaniel.jpg",
-    "tibetan-mastiff.jpg",
-    "tibetan-terrier.jpg",
-    "vizsla.jpg",
-    "weimaraner.jpg",
-    "welsh-terrier.jpg",
-    "whippet.jpg",
-    "yorkshire-terrier.jpg"
-];
-
 const arrayDogFrase = ["Paws-itively brilliant!", "You sniffed out that match like a pro!", "You’ve got a nose for matches!", "Howl you do that? Amazing!", "You're fetching those pairs like a good pup!", "Tail wags for that one – well done!"];
 
 function hideAlert() {
@@ -207,53 +136,36 @@ async function getDogPic() {
     let selectedImages = [];
     let allDogPics = [];
 
-    if (useDevMode) {
-        const imagesCopy = [...devImages];
+    const breeds = await getCommonBreeds();
+    const breedsCopy = [...breeds];
+    const selectedBreeds = [];
 
-        for (let i = 0; i < 10 && imagesCopy.length > 0; i++) {
-            const idx = Math.floor(Math.random() * imagesCopy.length);
-            const chosen = imagesCopy[idx];
-            selectedImages.push(chosen);
-            imagesCopy.splice(idx, 1);
-        }
-
-        for (let i = 0; i < selectedImages.length; i++) {
-            let img = selectedImages[i];
-            allDogPics.push("images/" + img);
-            allDogPics.push("images/" + img);
-        }
-
-    } else {
-        const breeds = await getCommonBreeds();
-        const breedsCopy = [...breeds];
-        const selectedBreeds = [];
-
-        for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
-            const idx = Math.floor(Math.random() * breedsCopy.length);
-            const chosen = breedsCopy[idx];
-            selectedBreeds.push(chosen);
-            breedsCopy.splice(idx, 1);
-        }
-
-        function toDogCeoApiBreed(breed) {
-            const parts = breed.toLowerCase().split(" ");
-            if (parts.length === 2) {
-                return `${parts[1]}/${parts[0]}`;
-            }
-            return parts.join("-");
-        }
-
-        for (let i = 0; i < selectedBreeds.length; i++) {
-            const breed = selectedBreeds[i];
-            const apiBreed = toDogCeoApiBreed(breed);
-
-            const response = await fetch(`http://localhost:8000/dogpic?breed=${apiBreed}`);
-            const data = await response.json();
-
-            allDogPics.push(data.message);
-            allDogPics.push(data.message);
-        }
+    for (let i = 0; i < 10 && breedsCopy.length > 0; i++) {
+        const idx = Math.floor(Math.random() * breedsCopy.length);
+        const chosen = breedsCopy[idx];
+        selectedBreeds.push(chosen);
+        breedsCopy.splice(idx, 1);
     }
+
+    function toDogCeoApiBreed(breed) {
+        const parts = breed.toLowerCase().split(" ");
+        if (parts.length === 2) {
+            return `${parts[1]}/${parts[0]}`;
+        }
+        return parts.join("-");
+    }
+
+    for (let i = 0; i < selectedBreeds.length; i++) {
+        const breed = selectedBreeds[i];
+        const apiBreed = toDogCeoApiBreed(breed);
+
+        const response = await fetch(`http://localhost:8000/dogpic?breed=${apiBreed}`);
+        const data = await response.json();
+
+        allDogPics.push(data.message);
+        allDogPics.push(data.message);
+    }
+
 
     const shuffledPics = [];
     while (allDogPics.length > 0) {
