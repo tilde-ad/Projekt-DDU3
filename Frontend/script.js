@@ -906,7 +906,6 @@ loginButton.addEventListener("click", async function () {
 
         await checkAndSendHighscore();
         await showHighscoreBox();
-        await showFavoritesBox();
 
         if (isGameWon()) {
             await checkAndSendHighscore();
