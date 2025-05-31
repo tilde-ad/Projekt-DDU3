@@ -514,7 +514,7 @@ async function checkForMatch() {
                 const popup = document.getElementById("popupFact");
                 popup.classList.remove("show");
                 popup.classList.add("show");
-            }, 400);
+            }, 300);
         }
 
         const totalCards = document.querySelectorAll(".memoryCard").length;
