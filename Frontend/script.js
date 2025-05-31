@@ -93,9 +93,10 @@ function hideAlert() {
     document.getElementById("customAlert").classList.add("hidden");
     document.getElementById("alertOverlay").classList.add("hidden");
     document.body.style.overflow = "";
-    if (alertTimeout) {
-        clearTimeout(alertTimeout);
-        alertTimeout = null;
+    if (shouldRestartAfterAlert) {
+        restartGame();
+        flipTheCards();
+        shouldRestartAfterAlert = false;
     }
 }
 
@@ -107,10 +108,6 @@ function showAlert(message) {
     alertBox.classList.remove("hidden");
     alertOverlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
-
-    alertTimeout = setTimeout(() => {
-        hideAlert();
-    }, 3000);
 }
 
 document.getElementById("alertOkButton").addEventListener("click", hideAlert);
@@ -844,11 +841,8 @@ accountButton.addEventListener("click", function () {
     } else {
         isLoggedin = false;
         currentUser = null;
+        shouldRestartAfterAlert = true;
         showAlert("Logged out!");
-
-        restartGame();
-        flipTheCards();
-
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
         accountButton.innerHTML = "Login/Register";
