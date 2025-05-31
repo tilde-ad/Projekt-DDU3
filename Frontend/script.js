@@ -98,10 +98,6 @@ function hideAlert() {
         clearTimeout(alertTimeout);
         alertTimeout = null;
     }
-    if (alertResolve) {
-        alertResolve();
-        alertResolve = null;
-    }
 }
 
 function showAlert(message) {
@@ -113,7 +109,7 @@ function showAlert(message) {
     alertOverlay.classList.remove("hidden");
     document.body.style.overflow = "hidden";
 
-    setTimeout(() => {
+    alertTimeout = setTimeout(() => {
         hideAlert();
     }, 3000);
 }
