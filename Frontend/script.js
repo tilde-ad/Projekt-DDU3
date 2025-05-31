@@ -93,7 +93,9 @@ function hideAlert() {
     document.getElementById("customAlert").classList.add("hidden");
     document.getElementById("alertOverlay").classList.add("hidden");
     document.body.style.overflow = "";
+
     if (shouldRestartAfterAlert) {
+        loadingScreen.classList.add("show");
         restartGame();
         flipTheCards();
         shouldRestartAfterAlert = false;
