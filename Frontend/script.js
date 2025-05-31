@@ -586,11 +586,14 @@ async function restartGame() {
     flippedCards = [];
     lockBoard = false;
     updateCounterDisplay();
+
     const descContainer = document.getElementById("desc");
     const descriptions = descContainer.querySelectorAll('.descriptions');
+
     for (let i = 0; i < descriptions.length; i++) {
         descriptions[i].remove();
     }
+
     descContainer.style.display = "flex";
     window.setDropdownOpen(false);
 
