@@ -15,7 +15,6 @@ const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
-const openAuthPopupButton = document.querySelector(".openAuthPopup");
 
 
 class Dog {
@@ -456,7 +455,7 @@ async function checkForMatch() {
                 winPopup.append(wantToSaveHighscore)
 
                 const button = document.createElement("button")
-                button.classList.add("openAuthPopup")
+                button.classList.add("accountButton")
                 button.textContent = "Login/Register"
                 button.id = "winLoginRegisterButton"
                 winPopup.append(button)
@@ -549,11 +548,6 @@ winRestartButton.addEventListener("click", function () {
 
 
 createCloseX(document.getElementById("popupWin"));
-
-openAuthPopupButton.addEventListener("click", function () {
-    authPopup.classList.add("show");
-    authPopup.classList.add("narrow");
-});
 
 async function findLoggedUserHighscore() {
     const response = await fetch("http://localhost:8000/getAllAccounts");
@@ -840,13 +834,13 @@ function dropdown() {
 
 
 const authPopup = document.getElementById("authPopup");
-const openAuthPopup = document.querySelector(".openAuthPopup");
 const highScoreBox = document.getElementById("savedHighscore");
+const accountButton = document.querySelector(".accountButton");
 
-openAuthPopup.addEventListener("click", function () {
+accountButton.addEventListener("click", function () {
     if (!isLoggedin) {
         authPopup.classList.add("show");
-
+        authPopup.classList.add("narrow");
     } else {
         isLoggedin = false;
         currentUser = null;
@@ -857,8 +851,8 @@ openAuthPopup.addEventListener("click", function () {
 
         authPopup.classList.remove("show");
         highScoreBox.innerHTML = "";
-        openAuthPopup.innerHTML = "Login/Register";
-        openAuthPopup.removeAttribute("style");
+        accountButton.innerHTML = "Login/Register";
+        accountButton.removeAttribute("style");
         document.getElementById("myAccount").style.display = "none";
     }
 });
@@ -941,11 +935,11 @@ loginButton.addEventListener("click", async function () {
 
 function logoutButtonDesign() {
     authPopup.classList.remove("show");
-    openAuthPopup.style.backgroundColor = "#E2EFFF"
-    openAuthPopup.style.color = "#0F3665"
-    openAuthPopup.style.fontFamily = "Jua, sans-serif"
-    openAuthPopup.style.fontSize = "24px"
-    openAuthPopup.textContent = "Log out"
+    accountButton.style.backgroundColor = "#E2EFFF"
+    accountButton.style.color = "#0F3665"
+    accountButton.style.fontFamily = "Jua, sans-serif"
+    accountButton.style.fontSize = "24px"
+    accountButton.textContent = "Log out"
 }
 
 
