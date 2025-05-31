@@ -34,7 +34,7 @@ class DogbreedManager {
     }
 
     async fetchBreed() {
-        let url = "http://localhost:8000/dogbreed"; // Live API
+        let url = "http://localhost:8000/dogbreed";
 
         const response = await fetch(url);
         const data = await response.json();
