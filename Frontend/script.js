@@ -5,8 +5,6 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 let firstLoad = true;
-let alertResolve = null;
-let alertTimeout = null;
 
 let allBreedsWithDesc = [];
 let breedmanager;
