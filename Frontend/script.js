@@ -610,7 +610,7 @@ function createFavoriteLi(breed) {
     const heartBtn = document.createElement("button");
     heartBtn.innerHTML = "♥";
     heartBtn.className = "faveButton favorited listHeart";
-    heartBtn.title = "Remove dog from favorite";
+    heartBtn.title = "Remove dog from favorites";
 
     heartBtn.addEventListener("click", async function () {
         await removeFavorite(breed);
@@ -719,9 +719,11 @@ async function updateAllFaveBoxes() {
         if (lowerFavorites.includes(breed)) {
             btn.innerHTML = "♥";
             btn.classList.add("favorited");
+            btn.title = "Remove dog from favorites";
         } else {
             btn.innerHTML = "♡";
             btn.classList.remove("favorited");
+            btn.title = "Save dog to favorites";
         }
     }
 }
