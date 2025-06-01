@@ -443,9 +443,8 @@ async function checkForMatch() {
             restartButtonBottom.style.display = "none";
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
-
             accountButton.style.display = "none";
-            //TA BORT DESSA OM DET EJ FUNKAR
+
             const oldH4s = winPopup.querySelectorAll("h4");
             for (let i = 0; i < oldH4s.length; i++) {
                 oldH4s[i].remove();
@@ -454,7 +453,6 @@ async function checkForMatch() {
             for (let i = 0; i < oldBtns.length; i++) {
                 oldBtns[i].remove();
             }
-            //TA BORT DESSA OM DET EJ FUNKAR
 
             if (isLoggedin == false) {
                 const wantToSaveHighscore = document.createElement("h4")
