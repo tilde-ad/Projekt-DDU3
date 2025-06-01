@@ -113,7 +113,6 @@ async function getDogPic() {
         loadingScreen.classList.add("show");
     }
 
-    let selectedImages = [];
     let allDogPics = [];
 
     const breeds = await getCommonBreeds();
@@ -167,8 +166,6 @@ async function getDogPic() {
     }
 
     loadingScreen.classList.remove("show");
-
-    return selectedImages;
 }
 
 function getDescriptionFromImageUrl(imageUrl) {
