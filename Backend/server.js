@@ -13,30 +13,6 @@ async function handler(request) {
         });
     }
 
-    if (request.method === "GET" && (url.pathname === "/" || url.pathname === "/index.html")) {
-        const html = await Deno.readTextFile("../Frontend/index.html");
-        return new Response(html, {
-            status: 200,
-            headers: { "content-type": "text/html", ...headerCORS }
-        });
-    }
-
-    if (request.method === "GET" && url.pathname === "/styles.css") {
-        const css = await Deno.readTextFile("../Frontend/styles.css");
-        return new Response(css, {
-            status: 200,
-            headers: { "content-type": "text/css", ...headerCORS }
-        });
-    }
-
-    if (request.method === "GET" && url.pathname === "/script.js") {
-        const js = await Deno.readTextFile("../Frontend/script.js");
-        return new Response(js, {
-            status: 200,
-            headers: { "content-type": "application/javascript", ...headerCORS }
-        });
-    }
-
     if (request.method === "GET") {
 
         if (url.pathname === "/dogpic") {
