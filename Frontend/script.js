@@ -443,6 +443,13 @@ async function checkForMatch() {
             const winPopup = document.getElementById("popupWin");
             winPopup.classList.add("show");
 
+            //TA BORT DESSA OM DET EJ FUNKAR
+            const oldH4 = winPopup.querySelector("h4");
+            const oldBtn = winPopup.querySelector("#winLoginRegisterButton");
+            if (oldH4) oldH4.remove();
+            if (oldBtn) oldBtn.remove();
+            //TA BORT DESSA OM DET EJ FUNKAR
+
             if (isLoggedin == false) {
                 const wantToSaveHighscore = document.createElement("h4")
                 wantToSaveHighscore.textContent = "Login or register to save your highscore!"
@@ -848,10 +855,10 @@ accountButton.addEventListener("click", function () {
 });
 
 function isGameWon() {
-        const allCards = document.querySelectorAll(".memoryCard");
-        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
 
-        return allCards.length > 0 && allCardsMatch.length === allCards.length;
+    return allCards.length > 0 && allCardsMatch.length === allCards.length;
 }
 
 createCloseX(document.getElementById("authPopup"));
