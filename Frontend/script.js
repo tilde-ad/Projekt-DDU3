@@ -847,6 +847,13 @@ accountButton.addEventListener("click", function () {
     }
 });
 
+function isGameWon() {
+        const allCards = document.querySelectorAll(".memoryCard");
+        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
+        return allCards.length > 0 && allCardsMatch.length === allCards.length;
+}
+
 createCloseX(document.getElementById("authPopup"));
 
 createButton.addEventListener("click", async function () {
@@ -887,7 +894,7 @@ createButton.addEventListener("click", async function () {
         const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
         const gameWon = allCards.length > 0 && allCardsMatch.length === allCards.length;
 
-        if (gameWon) {
+        if (isGameWon()) {
             await checkAndSendHighscore();
         }
     }
@@ -903,12 +910,6 @@ loginButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    function isGameWon() {
-        const allCards = document.querySelectorAll(".memoryCard");
-        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-
-        return allCards.length > 0 && allCardsMatch.length === allCards.length;
-    }
 
     const result = await response.json();
     if (result.success) {
