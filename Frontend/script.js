@@ -5,6 +5,7 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 let firstLoad = true;
+let shouldRestartAfterAlert;
 
 let breedmanager;
 const restartButton = document.getElementById("restartButton");
@@ -878,10 +879,17 @@ createButton.addEventListener("click", async function () {
         document.getElementById("createUsername").value = "";
         document.getElementById("createPassword").value = "";
 
-        
         logoutButtonDesign();
         await showHighscoreBox();
         await showFavoritesBox();
+
+        const allCards = document.querySelectorAll(".memoryCard");
+        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+        const gameWon = allCards.length > 0 && allCardsMatch.length === allCards.length;
+
+        if (gameWon) {
+            await checkAndSendHighscore();
+        }
     }
 });
 
