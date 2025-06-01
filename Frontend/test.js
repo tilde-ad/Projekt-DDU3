@@ -21,7 +21,7 @@ async function getDogFact() {
 
 //test 2
 async function getDogPic() {
-    const response = await fetch("https://dog.ceo/api/breeds/image/random");
+    const response = await fetch("http://localhost:8000/dogpic");
     const data = await response.json();
 
     const heading = document.createElement("h2");
