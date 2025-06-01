@@ -340,6 +340,10 @@ async function handler(request) {
             }
         }
     }
+    return new Response(JSON.stringify({ error: "Not Found" }), {
+        status: 404,
+        headers: headerCORS
+    });
 }
 
 Deno.serve(handler);
