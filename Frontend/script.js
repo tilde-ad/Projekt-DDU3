@@ -444,10 +444,14 @@ async function checkForMatch() {
             winPopup.classList.add("show");
 
             //TA BORT DESSA OM DET EJ FUNKAR
-            const oldH4 = winPopup.querySelector("h4");
-            const oldBtn = winPopup.querySelector("#winLoginRegisterButton");
-            if (oldH4) oldH4.remove();
-            if (oldBtn) oldBtn.remove();
+            const oldH4s = winPopup.querySelectorAll("h4");
+            for (let i = 0; i < oldH4s.length; i++) {
+                oldH4s[i].remove();
+            }
+            const oldBtns = winPopup.querySelectorAll("#winLoginRegisterButton");
+            for (let i = 0; i < oldBtns.length; i++) {
+                oldBtns[i].remove();
+            }
             //TA BORT DESSA OM DET EJ FUNKAR
 
             if (isLoggedin == false) {
