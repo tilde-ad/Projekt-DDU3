@@ -13,6 +13,7 @@ const winRestartButton = document.getElementById("winRestartButton");
 const loadingScreen = document.getElementById("loading-screen");
 const createButton = document.getElementById("createButton");
 const loginButton = document.getElementById("loginButton");
+const memoryContainer = document.getElementById("memory-Container");
 
 class Dog {
     constructor({ name, description }) {
@@ -463,7 +464,6 @@ async function checkForMatch() {
     }
 }
 
-const memoryContainer = document.getElementById("memory-Container");
 async function preloadImages(imageUrls) {
     const promises = imageUrls.map(url => {
         return new Promise((resolve, reject) => {
@@ -754,26 +754,29 @@ async function showFavoritesBox() {
     }
 }
 
-const ContainerMemory = document.getElementById("memory-Container");
-ContainerMemory.style.position = "relative";
+function createStartOverlay(container) {
+    container.style.position = "relative";
 
-const overlay = document.createElement("div");
-overlay.id = "startOverlay";
+    const overlay = document.createElement("div");
+    overlay.id = "startOverlay";
 
-const startGameButton = document.createElement("button");
-startGameButton.classList.add("blueButton");
-startGameButton.textContent = "Start Game";
+    const startGameButton = document.createElement("button");
+    startGameButton.classList.add("blueButton");
+    startGameButton.textContent = "Start Game";
 
-overlay.appendChild(startGameButton);
-ContainerMemory.appendChild(overlay);
+    overlay.appendChild(startGameButton);
+    container.appendChild(overlay);
 
-startGameButton.addEventListener("click", async function () {
-    overlay.style.display = "none";
-});
+    startGameButton.addEventListener("click", function () {
+        overlay.style.display = "none";
+    });
 
-if (firstLoad) {
-    overlay.style.display = "flex";
+    if (firstLoad) {
+        overlay.style.display = "flex";
+    }
 }
+
+createStartOverlay(memoryContainer);
 
 function dropdown() {
     const dropdown = document.getElementById("drop-down");
