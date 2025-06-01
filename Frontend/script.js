@@ -909,10 +909,6 @@ createButton.addEventListener("click", async function () {
         await showHighscoreBox();
         await showFavoritesBox();
 
-        const allCards = document.querySelectorAll(".memoryCard");
-        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-        const gameWon = allCards.length > 0 && allCardsMatch.length === allCards.length;
-
         if (isGameWon()) {
             await checkAndSendHighscore();
         }
@@ -960,45 +956,6 @@ function logoutButtonDesign() {
     accountButton.style.fontSize = "24px"
     accountButton.textContent = "Log out"
 }
-
-function winGameInstantly() {
-    const allCards = document.querySelectorAll(".memoryCard");
-
-    allCards.forEach(card => {
-        card.classList.add("matched");
-    });
-
-    // Visa vinst-popup och dölj accountButton
-    setTimeout(() => {
-        const restartButtonBottom = document.getElementById("restartButton");
-        restartButtonBottom.style.display = "none";
-        const winPopup = document.getElementById("popupWin");
-        winPopup.classList.add("show");
-
-        accountButton.style.display = "none";
-
-        if (isLoggedin == false) {
-            const wantToSaveHighscore = document.createElement("h4")
-            wantToSaveHighscore.textContent = "Login or register to save your highscore!"
-            wantToSaveHighscore.style.textAlign = "center"
-            winPopup.append(wantToSaveHighscore)
-
-            const buttonToLogInWhenWonGame = document.createElement("button");
-            buttonToLogInWhenWonGame.classList.add("accountButton")
-            buttonToLogInWhenWonGame.textContent = "Login/Register"
-            buttonToLogInWhenWonGame.id = "winLoginRegisterButton"
-            winPopup.append(buttonToLogInWhenWonGame);
-
-            buttonToLogInWhenWonGame.addEventListener("click", function () {
-                winPopup.classList.remove("show");
-                authPopup.classList.add("show");
-                authPopup.classList.remove("narrow");
-                document.getElementById("restartButton").style.display = "block";
-            });
-        }
-    }, 800);
-}
-
 
 async function initGame() {
     breedmanager = new DogbreedManager();
