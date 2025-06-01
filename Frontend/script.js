@@ -5,6 +5,7 @@ count.textContent = matchCounter;
 let currentUser = null;
 let isLoggedin = false;
 let firstLoad = true;
+let shouldRestartAfterAlert;
 
 let breedmanager;
 const restartButton = document.getElementById("restartButton");
@@ -183,6 +184,10 @@ async function getDogPic() {
 
 function getDescriptionFromImageUrl(imageUrl) {
     let breedName = extractBreedName(imageUrl);
+
+    if (breedName.toLowerCase() === "puggle") {
+        return "The Puggle is a crossbreed between a Pug and a Beagle. They are known for their playful and affectionate nature, making them great family pets.";
+    }
 
     if (breedmanager && breedmanager.instances) {
         for (let i = 0; i < breedmanager.instances.length; i++) {
@@ -440,6 +445,16 @@ async function checkForMatch() {
             winPopup.classList.add("show");
 
             accountButton.style.display = "none";
+            //TA BORT DESSA OM DET EJ FUNKAR
+            const oldH4s = winPopup.querySelectorAll("h4");
+            for (let i = 0; i < oldH4s.length; i++) {
+                oldH4s[i].remove();
+            }
+            const oldBtns = winPopup.querySelectorAll("#winLoginRegisterButton");
+            for (let i = 0; i < oldBtns.length; i++) {
+                oldBtns[i].remove();
+            }
+            //TA BORT DESSA OM DET EJ FUNKAR
 
             if (isLoggedin == false) {
                 const wantToSaveHighscore = document.createElement("h4")
@@ -603,7 +618,7 @@ function createFavoriteLi(breed) {
     const heartBtn = document.createElement("button");
     heartBtn.innerHTML = "♥";
     heartBtn.className = "faveButton favorited listHeart";
-    heartBtn.title = "Remove dog from favorite";
+    heartBtn.title = "Remove dog from favorites";
 
     heartBtn.addEventListener("click", async function () {
         await removeFavorite(breed);
@@ -712,9 +727,11 @@ async function updateAllFaveBoxes() {
         if (lowerFavorites.includes(breed)) {
             btn.innerHTML = "♥";
             btn.classList.add("favorited");
+            btn.title = "Remove dog from favorites";
         } else {
             btn.innerHTML = "♡";
             btn.classList.remove("favorited");
+            btn.title = "Save dog to favorites";
         }
     }
 }
@@ -848,6 +865,13 @@ accountButton.addEventListener("click", function () {
     }
 });
 
+function isGameWon() {
+    const allCards = document.querySelectorAll(".memoryCard");
+    const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+
+    return allCards.length > 0 && allCardsMatch.length === allCards.length;
+}
+
 createCloseX(document.getElementById("authPopup"));
 
 createButton.addEventListener("click", async function () {
@@ -883,8 +907,15 @@ createButton.addEventListener("click", async function () {
 
         logoutButtonDesign();
         await showHighscoreBox();
-        await checkAndSendHighscore();
         await showFavoritesBox();
+
+        const allCards = document.querySelectorAll(".memoryCard");
+        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
+        const gameWon = allCards.length > 0 && allCardsMatch.length === allCards.length;
+
+        if (isGameWon()) {
+            await checkAndSendHighscore();
+        }
     }
 });
 
@@ -898,12 +929,6 @@ loginButton.addEventListener("click", async function () {
         body: JSON.stringify({ username, password })
     });
 
-    function isGameWon() {
-        const allCards = document.querySelectorAll(".memoryCard");
-        const allCardsMatch = document.querySelectorAll(".memoryCard.matched");
-
-        return allCards.length > 0 && allCardsMatch.length === allCards.length;
-    }
 
     const result = await response.json();
     if (result.success) {
@@ -912,9 +937,10 @@ loginButton.addEventListener("click", async function () {
         logoutButtonDesign();
         currentUser = username;
 
-        await checkAndSendHighscore();
+
         await showHighscoreBox();
         await showFavoritesBox();
+        await updateAllFaveBoxes();
 
         if (isGameWon()) {
             await checkAndSendHighscore();

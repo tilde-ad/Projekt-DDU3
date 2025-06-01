@@ -293,6 +293,7 @@ p {
 .memoryCard img {
     object-fit: cover;
     object-position: center;
+    user-select: none;
 }
 
 .memoryCardInner {
