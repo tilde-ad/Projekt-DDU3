@@ -186,7 +186,7 @@ function getDescriptionFromImageUrl(imageUrl) {
             }
         }
     }
-    return "Ingen beskrivning hittades.";
+    return "No description found";
 }
 
 function getBreedFromImageUrl(imageUrl) {
