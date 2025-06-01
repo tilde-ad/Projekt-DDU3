@@ -262,7 +262,7 @@ p {
     height: 20px;
     display: block;
     margin: 5px auto 0;
-    animation: bounceArrow 2s infinite;
+
 }
 
 .scroll-indicator p {
