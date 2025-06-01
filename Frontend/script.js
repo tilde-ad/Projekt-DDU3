@@ -40,17 +40,6 @@ class DogbreedManager {
             this.instances.push(dogObj);
         }
     }
-
-    get dogBreed() {
-        return this._dogBreed
-    }
-    set dogBreed(value) {
-
-        if (!this.breeds.some(b => b.name === value)) {
-            return;
-        }
-        this._dogBreed = value;
-    }
 }
 
 function updateCounterDisplay() {
